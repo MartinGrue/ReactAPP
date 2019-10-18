@@ -20,6 +20,13 @@ namespace API.Controllers
 
         public IMediator _mediator { get; }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Activity>> Details(Guid id)
+        {
+            await Task.Delay(1000);
+            return await _mediator.Send(new Details.Query { Id = id });
+        }
+
         [HttpGet]
         public async Task<ActionResult<List<Activity>>> List()
         {
@@ -31,7 +38,6 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Unit>> Create(Create.Command command)
         {
-
             return await _mediator.Send(command);
         }
         [HttpPut("{id}")]

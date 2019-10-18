@@ -37,13 +37,16 @@ class ActivityStore {
     this.submitting = true;
     try {
       await agent.Activities.update(activity);
-      this.activityRegistry.set(activity.id, activity);
-      this.selectedActivity = activity;
-      this.submitting = false;
-      this.editMode = false;
+      runInAction('UpdateActivityAction', () => {
+        this.activityRegistry.set(activity.id, activity);
+        this.selectedActivity = activity;
+        this.submitting = false;
+        this.editMode = false;
+      });
     } catch (error) {
+      runInAction('UpdateActivityError', () => {
       console.log(error);
-      this.submitting = false;
+      this.submitting = false;});
     }
   };
   @action loadActivities = async () => {
@@ -66,8 +69,41 @@ class ActivityStore {
       });
     }
   };
+  @action loadActivity = async (id: string) => {
+    this.loadingInitial = true;
+    let activity = this.activityRegistry.get(id);
+    if (activity) {
+      console.log("found in registry")
+      this.selectedActivity = activity;
+      this.loadingInitial = false;
+    } else {
+      try {
+        activity = await agent.Activities.details(id);
+        runInAction('loadingActivities', () => {
+          console.log("after fetch")
+          this.selectedActivity = activity;
+          console.log(this.selectedActivity);
+          this.loadingInitial = false;
+        });
+      } catch (error) {
+        runInAction('loadingActivitiesError', () => {
+          console.log(error);
+          this.loadingInitial = false;
+        });
+      }
+    }
+  };
   @action createActivity = async (activity: IActivity) => {
     this.submitting = true;
+    if(activity.date === ''){
+      var today = new Date();
+      var dd = String(today.getDate()).padStart(2, '0');
+      var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+      var yyyy = today.getFullYear();
+      const dateAsString: string = mm + '/' + dd + '/' + yyyy;
+      activity.date = dateAsString;
+      console.log("in createActivity: ", activity)
+    }
     try {
       await agent.Activities.create(activity);
       runInAction('createActivity', () => {

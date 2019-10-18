@@ -19,7 +19,7 @@ namespace Application.Activities
             public string City { get; set; }
             public string Venue { get; set; }
         }
-         public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command>
         {
             public Handler(DataContext context)
             {
@@ -30,19 +30,20 @@ namespace Application.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-               var activity = new Activity{
-                   Id = request.Id,
-                   Title = request.Title,
-                   Description = request.Description,
-                   Category = request.Category,
-                   Date = request.Date,
-                   City = request.City,
-                   Venue = request.Venue                   
-               };
-               _context.Activities.Add(activity);
-               var success = await _context.SaveChangesAsync() > 0;
-               if(success) return Unit.Value;
-               throw new Exception("Problem in create handler");
+                var activity = new Activity
+                {
+                    Id = request.Id,
+                    Title = request.Title,
+                    Description = request.Description,
+                    Category = request.Category,
+                    City = request.City,
+                    Venue = request.Venue,
+                    Date = request.Date
+                };
+                _context.Activities.Add(activity);
+                var success = await _context.SaveChangesAsync() > 0;
+                if (success) return Unit.Value;
+                throw new Exception("Problem in create handler");
             }
         }
 
