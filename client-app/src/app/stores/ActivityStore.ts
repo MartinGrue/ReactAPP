@@ -18,9 +18,28 @@ class ActivityStore {
     // return this.activities.sort(
     //   (a, b) => Date.parse(a.date) - Date.parse(b.date)
     // );
-    return Array.from(this.activityRegistry.values()).sort(
-      //arrayfrom weil die observableMap kein Iteratble ist
+    return this.groupActivitiesByDate(Array.from(this.activityRegistry.values()));
+  }
+ groupActivitiesByDate(activities: IActivity[]) {
+
+    const sorted = activities.sort(
       (a, b) => Date.parse(a.date) - Date.parse(b.date)
+    );
+   
+    // console.log(Object.entries(sorted));
+
+    // console.log(Object.entries(sorted.reduce((a,b)=>{return a}, {})));
+    return Object.entries(
+      sorted.reduce(
+        (activities, activity) => {
+          const key: string = activity.date.split('T')[0];
+          activities[key] = activities[key]
+            ? [...activities[key], activity]
+            : [activity];
+          return activities;
+        },
+        {} as { [key: string]: IActivity[] }
+      )
     );
   }
   @action openEditForm = (id: string) => {
@@ -45,8 +64,9 @@ class ActivityStore {
       });
     } catch (error) {
       runInAction('UpdateActivityError', () => {
-      console.log(error);
-      this.submitting = false;});
+        console.log(error);
+        this.submitting = false;
+      });
     }
   };
   @action loadActivities = async () => {
@@ -54,6 +74,7 @@ class ActivityStore {
     this.loadingInitial = true;
     try {
       const activities = await agent.Activities.list();
+      // console.log(Object.entries(activities));
       runInAction('loadingActivities', () => {
         activities.forEach(activity => {
           activity.date = activity.date.split('.')[0];
@@ -73,16 +94,15 @@ class ActivityStore {
     this.loadingInitial = true;
     let activity = this.activityRegistry.get(id);
     if (activity) {
-      console.log("found in registry")
+      console.log("Activity found in registry");
       this.selectedActivity = activity;
       this.loadingInitial = false;
     } else {
       try {
         activity = await agent.Activities.details(id);
         runInAction('loadingActivities', () => {
-          console.log("after fetch")
+          console.log("Activity fetched from api");
           this.selectedActivity = activity;
-          console.log(this.selectedActivity);
           this.loadingInitial = false;
         });
       } catch (error) {
@@ -95,14 +115,13 @@ class ActivityStore {
   };
   @action createActivity = async (activity: IActivity) => {
     this.submitting = true;
-    if(activity.date === ''){
+    if (activity.date === '') {
       var today = new Date();
       var dd = String(today.getDate()).padStart(2, '0');
       var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
       var yyyy = today.getFullYear();
       const dateAsString: string = mm + '/' + dd + '/' + yyyy;
       activity.date = dateAsString;
-      console.log("in createActivity: ", activity)
     }
     try {
       await agent.Activities.create(activity);

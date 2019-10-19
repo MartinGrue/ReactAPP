@@ -1,5 +1,5 @@
 import React, { useState, FormEvent, useContext, useEffect } from 'react';
-import { Segment, Form, FormInput, Button } from 'semantic-ui-react';
+import { Segment, Form, FormInput, Button, Grid, GridColumn } from 'semantic-ui-react';
 import { IActivity } from '../../../app/models/IActivity';
 import { v4 as uuid } from 'uuid';
 import { observer } from 'mobx-react-lite';
@@ -90,6 +90,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     return <LoadingComponent content='Fetching Activity...'></LoadingComponent>;
   }
   return (
+    <Grid>
+      <GridColumn width={10}>
     <Segment clearing>
       <Form onSubmit={handleSubmit}>
         <FormInput
@@ -146,6 +148,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
           }}
         ></Button>
     </Segment>
+    </GridColumn>
+    </Grid>
   );
 };
 
