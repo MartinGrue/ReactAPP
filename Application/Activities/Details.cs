@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -27,11 +29,11 @@ namespace Application.Activities
             public async Task<Activity> Handle(Query request, CancellationToken cancellationToken)
             {
                 var activityFromRepo = await _context.Activities.FirstOrDefaultAsync(p => p.Id == request.Id);
+
                 if (activityFromRepo == null)
                 {
-                    throw new Exception("Could not find Activity");
+                    throw new RestException(HttpStatusCode.NotFound, new { activity = "Could not find Activity" });
                 }
-                
                 return activityFromRepo;
             }
         }

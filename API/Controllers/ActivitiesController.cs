@@ -33,6 +33,7 @@ namespace API.Controllers
             // Query q = new List.Query();
             // CancellationToken token = new CancellationToken();
             // return await _handler.Handle(q, token );
+            await Task.Delay(1000);
             return await _mediator.Send(new List.Query());
         }
         [HttpPost]

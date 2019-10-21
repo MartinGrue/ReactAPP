@@ -1,5 +1,7 @@
 ﻿
+using API.Middleware;
 using Application.Activities;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,7 +32,9 @@ namespace API
                  options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
              });
             services.AddDbContext<DataContext>(x => { x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")); });
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc()
+            .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Create>())
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             // services.AddCors();
             services.AddMediatR(typeof(List.Handler).Assembly);
         }
@@ -40,7 +44,8 @@ namespace API
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                // app.UseDeveloperExceptionPage();
+                app.UseMiddleware<ErrorHandlingMiddleware>();
             }
             else
             {

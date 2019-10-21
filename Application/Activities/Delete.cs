@@ -1,6 +1,8 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -27,7 +29,7 @@ namespace Application.Activities
                 var activityFromRepo = await _context.Activities.FirstOrDefaultAsync(p => p.Id == request.Id);
                 if (activityFromRepo == null)
                 {
-                    throw new Exception("Could not find Activity to delete");
+                    throw new RestException(HttpStatusCode.NotFound, new { activity = "Could not find Activity to delete" });
                 }
                 _context.Activities.Remove(activityFromRepo);
 

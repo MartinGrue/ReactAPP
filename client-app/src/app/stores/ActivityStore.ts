@@ -18,14 +18,15 @@ class ActivityStore {
     // return this.activities.sort(
     //   (a, b) => Date.parse(a.date) - Date.parse(b.date)
     // );
-    return this.groupActivitiesByDate(Array.from(this.activityRegistry.values()));
+    return this.groupActivitiesByDate(
+      Array.from(this.activityRegistry.values())
+    );
   }
- groupActivitiesByDate(activities: IActivity[]) {
-
+  groupActivitiesByDate(activities: IActivity[]) {
     const sorted = activities.sort(
       (a, b) => Date.parse(a.date) - Date.parse(b.date)
     );
-   
+
     // console.log(Object.entries(sorted));
 
     // console.log(Object.entries(sorted.reduce((a,b)=>{return a}, {})));
@@ -72,36 +73,41 @@ class ActivityStore {
   @action loadActivities = async () => {
     //implicity returning a promise
     this.loadingInitial = true;
-    try {
-      const activities = await agent.Activities.list();
-      // console.log(Object.entries(activities));
-      runInAction('loadingActivities', () => {
-        activities.forEach(activity => {
-          activity.date = activity.date.split('.')[0];
-          // this.activities.push(activity);
-          this.activityRegistry.set(activity.id, activity);
+    let activities = this.activityRegistry
+    if ( Array.from(this.activityRegistry.values()).length !== 0 ) {
+      this.loadingInitial = false
+    } else {
+      try {
+        const activities = await agent.Activities.list();
+        // console.log(Object.entries(activities));
+        runInAction('loadingActivities', () => {
+          activities.forEach(activity => {
+            activity.date = activity.date.split('.')[0];
+            // this.activities.push(activity);
+            this.activityRegistry.set(activity.id, activity);
+          });
+          this.loadingInitial = false;
         });
-        this.loadingInitial = false;
-      });
-    } catch (error) {
-      runInAction('loadingActivitiesError', () => {
-        console.log(error);
-        this.loadingInitial = false;
-      });
+      } catch (error) {
+        runInAction('loadingActivitiesError', () => {
+          console.log(error);
+          this.loadingInitial = false;
+        });
+      }
     }
   };
   @action loadActivity = async (id: string) => {
     this.loadingInitial = true;
     let activity = this.activityRegistry.get(id);
     if (activity) {
-      console.log("Activity found in registry");
+      console.log('Activity found in registry');
       this.selectedActivity = activity;
       this.loadingInitial = false;
     } else {
       try {
         activity = await agent.Activities.details(id);
         runInAction('loadingActivities', () => {
-          console.log("Activity fetched from api");
+          console.log('Activity fetched from api');
           this.selectedActivity = activity;
           this.loadingInitial = false;
         });
