@@ -8,13 +8,15 @@ import ActivityDetailedHeader from './ActivityDetailedHeader';
 import ActivityDetailedInfo from './ActivityDetailedInfo';
 import ActivityDetailedChat from './ActivityDetailedChat';
 import ActivityDetailedSideBar from './ActivityDetailedSideBar';
+import NotFound from '../../../app/layout/NotFound';
 
 interface DetailParams {
   id: string;
 }
 
 const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
-  match
+  match,
+  history
 }) => {
   const activityStore = useContext(ActivityStore);
   const {
@@ -26,7 +28,13 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   useEffect(() => {
     loadActivity(match.params.id);
   }, [match.params.id, loadActivity]);
+
+
   // return <p>Details {match.params.id}</p>
+  
+  if(!selectedActivity){
+    return<NotFound></NotFound>
+  }
   if (loadingInitial || !selectedActivity) {
     return <LoadingComponent content='Fetching Activity...'></LoadingComponent>;
   }

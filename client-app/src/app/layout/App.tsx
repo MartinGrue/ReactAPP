@@ -4,14 +4,17 @@ import React, { Fragment } from 'react';
 import Nav from '../../features/nav/Nav';
 import ActivityDashboard from '../../features/activities/dashbord/ActivityDashboard';
 import { observer } from 'mobx-react-lite';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import homepage from '../../features/home/homepage';
 import ActivityForm from '../../features/activities/form/ActivityForm';
 import ActivityDetails from '../../features/activities/details/ActivityDetails';
+import NotFound from './NotFound';
+import {ToastContainer} from 'react-toastify'
 
 const App = () => {
   return (
     <Fragment>
+      <ToastContainer position='bottom-right'></ToastContainer>
       <Route exact path='/' component={homepage}></Route>
       <Route
         path={'/(.+)'}
@@ -19,21 +22,24 @@ const App = () => {
           <Fragment>
             <Nav />
             <Container style={{ marginTop: '7em' }}>
-              <Route
-                exact
-                path='/activities'
-                component={ActivityDashboard}
-              ></Route>
-              <Route
-                exact
-                path={['/createActivity', '/manage/:id']}
-                component={ActivityForm}
-              ></Route>
-              <Route
-                exact
-                path='/activities/:id'
-                component={ActivityDetails}
-              ></Route>
+              <Switch>
+                <Route
+                  exact
+                  path='/activities'
+                  component={ActivityDashboard}
+                ></Route>
+                <Route
+                  exact
+                  path={['/createActivity', '/manage/:id']}
+                  component={ActivityForm}
+                ></Route>
+                <Route
+                  exact
+                  path='/activities/:id'
+                  component={ActivityDetails}
+                ></Route>
+                <Route component={NotFound}></Route>
+              </Switch>
             </Container>
           </Fragment>
         )}
