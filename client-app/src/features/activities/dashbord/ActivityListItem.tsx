@@ -9,7 +9,7 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
   return (
     <Segment.Group>
       <Segment>
-        <Item.Meta>
+        <Item.Group>
           <Item key={activity.id}>
             <Item.Image
               size='tiny'
@@ -22,7 +22,7 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
               <Item.Description>Hosted by Bob</Item.Description>
             </Item.Content>
           </Item>
-        </Item.Meta>
+        </Item.Group>
       </Segment>
       <Segment>
         <Icon name='clock' />
