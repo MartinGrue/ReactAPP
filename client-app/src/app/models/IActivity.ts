@@ -4,8 +4,8 @@ export interface IActivity {
   title: string;
   description: string;
   category: string;
-  // date: Date;
-  date: string
+  date: Date | null;
+  // date: string
   city: string;
   venue: string;
 }

@@ -24,7 +24,7 @@ class ActivityStore {
   }
   groupActivitiesByDate(activities: IActivity[]) {
     const sorted = activities.sort(
-      (a, b) => Date.parse(a.date) - Date.parse(b.date)
+      (a, b) => a.date!.getTime() - b.date!.getTime()
     );
 
     // console.log(Object.entries(sorted));
@@ -33,7 +33,7 @@ class ActivityStore {
     return Object.entries(
       sorted.reduce(
         (activities, activity) => {
-          const key: string = activity.date.split('T')[0];
+          const key: string = activity.date!.toISOString().split('T')[0];
           activities[key] = activities[key]
             ? [...activities[key], activity]
             : [activity];
@@ -73,16 +73,16 @@ class ActivityStore {
   @action loadActivities = async () => {
     //implicity returning a promise
     this.loadingInitial = true;
-    let activities = this.activityRegistry
-    if ( Array.from(this.activityRegistry.values()).length !== 0 ) {
-      this.loadingInitial = false
+    let activities = this.activityRegistry;
+    if (Array.from(this.activityRegistry.values()).length !== 0) {
+      this.loadingInitial = false;
     } else {
       try {
         const activities = await agent.Activities.list();
         // console.log(Object.entries(activities));
         runInAction('loadingActivities', () => {
           activities.forEach(activity => {
-            activity.date = activity.date.split('.')[0];
+            activity.date = new Date(activity.date!);
             // this.activities.push(activity);
             this.activityRegistry.set(activity.id, activity);
           });
@@ -107,6 +107,7 @@ class ActivityStore {
       try {
         activity = await agent.Activities.details(id);
         runInAction('loadingActivities', () => {
+          activity.date = new Date(activity.date);
           console.log('Activity fetched from api');
           this.selectedActivity = activity;
           this.loadingInitial = false;
@@ -121,13 +122,8 @@ class ActivityStore {
   };
   @action createActivity = async (activity: IActivity) => {
     this.submitting = true;
-    if (activity.date === '') {
-      var today = new Date();
-      var dd = String(today.getDate()).padStart(2, '0');
-      var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-      var yyyy = today.getFullYear();
-      const dateAsString: string = mm + '/' + dd + '/' + yyyy;
-      activity.date = dateAsString;
+    if (activity.date === null) {
+      activity.date = new Date()
     }
     try {
       await agent.Activities.create(activity);

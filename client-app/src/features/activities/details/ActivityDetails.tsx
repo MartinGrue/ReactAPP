@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { Grid, GridColumn } from 'semantic-ui-react';
 import ActivityStore from '../../../app/stores/ActivityStore';
 import { observer } from 'mobx-react-lite';
-import {  RouteComponentProps } from 'react-router';
+import { RouteComponentProps } from 'react-router';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import ActivityDetailedHeader from './ActivityDetailedHeader';
 import ActivityDetailedInfo from './ActivityDetailedInfo';
@@ -19,21 +19,16 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   history
 }) => {
   const activityStore = useContext(ActivityStore);
-  const {
-    selectedActivity,
-    loadActivity,
-    loadingInitial
-  } = activityStore;
+  const { selectedActivity, loadActivity, loadingInitial } = activityStore;
 
   useEffect(() => {
     loadActivity(match.params.id);
   }, [match.params.id, loadActivity]);
 
-
   // return <p>Details {match.params.id}</p>
-  
-  if(!selectedActivity){
-    return<NotFound></NotFound>
+
+  if (!selectedActivity) {
+    return <NotFound></NotFound>;
   }
   if (loadingInitial || !selectedActivity) {
     return <LoadingComponent content='Fetching Activity...'></LoadingComponent>;
@@ -41,12 +36,16 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   return (
     <Grid>
       <GridColumn width={10}>
-      <ActivityDetailedHeader activity={selectedActivity}></ActivityDetailedHeader>
-      <ActivityDetailedInfo activity={selectedActivity}></ActivityDetailedInfo>
-      <ActivityDetailedChat></ActivityDetailedChat>
+        <ActivityDetailedHeader
+          activity={selectedActivity}
+        ></ActivityDetailedHeader>
+        <ActivityDetailedInfo
+          activity={selectedActivity}
+        ></ActivityDetailedInfo>
+        <ActivityDetailedChat></ActivityDetailedChat>
       </GridColumn>
       <GridColumn width={6}>
-      <ActivityDetailedSideBar></ActivityDetailedSideBar>
+        <ActivityDetailedSideBar></ActivityDetailedSideBar>
       </GridColumn>
     </Grid>
     // <Card fluid>
