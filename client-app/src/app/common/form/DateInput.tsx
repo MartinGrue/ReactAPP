@@ -2,7 +2,6 @@ import React from 'react';
 import { FieldRenderProps } from 'react-final-form';
 import { FormFieldProps, Form, Label } from 'semantic-ui-react';
 import { DateTimePicker } from 'react-widgets';
-import { values } from 'mobx';
 
 interface IProps
   extends FieldRenderProps<Date, HTMLInputElement>,
@@ -11,6 +10,8 @@ interface IProps
 const DateInput: React.FC<IProps> = ({
   input,
   width,
+  date = false,
+  time = false,
   placeholder,
   meta: { touched, error },
   ...rest
@@ -18,7 +19,12 @@ const DateInput: React.FC<IProps> = ({
   return (
     <Form.Field error={touched && !!error} width={width}>
       <DateTimePicker
-      onChange={input.onChange}
+        time={time}
+        timeFormat='HH:mm'
+        step={15}
+        date={date}
+        format={date ? 'dd.MM.YYYY': 'HH:mm'}
+        onChange={input.onChange}
         value={input.value || null}
         placeholder={placeholder}
         {...rest}
