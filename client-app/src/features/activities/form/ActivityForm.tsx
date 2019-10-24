@@ -27,6 +27,16 @@ import DateInput from '../../../app/common/form/DateInput';
 import format from 'date-fns/esm/format';
 import { combineDateAndTime } from '../../../app/common/util/util';
 
+import {
+  createValidator,
+  composeValidators,
+  combineValidators,
+  isRequired,
+  isAlphabetic,
+  isNumeric,
+  hasLengthGreaterThan
+} from 'revalidate';
+
 interface DetailsParams {
   id: string;
 }
@@ -117,15 +127,30 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
       history.push('/');
     }
   };
+  const validate = combineValidators({
+    title: isRequired({ message: 'The title is required' }),
+    category: isRequired('category'),
+    description: composeValidators(
+      isRequired('Description'),
+      hasLengthGreaterThan(4)({
+        message: 'Description needs to be at least 5 characters'
+      })
+    )(),
+    city: isRequired('City'),
+    venue: isRequired('Venue'),
+    date: isRequired('Date'),
+    time: isRequired('Time')
+  });
 
   return (
     <Grid>
       <GridColumn width={10}>
         <Segment clearing>
           <FinalForm
+            validate={validate}
             initialValues={activity}
             onSubmit={handleFinalFormSubmit}
-            render={({ handleSubmit }) => (
+            render={({ handleSubmit, invalid, pristine }) => (
               <Form loading={loading} onSubmit={handleSubmit}>
                 <Field
                   name='title'
@@ -178,7 +203,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                   value={activity.venue}
                 ></Field>
                 <Button
-                  disabled={loading}
+                  disabled={loading || invalid || pristine}
                   loading={submitting}
                   floated='right'
                   positive

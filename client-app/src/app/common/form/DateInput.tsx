@@ -19,11 +19,13 @@ const DateInput: React.FC<IProps> = ({
   return (
     <Form.Field error={touched && !!error} width={width}>
       <DateTimePicker
+        onKeyDown={e => e.preventDefault()}
+        onBlur={input.onBlur}
         time={time}
         timeFormat='HH:mm'
         step={15}
         date={date}
-        format={date ? 'dd.MM.YYYY': 'HH:mm'}
+        format={date ? 'dd.MM.YYYY' : 'HH:mm'}
         onChange={input.onChange}
         value={input.value || null}
         placeholder={placeholder}
