@@ -8,7 +8,11 @@ import {
   GridColumn,
   FormGroup
 } from 'semantic-ui-react';
-import { IActivity, IActivityFormValues } from '../../../app/models/IActivity';
+import {
+  IActivity,
+  IActivityFormValues,
+  ActivityFormValues
+} from '../../../app/models/IActivity';
 import { v4 as uuid } from 'uuid';
 import { observer } from 'mobx-react-lite';
 import ActivityStore from '../../../app/stores/ActivityStore';
@@ -37,32 +41,33 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     editActivity,
     submitting,
     cancelFormOpen,
-    loadActivity,
-    loadingInitial
+    loadActivity
   } = activityStore;
 
-  const [activity, setActivity] = useState<IActivityFormValues>({
-    id: '',
-    title: '',
-    description: '',
-    category: '',
-    date: undefined,
-    time: undefined,
-    city: '',
-    venue: ''
-  });
+  const [activity, setActivity] = useState<IActivityFormValues>(
+    new ActivityFormValues()
+  );
+  const [loading, setloading] = useState(false);
 
   useEffect(() => {
     if (match.params.id) {
+      setloading(true);
       if (activityStore.selectedActivity === undefined) {
-        loadActivity(match.params.id).then(() => {
-          console.log(activityStore.selectedActivity);
-          activityStore.selectedActivity &&
-            setActivity(activityStore.selectedActivity);
-        });
+        loadActivity(match.params.id)
+          .then(() => {
+            activityStore.selectedActivity &&
+              setActivity(
+                new ActivityFormValues(activityStore.selectedActivity)
+              );
+          })
+          .finally(() => {
+            setloading(false);
+          });
+      } else {
+        activityStore.selectedActivity &&
+          setActivity(new ActivityFormValues(activityStore.selectedActivity));
+        setloading(false);
       }
-      activityStore.selectedActivity &&
-        setActivity(activityStore.selectedActivity);
     } else {
       setActivity({
         id: '',
@@ -91,11 +96,19 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   //   console.log(activity);
   // };
   const handleFinalFormSubmit = (values: any) => {
-    console.log(values);
     const dateAndTime = combineDateAndTime(values.date, values.time);
     const { date, time, ...activity } = values;
-    activity.date = dateAndTime
-    console.log(activity);
+    activity.date = dateAndTime;
+    if (!activity.id) {
+      let newActivity = { ...activity, id: uuid() };
+      createActivity(newActivity).then(() =>
+        history.push(`/activities/${newActivity.id}`)
+      );
+    } else {
+      editActivity(activity).then(() =>
+        history.push(`/activities/${activity.id}`)
+      );
+    }
   };
   const handleCancel = () => {
     if (match.params.id) {
@@ -104,17 +117,16 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
       history.push('/');
     }
   };
-  if (loadingInitial) {
-    return <LoadingComponent content='Fetching Activity...'></LoadingComponent>;
-  }
+
   return (
     <Grid>
       <GridColumn width={10}>
         <Segment clearing>
           <FinalForm
+            initialValues={activity}
             onSubmit={handleFinalFormSubmit}
             render={({ handleSubmit }) => (
-              <Form onSubmit={handleSubmit}>
+              <Form loading={loading} onSubmit={handleSubmit}>
                 <Field
                   name='title'
                   placeholder='title'
@@ -166,23 +178,25 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                   value={activity.venue}
                 ></Field>
                 <Button
+                  disabled={loading}
                   loading={submitting}
                   floated='right'
                   positive
                   type='submit'
                   content='submit'
                 ></Button>
+                <Button
+                  disabled={loading}
+                  floated='right'
+                  content='Cancel'
+                  onClick={() => {
+                    cancelFormOpen();
+                    handleCancel();
+                  }}
+                ></Button>
               </Form>
             )}
           />
-          <Button
-            floated='right'
-            content='Cancel'
-            onClick={() => {
-              cancelFormOpen();
-              handleCancel();
-            }}
-          ></Button>
         </Segment>
       </GridColumn>
     </Grid>
