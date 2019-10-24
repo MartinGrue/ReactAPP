@@ -1,5 +1,5 @@
 import React, { useContext, Fragment } from 'react';
-import { Item, Label } from 'semantic-ui-react';
+import { Item, Label, Segment } from 'semantic-ui-react';
 import ActivityStore from '../../../app/stores/ActivityStore';
 import { observer } from 'mobx-react-lite';
 import ActivityListItem from './ActivityListItem';
@@ -15,6 +15,7 @@ const ActivityList: React.FC = () => {
           <Label size='large' color='blue'>
             {group}
           </Label>
+          <Segment>
             <Item.Group>
             {activities.map((activity: IActivity) => (
                 <ActivityListItem
@@ -23,6 +24,7 @@ const ActivityList: React.FC = () => {
                 />
               ))}
             </Item.Group>
+            </Segment>
         </Fragment>
       ))}
     </Fragment>
