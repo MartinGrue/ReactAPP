@@ -4,6 +4,7 @@ using Application.Activities;
 using Domain;
 using FluentValidation.AspNetCore;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +14,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Persistence;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Application.interfaces;
+using Infrastructure.security;
+
 namespace API
 {
     public class Startup
@@ -41,9 +47,23 @@ namespace API
 
             var builder = services.AddIdentityCore<AppUser>();
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
-            // identityBuilder.AddEntityFrameworkStores<DataContext>();
-            // identityBuilder.AddSignInManager<SignInManager<AppUser>>();
-            services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<DataContext>();
+            identityBuilder.AddEntityFrameworkStores<DataContext>();
+            identityBuilder.AddSignInManager<SignInManager<AppUser>>();
+            // services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<DataContext>();
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.
+            GetBytes("Super secret key"));
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(Options =>
+                Options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = key
+                }
+                );
+            services.AddScoped<IJwtGenerator, JwtGenerator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,6 +80,7 @@ namespace API
             }
 
             // app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseMvc();
         }

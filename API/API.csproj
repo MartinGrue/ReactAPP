@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
+  <UserSecretsId>3e9cedf7-f5ba-4b13-8fdf-f79ae1ace121</UserSecretsId>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <StartupObject>API.Program</StartupObject>
   </PropertyGroup>
@@ -15,5 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Persistence\Persistence.csproj" />
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Application.Activities;
 using Domain;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -13,8 +14,8 @@ namespace API.Controllers
     public class ActivitiesController : BaseController
     {
 
-
         [HttpGet("{id}")]
+                [Authorize]
         public async Task<ActionResult<Activity>> Details(Guid id)
         {
             await Task.Delay(1000);
@@ -22,6 +23,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
+
         public async Task<ActionResult<List<Activity>>> List()
         {
             // Query q = new List.Query();

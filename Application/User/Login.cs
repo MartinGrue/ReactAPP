@@ -2,6 +2,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Errors;
+using Application.interfaces;
 using Domain;
 using FluentValidation;
 using MediatR;
@@ -30,8 +31,10 @@ namespace Application.User
         {
             private readonly UserManager<AppUser> userManager;
             private readonly SignInManager<AppUser> signInManager;
-            public Handler(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+            private readonly IJwtGenerator jwtGenerator;
+            public Handler(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IJwtGenerator jwtGenerator)
             {
+                this.jwtGenerator = jwtGenerator;
                 this.signInManager = signInManager;
                 this.userManager = userManager;
             }
@@ -47,14 +50,18 @@ namespace Application.User
                 if (results.Succeeded)
                 {
                     //TODO: generate token
-                    return new User{
+                    return new User
+                    {
                         DisplayName = user.DisplayName,
                         Username = user.UserName,
                         Image = "bla",
-                        Token = "not created"
+                        Token = this.jwtGenerator.CreateToken(user)
                     };
                 }
                 throw new RestException(HttpStatusCode.Unauthorized);
+
+
+
             }
         }
     }
