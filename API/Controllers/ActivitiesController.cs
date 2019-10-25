@@ -9,22 +9,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ActivitiesController : ControllerBase
-    {
-        public ActivitiesController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
 
-        public IMediator _mediator { get; }
+    public class ActivitiesController : BaseController
+    {
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Activity>> Details(Guid id)
         {
             await Task.Delay(1000);
-            return await _mediator.Send(new Details.Query { Id = id });
+            return await Mediator.Send(new Details.Query { Id = id });
         }
 
         [HttpGet]
@@ -34,26 +28,26 @@ namespace API.Controllers
             // CancellationToken token = new CancellationToken();
             // return await _handler.Handle(q, token );
             await Task.Delay(1000);
-            return await _mediator.Send(new List.Query());
+            return await Mediator.Send(new List.Query());
         }
         [HttpPost]
         public async Task<ActionResult<Unit>> Create(Create.Command command)
         {
-            return await _mediator.Send(command);
+            return await Mediator.Send(command);
         }
         [HttpPut("{id}")]
         public async Task<ActionResult<Unit>> Update(Guid id, Update.Command command)
         {
             command.Id = id;
-            await Task.Delay(2000);
-            return await _mediator.Send(command);
+            await Task.Delay(1000);
+            return await Mediator.Send(command);
         }
         [HttpDelete("{id}")]
         public async Task<ActionResult<Unit>> Delete(Guid id)
         {
             // Delete.Command command = new Delete.Command{Id = id};
-            await Task.Delay(2000);
-            return await _mediator.Send(new Delete.Command { Id = id });
+            await Task.Delay(1000);
+            return await Mediator.Send(new Delete.Command { Id = id });
         }
     }
 }

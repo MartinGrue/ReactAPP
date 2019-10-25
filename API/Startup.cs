@@ -1,11 +1,12 @@
 ﻿
 using API.Middleware;
 using Application.Activities;
+using Domain;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -37,6 +38,12 @@ namespace API
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             // services.AddCors();
             services.AddMediatR(typeof(List.Handler).Assembly);
+
+            var builder = services.AddIdentityCore<AppUser>();
+            var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
+            // identityBuilder.AddEntityFrameworkStores<DataContext>();
+            // identityBuilder.AddSignInManager<SignInManager<AppUser>>();
+            services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<DataContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,7 +62,6 @@ namespace API
             // app.UseHttpsRedirection();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseMvc();
-
         }
     }
 }
