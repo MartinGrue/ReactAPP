@@ -18,6 +18,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Application.interfaces;
 using Infrastructure.security;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace API
 {
@@ -33,13 +35,13 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc()
-             .AddJsonOptions(options =>
-             {
-                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-             });
+
             services.AddDbContext<DataContext>(x => { x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")); });
-            services.AddMvc()
+            services.AddMvc(opt =>
+            {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                opt.Filters.Add(new AuthorizeFilter(policy));
+            })
             .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Create>())
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             // services.AddCors();
@@ -49,7 +51,6 @@ namespace API
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
             identityBuilder.AddEntityFrameworkStores<DataContext>();
             identityBuilder.AddSignInManager<SignInManager<AppUser>>();
-            // services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<DataContext>();
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.
             GetBytes("Super secret key"));
@@ -61,8 +62,7 @@ namespace API
                     ValidateAudience = false,
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = key
-                }
-                );
+                });
             services.AddScoped<IJwtGenerator, JwtGenerator>();
         }
 

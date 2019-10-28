@@ -26,7 +26,6 @@ namespace API
                     context.Database.Migrate();
                     var userManager = services.GetRequiredService<UserManager<AppUser>>();
                     Seed.SeedData(context, userManager).Wait();
-
                }
                catch(Exception ex){
                    var logger = services.GetRequiredService<ILogger<Program>>();

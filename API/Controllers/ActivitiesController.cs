@@ -15,7 +15,7 @@ namespace API.Controllers
     {
 
         [HttpGet("{id}")]
-                [Authorize]
+        [Authorize]
         public async Task<ActionResult<Activity>> Details(Guid id)
         {
             await Task.Delay(1000);
