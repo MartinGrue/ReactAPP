@@ -3,9 +3,18 @@ import { createContext, SyntheticEvent } from 'react';
 import { IActivity } from '../models/IActivity';
 import agent from '../api/agent';
 import { toast } from 'react-toastify';
+import { RootStore } from './rootStore';
 
-configure({ enforceActions: 'always' });
-class ActivityStore {
+// class ActivityStore {
+export default class ActivityStore {
+  /**
+   *
+   */
+  constructor(rootStore: RootStore) {
+    this.rootStore = rootStore;
+  }
+  rootStore: RootStore;
+
   @observable activityRegistry = new Map(); // um die activities als eine observableMap darzustellen
   @observable activities: IActivity[] = [];
   @observable loadingInitial = false;
@@ -125,7 +134,7 @@ class ActivityStore {
   @action createActivity = async (activity: IActivity) => {
     this.submitting = true;
     if (activity.date === null) {
-      activity.date = new Date()
+      activity.date = new Date();
     }
     try {
       await agent.Activities.create(activity);
@@ -175,4 +184,4 @@ class ActivityStore {
   };
 }
 
-export default createContext(new ActivityStore());
+// export default createContext(new ActivityStore());

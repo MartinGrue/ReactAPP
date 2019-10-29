@@ -36,6 +36,7 @@ import {
   isNumeric,
   hasLengthGreaterThan
 } from 'revalidate';
+import { RootStoreContext } from '../../../app/stores/rootStore';
 
 interface DetailsParams {
   id: string;
@@ -45,14 +46,14 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   match,
   history
 }) => {
-  const activityStore = useContext(ActivityStore);
+  const rootStore = useContext(RootStoreContext);
   const {
     createActivity,
     editActivity,
     submitting,
     cancelFormOpen,
     loadActivity
-  } = activityStore;
+  } = rootStore.activityStore;
 
   const [activity, setActivity] = useState<IActivityFormValues>(
     new ActivityFormValues()
@@ -62,20 +63,20 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   useEffect(() => {
     if (match.params.id) {
       setloading(true);
-      if (activityStore.selectedActivity === undefined) {
+      if ( rootStore.activityStore.selectedActivity === undefined) {
         loadActivity(match.params.id)
           .then(() => {
-            activityStore.selectedActivity &&
+            rootStore.activityStore.selectedActivity &&
               setActivity(
-                new ActivityFormValues(activityStore.selectedActivity)
+                new ActivityFormValues( rootStore.activityStore.selectedActivity)
               );
           })
           .finally(() => {
             setloading(false);
           });
       } else {
-        activityStore.selectedActivity &&
-          setActivity(new ActivityFormValues(activityStore.selectedActivity));
+        rootStore.activityStore.selectedActivity &&
+          setActivity(new ActivityFormValues( rootStore.activityStore.selectedActivity));
         setloading(false);
       }
     } else {
@@ -89,7 +90,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
         city: ''
       });
     }
-  }, [match.params.id, loadActivity, activityStore.selectedActivity]);
+  }, [match.params.id, loadActivity,  rootStore.activityStore.selectedActivity]);
 
   // const handleSubmit = () => {
   //   if (activity.id.length === 0) {

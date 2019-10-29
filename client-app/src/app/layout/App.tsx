@@ -9,7 +9,8 @@ import homepage from '../../features/home/homepage';
 import ActivityForm from '../../features/activities/form/ActivityForm';
 import ActivityDetails from '../../features/activities/details/ActivityDetails';
 import NotFound from './NotFound';
-import {ToastContainer} from 'react-toastify'
+import { ToastContainer } from 'react-toastify';
+import LoginForm from '../../features/User/LoginForm';
 
 const App = () => {
   return (
@@ -38,6 +39,7 @@ const App = () => {
                   path='/activities/:id'
                   component={ActivityDetails}
                 ></Route>
+                <Route path='/login' component={LoginForm}></Route>
                 <Route component={NotFound}></Route>
               </Switch>
             </Container>
