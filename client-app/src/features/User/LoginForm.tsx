@@ -10,24 +10,17 @@ import { RouteComponentProps } from 'react-router-dom';
 
 const validate = combineValidators({
   email: isRequired('email'),
-  password: isRequired('password')
+password: isRequired('password')
 });
 
-interface DetailsParams {}
 
-const LoginForm: React.FC<RouteComponentProps<DetailsParams>> = ({
-  history
-}) => {
+const LoginForm: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
   const { login } = rootStore.userStore;
   return (
     <FinalForm
       onSubmit={(values: IUserFormValues) =>
-        login(values)
-          .then(() => {
-            history.push(`/activities`);
-          })
-          .catch(error => ({
+        login(values).catch(error => ({
             [FORM_ERROR]: error
           }))
       }
