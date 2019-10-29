@@ -59,9 +59,6 @@ namespace Application.User
                     };
                 }
                 throw new RestException(HttpStatusCode.Unauthorized);
-
-
-
             }
         }
     }

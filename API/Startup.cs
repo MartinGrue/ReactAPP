@@ -20,6 +20,7 @@ using Application.interfaces;
 using Infrastructure.security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Application.User;
 
 namespace API
 {
@@ -35,7 +36,6 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddDbContext<DataContext>(x => { x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")); });
             services.AddMvc(opt =>
             {
@@ -46,6 +46,7 @@ namespace API
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             // services.AddCors();
             services.AddMediatR(typeof(List.Handler).Assembly);
+            services.AddMediatR(typeof(CurrentUser.Handler).Assembly);
 
             var builder = services.AddIdentityCore<AppUser>();
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
@@ -64,6 +65,8 @@ namespace API
                     IssuerSigningKey = key
                 });
             services.AddScoped<IJwtGenerator, JwtGenerator>();
+            services.AddScoped<IUserAccessor,UserAccessor>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
