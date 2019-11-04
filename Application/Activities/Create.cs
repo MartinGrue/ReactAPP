@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.interfaces;
 using Domain;
 using FluentValidation;
 using MediatR;
@@ -34,8 +36,10 @@ namespace Application.Activities
         }
         public class Handler : IRequestHandler<Command>
         {
-            public Handler(DataContext context)
+            private readonly IUserAccessor userAccessor;
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
+                this.userAccessor = userAccessor;
                 _context = context;
             }
 
@@ -54,6 +58,17 @@ namespace Application.Activities
                     Date = request.Date
                 };
                 _context.Activities.Add(activity);
+
+                var user = _context.Users.SingleOrDefault(p => p.UserName == userAccessor.GetCurrentUsername());
+                var attendee = new UserActivity
+                {
+                    AppUser = user,
+                    Activity = activity,
+                    isHost = true,
+                    DateJoined = DateTime.Now
+                };
+                _context.UserActivity.Add(attendee);
+
                 var success = await _context.SaveChangesAsync() > 0;
                 if (success) return Unit.Value;
                 throw new Exception("Problem in create handler");

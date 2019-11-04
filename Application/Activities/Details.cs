@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Errors;
+using AutoMapper;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -13,28 +14,30 @@ namespace Application.Activities
 {
     public class Details
     {
-        public class Query : IRequest<Activity>
+        public class Query : IRequest<ActivityDTO>
         {
             public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Activity>
+        public class Handler : IRequestHandler<Query, ActivityDTO>
         {
-            public Handler(DataContext context)
+            private readonly IMapper _mapper;
+            public Handler(DataContext context, IMapper mapper)
             {
+                this._mapper = mapper;
                 _context = context;
             }
 
             public DataContext _context { get; }
-            public async Task<Activity> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<ActivityDTO> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activityFromRepo = await _context.Activities.FirstOrDefaultAsync(p => p.Id == request.Id);
+                var activity = await _context.Activities.FindAsync(request.Id);
 
-                if (activityFromRepo == null)
+                if (activity == null)
                 {
                     throw new RestException(HttpStatusCode.NotFound, new { activity = "Could not find Activity" });
                 }
-                return activityFromRepo;
+                return _mapper.Map<Activity, ActivityDTO>(activity);
             }
         }
     }

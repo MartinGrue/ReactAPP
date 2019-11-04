@@ -21,6 +21,7 @@ using Infrastructure.security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Application.User;
+using AutoMapper;
 
 namespace API
 {
@@ -36,7 +37,9 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(x => { x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")); });
+            services.AddDbContext<DataContext>(opt => { 
+                opt.UseLazyLoadingProxies();
+                opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection")); });
             services.AddMvc(opt =>
             {
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
@@ -47,6 +50,7 @@ namespace API
             // services.AddCors();
             services.AddMediatR(typeof(List.Handler).Assembly);
             services.AddMediatR(typeof(CurrentUser.Handler).Assembly);
+            services.AddAutoMapper(typeof(List.Handler).Assembly);
 
             var builder = services.AddIdentityCore<AppUser>();
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
