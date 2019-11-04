@@ -50,5 +50,16 @@ namespace API.Controllers
             await Task.Delay(1000);
             return await Mediator.Send(new Delete.Command { Id = id });
         }
+        [HttpPost("{id}/attend")]
+        public async Task<ActionResult<Unit>> Join(Guid id)
+        {
+            return await Mediator.Send(new JoinActivity.Command { Id = id });
+        }
+
+        [HttpDelete("{id}/attend")]
+        public async Task<ActionResult<Unit>> UnJoin(Guid id)
+        {
+            return await Mediator.Send(new UnJoinActivity.Command { Id = id });
+        }
     }
 }

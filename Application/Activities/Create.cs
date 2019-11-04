@@ -74,6 +74,5 @@ namespace Application.Activities
                 throw new Exception("Problem in create handler");
             }
         }
-
     }
 }
