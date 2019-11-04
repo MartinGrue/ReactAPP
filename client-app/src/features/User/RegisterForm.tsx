@@ -9,17 +9,19 @@ import { combineValidators, isRequired } from 'revalidate';
 import ErrorMessage from '../../app/common/form/ErrorMessage';
 
 const validate = combineValidators({
+  username: isRequired('username'),
+  displayname: isRequired('displayname'),
   email: isRequired('email'),
   password: isRequired('password')
 });
 
-const LoginForm: React.FC = () => {
+const RegisterForm: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
-  const { login } = rootStore.userStore;
+  const { register } = rootStore.userStore;
   return (
     <FinalForm
       onSubmit={(values: IUserFormValues) =>
-        login(values).catch(error => ({
+        register(values).catch(error => ({
           [FORM_ERROR]: error
         }))
       }
@@ -27,6 +29,7 @@ const LoginForm: React.FC = () => {
       render={({
         handleSubmit,
         submitting,
+        form,
         submitError,
         invalid,
         pristine,
@@ -35,10 +38,20 @@ const LoginForm: React.FC = () => {
         <Form onSubmit={handleSubmit} error>
           <Header
             as='h2'
-            content='Login to Reactivities'
+            content='Sign up to Reactivities'
             color='teal'
             textAlign='center'
           ></Header>
+          <Field
+            name='username'
+            component={TextInput}
+            placeholder='Username'
+          ></Field>
+          <Field
+            name='displayname'
+            component={TextInput}
+            placeholder='Displayname'
+          ></Field>
           <Field name='email' component={TextInput} placeholder='email'></Field>
           <Field
             name='password'
@@ -50,14 +63,13 @@ const LoginForm: React.FC = () => {
             // <Label color='red' basic content={submitError.statusText}></Label>
             <ErrorMessage
               error={submitError}
-              text='Invalid email or password'
             ></ErrorMessage>
           )}
           {/* <br></br> */}
           <Button
-            disabled={(invalid && !dirtySinceLastSubmit) || pristine}
+            disabled={ pristine}
             positive
-            content='Login'
+            content='Register'
             loading={submitting}
             fluid
           ></Button>
@@ -68,4 +80,4 @@ const LoginForm: React.FC = () => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;

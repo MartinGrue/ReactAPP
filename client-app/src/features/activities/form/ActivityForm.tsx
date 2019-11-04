@@ -1,39 +1,30 @@
-import React, { useState, FormEvent, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   Segment,
   Form,
-  FormInput,
   Button,
   Grid,
-  GridColumn,
-  FormGroup
+  GridColumn
 } from 'semantic-ui-react';
 import {
-  IActivity,
   IActivityFormValues,
   ActivityFormValues
 } from '../../../app/models/IActivity';
 import { v4 as uuid } from 'uuid';
 import { observer } from 'mobx-react-lite';
-import ActivityStore from '../../../app/stores/ActivityStore';
 import { RouteComponentProps } from 'react-router';
-import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { Form as FinalForm, Field } from 'react-final-form';
 import TextInput from '../../../app/common/form/TextInput';
 import TextAreaInput from '../../../app/common/form/TextAreaInput';
 import SelectInput from '../../../app/common/form/SelectInput';
 import { category } from '../../../app/common/options/categoryOptions';
 import DateInput from '../../../app/common/form/DateInput';
-import format from 'date-fns/esm/format';
 import { combineDateAndTime } from '../../../app/common/util/util';
 
 import {
-  createValidator,
   composeValidators,
   combineValidators,
   isRequired,
-  isAlphabetic,
-  isNumeric,
   hasLengthGreaterThan
 } from 'revalidate';
 import { RootStoreContext } from '../../../app/stores/rootStore';

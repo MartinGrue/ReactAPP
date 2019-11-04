@@ -8,7 +8,7 @@ import dateFnsLocalizer from 'react-widgets-date-fns';
 
 import App from './app/layout/App';
 import * as serviceWorker from './serviceWorker';
-import {BrowserRouter, Router} from 'react-router-dom';
+import {Router} from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 
 dateFnsLocalizer()

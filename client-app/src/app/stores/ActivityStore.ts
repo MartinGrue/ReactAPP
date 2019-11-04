@@ -1,5 +1,5 @@
-import { observable, action, computed, configure, runInAction } from 'mobx';
-import { createContext, SyntheticEvent } from 'react';
+import { observable, action, computed, runInAction } from 'mobx';
+import { SyntheticEvent } from 'react';
 import { IActivity } from '../models/IActivity';
 import agent from '../api/agent';
 import { toast } from 'react-toastify';
@@ -84,7 +84,7 @@ export default class ActivityStore {
   @action loadActivities = async () => {
     //implicity returning a promise
     this.loadingInitial = true;
-    let activities = this.activityRegistry;
+    // let activities = this.activityRegistry;
     if (Array.from(this.activityRegistry.values()).length !== 0) {
       this.loadingInitial = false;
     } else {

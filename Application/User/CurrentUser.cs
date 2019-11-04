@@ -37,7 +37,7 @@ namespace Application.User
                 {
                     DisplayName = user.DisplayName,
                     Username = user.UserName,
-                    Image = "bla",
+                    Image = null,
                     Token = this.jwtGenerator.CreateToken(user)
                 };
                 //TODO throw with restexception error + statuscode

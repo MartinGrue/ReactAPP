@@ -49,11 +49,11 @@ namespace Application.User
 
                 public async Task<User> Handle(Command request, CancellationToken cancellationToken)
                 {
-                    if (await userManager.Users.Where(p => p.Email == request.Email).AnyAsync())
+                    if (await context.Users.Where(p => p.Email == request.Email).AnyAsync())
                     {
                         throw new RestException(HttpStatusCode.BadRequest, new { Email = "Email already exists" });
                     }
-                    if (await userManager.Users.Where(p => p.UserName == request.UserName).AnyAsync())
+                    if (await context.Users.Where(p => p.UserName == request.UserName.ToLower()).AnyAsync())
                     {
                         throw new RestException(HttpStatusCode.BadRequest, new { UserName = "UserName already exists" });
                     }

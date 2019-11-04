@@ -24,7 +24,7 @@ axios.interceptors.response.use(undefined, error => {
   const { status, data, config } = error.response;
   // console.log(data);
 
-  if (error.response.status == 404) {
+  if (error.response.status === 404) {
     history.push('/notfound');
   }
   if (status === 400 && config.method === 'get' && data.hasOwnProperty('id')) {

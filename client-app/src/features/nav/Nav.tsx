@@ -6,7 +6,7 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 
 const Nav: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
-  const { isLoggedIn, user, logout } = rootStore.userStore;
+  const { user, logout } = rootStore.userStore;
   return (
     <div>
       <Menu fixed='top' inverted>
@@ -26,7 +26,7 @@ const Nav: React.FC = () => {
               content='Create Activity'
               as={NavLink}
               to='/createactivity'
-            ></Button>{' '}
+            ></Button>
           </Menu.Item>
           {user && (
             <Menu.Item position='right'>
