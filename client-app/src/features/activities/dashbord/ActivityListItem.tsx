@@ -1,11 +1,20 @@
 import React from 'react';
-import { Item, Button, Segment, Icon } from 'semantic-ui-react';
+import {
+  Item,
+  Button,
+  Segment,
+  Icon,
+  Label,
+  ItemDescription
+} from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { IActivity } from '../../../app/models/IActivity';
 import { observer } from 'mobx-react-lite';
 import { format } from 'date-fns';
+import ActivityListAttendee from './ActivityListAttendee';
 
 const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
+  const host = activity.userActivities.filter(x => x.isHost)[0];
   return (
     <Segment.Group>
       <Segment>
@@ -19,7 +28,25 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
             <Item.Content>
               <Item.Header as='a'>{activity.title}</Item.Header>
               <Item.Meta>{format(activity.date!, 'hh:mm')}</Item.Meta>
-              <Item.Description>Hosted by Bob</Item.Description>
+              <Item.Description>Hosted by {host.userName}</Item.Description>
+              {activity.isHost && (
+                <ItemDescription>
+                  <Label
+                    tag
+                    color='orange'
+                    content='you are hosting this activity'
+                  ></Label>
+                </ItemDescription>
+              )}
+              {activity.isGoing && !activity.isHost && (
+                <ItemDescription>
+                  <Label
+                    tag
+                    color='green'
+                    content='you are going to this activity'
+                  ></Label>
+                </ItemDescription>
+              )}
             </Item.Content>
           </Item>
         </Item.Group>
@@ -30,7 +57,11 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
         <Icon name='marker' />
         {activity.venue},{activity.city}
       </Segment>
-      <Segment secondary>Miglieder kommen hier rein</Segment>
+      <Segment secondary>
+        <ActivityListAttendee
+          attendees={activity.userActivities}
+        ></ActivityListAttendee>
+      </Segment>
       <Segment clearing>
         <span>{activity.description}</span>
         <Button

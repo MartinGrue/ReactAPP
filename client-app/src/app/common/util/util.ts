@@ -1,18 +1,21 @@
+import { IActivity } from '../../models/IActivity';
+import { IUser } from '../../models/user';
+
 export const combineDateAndTime = (date: Date, time: Date) => {
   const timeString = time.getHours() + ':' + time.getMinutes() + ':00';
-  console.log("timeString");
-  console.log(timeString);
   const year = date.getFullYear();
-  console.log("year")
-  console.log(year);
   const month = date.getMonth() + 1;
-  console.log("month")
-  console.log(month);
   const day = date.getDate();
-  console.log("day")
-  console.log(day);
   const DateString = `${year}-${month}-${day}`;
-  console.log("DateString")
-  console.log(DateString);
   return new Date(DateString + ' ' + timeString);
+};
+export const FillActivityProps = (activity: IActivity, user: IUser) => {
+  activity.date = new Date(activity.date!);
+  activity.isGoing = activity.userActivities.some(
+    x => x.userName === user.userName
+  );
+  activity.isHost = activity.userActivities.some(
+    x => x.userName === user.userName && x.isHost
+  );
+  return activity;
 };

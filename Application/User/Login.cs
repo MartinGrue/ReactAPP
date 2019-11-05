@@ -53,7 +53,7 @@ namespace Application.User
                     return new User
                     {
                         DisplayName = user.DisplayName,
-                        Username = user.UserName,
+                        UserName = user.UserName,
                         Image = null,
                         Token = this.jwtGenerator.CreateToken(user)
                     };

@@ -4,6 +4,8 @@ import { IActivity } from '../models/IActivity';
 import agent from '../api/agent';
 import { toast } from 'react-toastify';
 import { RootStore } from './rootStore';
+import { is } from '@babel/types';
+import { FillActivityProps } from '../common/util/util';
 
 // class ActivityStore {
 export default class ActivityStore {
@@ -93,7 +95,7 @@ export default class ActivityStore {
         // console.log(Object.entries(activities));
         runInAction('loadingActivities', () => {
           activities.forEach(activity => {
-            activity.date = new Date(activity.date!);
+            FillActivityProps(activity, this.rootStore.userStore.user!);
             // this.activities.push(activity);
             this.activityRegistry.set(activity.id, activity);
           });
@@ -109,7 +111,8 @@ export default class ActivityStore {
   };
   @action loadActivity = async (id: string) => {
     this.loadingInitial = true;
-    let activity = this.activityRegistry.get(id);
+    var user = this.rootStore.userStore.user!;
+    let activity: IActivity = this.activityRegistry.get(id);
     if (activity) {
       console.log('Activity found in registry');
       this.selectedActivity = activity;
@@ -118,7 +121,7 @@ export default class ActivityStore {
       try {
         activity = await agent.Activities.details(id);
         runInAction('loadingActivities', () => {
-          activity.date = new Date(activity.date);
+          FillActivityProps(activity, this.rootStore.userStore.user!);
           console.log('Activity fetched from api');
           this.selectedActivity = activity;
           this.loadingInitial = false;

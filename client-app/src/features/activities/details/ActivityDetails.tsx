@@ -17,11 +17,13 @@ interface DetailParams {
 const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   match
 }) => {
+  
   const rootStore = useContext(RootStoreContext);
   const { selectedActivity, loadActivity, loadingInitial } = rootStore.activityStore;
 
   useEffect(() => {
     loadActivity(match.params.id);
+    window.scrollTo(0, 0);
   }, [match.params.id, loadActivity]);
 
   // return <p>Details {match.params.id}</p>
@@ -44,7 +46,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
         <ActivityDetailedChat></ActivityDetailedChat>
       </GridColumn>
       <GridColumn width={6}>
-        <ActivityDetailedSideBar></ActivityDetailedSideBar>
+        <ActivityDetailedSideBar attendees={selectedActivity.userActivities}></ActivityDetailedSideBar>
       </GridColumn>
     </Grid>
     // <Card fluid>

@@ -48,3 +48,6 @@ body {
   margin-top: auto;
 }
 /*End Segment Styles for ActivityList*/
+body.dimmable>.dimmer {
+    background: rgba(255, 255, 255, 0.1);
+}

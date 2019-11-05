@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 
 const activityImageStyle = {
-  filter: 'brightness(50%)'
+  filter: 'brightness(80%)'
 };
 
 const activityImageTextStyle = {
@@ -21,7 +21,7 @@ const activityImageTextStyle = {
 const ActivityDetailedHeader: React.FC<{activity: IActivity}> = ({activity}) => {
   return (
     <Segment.Group>
-      <Segment basic attached='top' style={{ padding: '0' }}>
+      <Segment basic attached='top' style={{ padding: '0'}}>
         <Image
           src={`/assets/categoryImages/${activity.category}.jpg`}
           fluid
