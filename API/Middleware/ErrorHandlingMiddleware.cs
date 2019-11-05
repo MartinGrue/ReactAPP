@@ -12,7 +12,8 @@ namespace API.Middleware
     {
         private readonly RequestDelegate next;
         private readonly ILogger<ErrorHandlingMiddleware> logger;
-        public ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
+        public ErrorHandlingMiddleware(RequestDelegate next,
+         ILogger<ErrorHandlingMiddleware> logger)
         {
             this.logger = logger;
             this.next = next;
@@ -30,7 +31,8 @@ namespace API.Middleware
             }
         }
 
-        private async Task HandleExceptionAsyn(HttpContext context, Exception ex, ILogger<ErrorHandlingMiddleware> logger)
+        private async Task HandleExceptionAsyn(HttpContext context,
+         Exception ex, ILogger<ErrorHandlingMiddleware> logger)
         {
             object errors = null;
             switch (ex)

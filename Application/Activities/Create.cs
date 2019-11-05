@@ -59,7 +59,8 @@ namespace Application.Activities
                 };
                 _context.Activities.Add(activity);
 
-                var user = _context.Users.SingleOrDefault(p => p.UserName == userAccessor.GetCurrentUsername());
+                var user = _context.Users
+                .SingleOrDefault(p => p.UserName == userAccessor.GetCurrentUsername());
                 var attendee = new UserActivity
                 {
                     AppUser = user,

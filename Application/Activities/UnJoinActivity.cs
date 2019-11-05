@@ -33,12 +33,15 @@ namespace Application.Activities
 
                 if (activity == null)
                 {
-                    throw new RestException(HttpStatusCode.NotFound, new { Activity = "Could not found Activity" });
+                    throw new RestException(HttpStatusCode.NotFound,
+                     new { Activity = "Could not found Activity" });
                 }
 
-                var user = await _context.Users.SingleOrDefaultAsync(p => p.UserName == userAccessor.GetCurrentUsername());
+                var user = await _context.Users
+                .SingleOrDefaultAsync(p => p.UserName == userAccessor.GetCurrentUsername());
 
-                var join = await _context.UserActivity.SingleOrDefaultAsync(p => p.AppUserId == user.Id && p.ActivityId == request.Id);
+                var join = await _context.UserActivity
+                .SingleOrDefaultAsync(p => p.AppUserId == user.Id && p.ActivityId == request.Id);
 
                 if (join == null)
                 {
@@ -46,7 +49,8 @@ namespace Application.Activities
                 }
                 if (join.isHost)
                 {
-                    throw new RestException(HttpStatusCode.NotFound, new { Activity = "You are the host of the activity" });
+                    throw new RestException(HttpStatusCode.NotFound,
+                     new { Activity = "You are the host of the activity" });
                 }
 
                 _context.UserActivity.Remove(join);

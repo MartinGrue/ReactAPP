@@ -26,10 +26,12 @@ namespace Application.Activities
             public DataContext _context { get; }
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activityFromRepo = await _context.Activities.FirstOrDefaultAsync(p => p.Id == request.Id);
+                var activityFromRepo = await _context.Activities
+                .FirstOrDefaultAsync(p => p.Id == request.Id);
                 if (activityFromRepo == null)
                 {
-                    throw new RestException(HttpStatusCode.NotFound, new { activity = "Could not find Activity to delete" });
+                    throw new RestException(HttpStatusCode.NotFound,
+                     new { activity = "Could not find Activity to delete" });
                 }
                 _context.Activities.Remove(activityFromRepo);
 

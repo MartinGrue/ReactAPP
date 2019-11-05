@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Application.User;
 using AutoMapper;
+using System;
 
 namespace API
 {
@@ -37,6 +38,12 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Action<AuthorizationPolicyBuilder>  configurePolicy = (authpolbuilder) => {authpolbuilder.Requirements.Add(new IsHostRequirement());};
+            Action<AuthorizationOptions> configure = (authopt) => {authopt.AddPolicy("IsActivityHost",configurePolicy);};
+            // Action<AuthorizationOptions> auth2 = (configure) => {};
+
+            services.AddAuthorization(configure);
+             services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
             services.AddDbContext<DataContext>(opt => { 
                 opt.UseLazyLoadingProxies();
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection")); });

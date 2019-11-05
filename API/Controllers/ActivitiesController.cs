@@ -37,6 +37,7 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
         [HttpPut("{id}")]
+        [Authorize(Policy = "IsActivityHost")]
         public async Task<ActionResult<Unit>> Update(Guid id, Update.Command command)
         {
             command.Id = id;
@@ -44,6 +45,7 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
         [HttpDelete("{id}")]
+        [Authorize(Policy = "IsActivityHost")]
         public async Task<ActionResult<Unit>> Delete(Guid id)
         {
             // Delete.Command command = new Delete.Command{Id = id};
