@@ -98,7 +98,7 @@ namespace Persistence.Migrations
 
                     b.Property<DateTime>("DateJoined");
 
-                    b.Property<bool>("isHost");
+                    b.Property<bool>("IsHost");
 
                     b.HasKey("AppUserId", "ActivityId");
 
@@ -246,12 +246,12 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.UserActivity", b =>
                 {
                     b.HasOne("Domain.Activity", "Activity")
-                        .WithMany("UserActivity")
+                        .WithMany("UserActivities")
                         .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Domain.AppUser", "AppUser")
-                        .WithMany("UserActivity")
+                        .WithMany("UserActivities")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

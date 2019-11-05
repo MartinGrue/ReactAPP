@@ -9,6 +9,6 @@ namespace Domain
         public virtual AppUser AppUser { get; set; }
         public virtual Activity Activity { get; set; }
         public DateTime DateJoined { get; set; }
-        public bool isHost { get; set; }
+        public bool IsHost { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace Persistence.Migrations
                     AppUserId = table.Column<string>(nullable: false),
                     ActivityId = table.Column<Guid>(nullable: false),
                     DateJoined = table.Column<DateTime>(nullable: false),
-                    isHost = table.Column<bool>(nullable: false)
+                    IsHost = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {

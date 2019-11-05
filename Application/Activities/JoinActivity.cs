@@ -54,7 +54,7 @@ namespace Application.Activities
                     AppUser = user,
                     Activity = activity,
                     DateJoined = DateTime.Now,
-                    isHost = false
+                    IsHost = false
                 };
 
                 _context.UserActivity.Add(newjoin);

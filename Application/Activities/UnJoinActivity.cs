@@ -47,7 +47,7 @@ namespace Application.Activities
                 {
                     return Unit.Value;
                 }
-                if (join.isHost)
+                if (join.IsHost)
                 {
                     throw new RestException(HttpStatusCode.NotFound,
                      new { Activity = "You are the host of the activity" });

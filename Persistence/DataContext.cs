@@ -26,11 +26,11 @@ namespace Persistence
             builder.Entity<UserActivity>(x => x.HasKey(ua => new { ua.AppUserId, ua.ActivityId }));
 
             builder.Entity<UserActivity>(x => x.HasOne(a => a.AppUser)
-            .WithMany(b => b.UserActivity)
+            .WithMany(b => b.UserActivities)
             .HasForeignKey(a => a.AppUserId));
 
             builder.Entity<UserActivity>(x => x.HasOne(a => a.Activity)
-            .WithMany(b => b.UserActivity)
+            .WithMany(b => b.UserActivities)
             .HasForeignKey(a => a.ActivityId));
         }
     }

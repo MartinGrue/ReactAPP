@@ -9,7 +9,7 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20191104172740_AddedUserActivity")]
+    [Migration("20191105163936_AddedUserActivity")]
     partial class AddedUserActivity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -100,7 +100,7 @@ namespace Persistence.Migrations
 
                     b.Property<DateTime>("DateJoined");
 
-                    b.Property<bool>("isHost");
+                    b.Property<bool>("IsHost");
 
                     b.HasKey("AppUserId", "ActivityId");
 
@@ -248,12 +248,12 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.UserActivity", b =>
                 {
                     b.HasOne("Domain.Activity", "Activity")
-                        .WithMany("UserActivity")
+                        .WithMany("UserActivities")
                         .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Domain.AppUser", "AppUser")
-                        .WithMany("UserActivity")
+                        .WithMany("UserActivities")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

@@ -30,7 +30,7 @@ namespace Infrastructure.security
                 // var activityFromRepo = datacontext.Activities
                 // .SingleOrDefault(p => p.Id == activityId);
                 var activityFromRepo = datacontext.Activities.FindAsync(activityId).Result;
-                var host = activityFromRepo.UserActivity.FirstOrDefault(x => x.isHost);
+                var host = activityFromRepo.UserActivities.FirstOrDefault(x => x.IsHost);
 
                 if (host?.AppUser?.UserName == username)
                 {
