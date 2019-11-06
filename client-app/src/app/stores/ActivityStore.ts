@@ -1,10 +1,9 @@
 import { observable, action, computed, runInAction } from 'mobx';
 import { SyntheticEvent } from 'react';
-import { IActivity } from '../models/IActivity';
+import { IActivity, IAttendee } from '../models/IActivity';
 import agent from '../api/agent';
 import { toast } from 'react-toastify';
 import { RootStore } from './rootStore';
-import { is } from '@babel/types';
 import { FillActivityProps } from '../common/util/util';
 
 // class ActivityStore {
@@ -24,6 +23,7 @@ export default class ActivityStore {
   @observable editMode = false;
   @observable submitting = false;
   @observable target = '';
+  @observable loading = false;
 
   @computed get activitiesByDate() {
     //um die anzeige zu sortieren (clientseitig)
@@ -111,7 +111,6 @@ export default class ActivityStore {
   };
   @action loadActivity = async (id: string) => {
     this.loadingInitial = true;
-    var user = this.rootStore.userStore.user!;
     let activity: IActivity = this.activityRegistry.get(id);
     if (activity) {
       console.log('Activity found in registry');
@@ -141,6 +140,17 @@ export default class ActivityStore {
     }
     try {
       await agent.Activities.create(activity);
+
+      const NewAttendee: IAttendee = {
+        userName: this.rootStore.userStore.user!.userName,
+        displayName: this.rootStore.userStore.user!.displayName,
+        isHost: true,
+        image: null
+      };
+      let attendees = [];
+      attendees.push(NewAttendee);
+      activity.userActivities = attendees;
+
       runInAction('createActivity', () => {
         // this.activities.push(activity);
         this.activityRegistry.set(activity.id, activity);
@@ -156,21 +166,22 @@ export default class ActivityStore {
     }
   };
   @action deleteActivity = async (
-    event: SyntheticEvent<HTMLButtonElement>,
+    // event: SyntheticEvent<HTMLButtonElement>,
     id: string
   ) => {
     this.submitting = true;
-    this.target = event.currentTarget.name;
+    // this.target = event.currentTarget.name;
     try {
       await agent.Activities.delete(id);
       runInAction('DeleteActivity', () => {
         this.activityRegistry.delete(id);
+        this.selectedActivity = undefined;
         this.submitting = false;
       });
     } catch (error) {
       runInAction('DeleteActivityError', () => {
         this.submitting = false;
-        this.target = '';
+        // this.target = '';
         console.log(error);
       });
     }
@@ -184,6 +195,55 @@ export default class ActivityStore {
     // this.selectedActivity = this.activities.find(p => p.id === id);
     this.selectedActivity = this.activityRegistry.get(id);
     this.editMode = false;
+  };
+  @action joinActivity =  async () => {
+    const NewAttendee: IAttendee = {
+      userName: this.rootStore.userStore.user!.userName,
+      displayName: this.rootStore.userStore.user!.displayName,
+      isHost: false,
+      image: null
+    };
+    this.loading = true;
+    try {
+      await agent.Activities.join(this.selectedActivity!.id);
+      runInAction('JoinActivity', () => {
+        this.selectedActivity!.userActivities.push(NewAttendee);
+        this.activityRegistry.set(
+          this.selectedActivity!.id,
+          this.selectedActivity!          
+        );
+        this.selectedActivity!.isGoing = true;
+        this.loading = false;
+
+      });
+    } catch (error) {
+      runInAction('JoinActivityError', () => {
+        this.loading = false;
+      });
+    }
+  };
+  @action unjoinActivity = async () => {
+    this.loading = true;
+    try {
+      await agent.Activities.unjoin(this.selectedActivity!.id);
+      runInAction('UnJoinActivity', () => {
+        this.selectedActivity!.userActivities =
+        this.selectedActivity!.userActivities.filter(
+          at => at.userName !== this.rootStore.userStore.user!.userName
+        );
+        this.activityRegistry.set(
+          this.selectedActivity!.id,
+          this.selectedActivity!
+        );
+        this.selectedActivity!.isGoing = false;
+        this.loading = false;
+      });
+    } catch (error) {
+      runInAction('JoinActivityError', () => {
+        this.loading = false;
+        console.log(error);
+      });
+    }
   };
 }
 

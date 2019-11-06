@@ -8,16 +8,16 @@ export interface IActivity {
   // date: string
   city: string;
   venue: string;
-  userActivities: IAtendee[];
+  userActivities: IAttendee[];
 
   //Props from user
   isGoing: boolean;
   isHost:boolean
 }
-export interface IAtendee {
+export interface IAttendee {
   userName: string;
   displayName: string;
-  iamge:string;
+  image:string | null;
   isHost: boolean
 }
 export interface IActivityFormValues extends Partial<IActivity> {

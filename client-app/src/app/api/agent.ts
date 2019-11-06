@@ -44,14 +44,18 @@ const requests = {
   put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
   delete: (url: string) => axios.delete(url).then(responseBody)
 };
+
 const Activities = {
   list: (): Promise<IActivity[]> => requests.get('/activities'),
   details: (id: string) => requests.get(`/activities/${id}`),
   create: (activity: IActivity) => requests.post('/Activities', activity),
   update: (activity: IActivity) =>
     requests.put(`/activities/${activity.id}`, activity),
-  delete: (id: string) => requests.delete(`/activities/${id}`)
+  delete: (id: string) => requests.delete(`/activities/${id}`),
+  join: (id: string) => requests.post(`/activities/${id}/attend`, {} ),
+  unjoin: (id: string) => requests.delete(`/activities/${id}/attend`)
 };
+
 const User = {
   current: (): Promise<IUser> => requests.get('/User'),
   login: (user: IUserFormValues): Promise<IUser> =>

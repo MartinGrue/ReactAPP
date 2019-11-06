@@ -1,11 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import {
-  Segment,
-  Form,
-  Button,
-  Grid,
-  GridColumn
-} from 'semantic-ui-react';
+import { Segment, Form, Button, Grid, GridColumn } from 'semantic-ui-react';
 import {
   IActivityFormValues,
   ActivityFormValues
@@ -43,7 +37,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     editActivity,
     submitting,
     cancelFormOpen,
-    loadActivity
+    loadActivity,
+    deleteActivity
   } = rootStore.activityStore;
 
   const [activity, setActivity] = useState<IActivityFormValues>(
@@ -54,12 +49,12 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   useEffect(() => {
     if (match.params.id) {
       setloading(true);
-      if ( rootStore.activityStore.selectedActivity === undefined) {
+      if (rootStore.activityStore.selectedActivity === undefined) {
         loadActivity(match.params.id)
           .then(() => {
             rootStore.activityStore.selectedActivity &&
               setActivity(
-                new ActivityFormValues( rootStore.activityStore.selectedActivity)
+                new ActivityFormValues(rootStore.activityStore.selectedActivity)
               );
           })
           .finally(() => {
@@ -67,7 +62,9 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
           });
       } else {
         rootStore.activityStore.selectedActivity &&
-          setActivity(new ActivityFormValues( rootStore.activityStore.selectedActivity));
+          setActivity(
+            new ActivityFormValues(rootStore.activityStore.selectedActivity)
+          );
         setloading(false);
       }
     } else {
@@ -81,7 +78,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
         city: ''
       });
     }
-  }, [match.params.id, loadActivity,  rootStore.activityStore.selectedActivity]);
+  }, [match.params.id, loadActivity, rootStore.activityStore.selectedActivity]);
 
   // const handleSubmit = () => {
   //   if (activity.id.length === 0) {
@@ -101,15 +98,20 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     const dateAndTime = combineDateAndTime(values.date, values.time);
     const { date, time, ...activity } = values;
     activity.date = dateAndTime;
-    if (!activity.id) {
-      let newActivity = { ...activity, id: uuid() };
-      createActivity(newActivity).then(() =>
-        history.push(`/activities/${newActivity.id}`)
-      );
+    if (rootStore.activityStore.selectedActivity) {
+      console.log('here');
+      history.push(`/activities/`);
     } else {
-      editActivity(activity).then(() =>
-        history.push(`/activities/${activity.id}`)
-      );
+      if (!activity.id) {
+        let newActivity = { ...activity, id: uuid() };
+        createActivity(newActivity).then(() =>
+          history.push(`/activities/${newActivity.id}`)
+        );
+      } else {
+        editActivity(activity).then(() =>
+          history.push(`/activities/${activity.id}`)
+        );
+      }
     }
   };
   const handleCancel = () => {
@@ -202,6 +204,20 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                   type='submit'
                   content='submit'
                 ></Button>
+                {match.params.id && (
+                  <Button
+                    disabled={loading}
+                    loading={submitting}
+                    floated='right'
+                    negative
+                    content='Delete'
+                    onClick={() => {
+                      deleteActivity(
+                        rootStore.activityStore.selectedActivity!.id
+                      );
+                    }}
+                  ></Button>
+                )}
                 <Button
                   disabled={loading}
                   floated='right'

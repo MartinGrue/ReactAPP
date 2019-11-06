@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Segment, Item, Header, Button, Image } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { IActivity } from '../../../app/models/IActivity';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
+import { RootStoreContext } from '../../../app/stores/rootStore';
 
 const activityImageStyle = {
   filter: 'brightness(80%)'
@@ -18,10 +19,16 @@ const activityImageTextStyle = {
   color: 'white'
 };
 
-const ActivityDetailedHeader: React.FC<{activity: IActivity}> = ({activity}) => {
+const ActivityDetailedHeader: React.FC<{ activity: IActivity }> = ({
+  activity
+}) => {
+  const rootStore = useContext(RootStoreContext);
+  const { joinActivity, unjoinActivity, loading } = rootStore.activityStore;
+  const host = activity.userActivities.filter(x => x.isHost)[0];
+
   return (
     <Segment.Group>
-      <Segment basic attached='top' style={{ padding: '0'}}>
+      <Segment basic attached='top' style={{ padding: '0' }}>
         <Image
           src={`/assets/categoryImages/${activity.category}.jpg`}
           fluid
@@ -38,7 +45,7 @@ const ActivityDetailedHeader: React.FC<{activity: IActivity}> = ({activity}) => 
                 />
                 <p>{format(activity.date!, 'eeee do MMMM')}</p>
                 <p>
-                  Hosted by <strong>Bob</strong>
+                  Hosted by <strong>{host.userName}</strong>
                 </p>
               </Item.Content>
             </Item>
@@ -46,12 +53,20 @@ const ActivityDetailedHeader: React.FC<{activity: IActivity}> = ({activity}) => 
         </Segment>
       </Segment>
       <Segment clearing attached='bottom'>
-        <Button color='teal'>Join Activity</Button>
-        <Button>Cancel attendance</Button>
-        <Button as={Link} to={`/manage/${activity.id}`}
-         color='orange' floated='right'>
-          Manage Event
-        </Button>
+        {activity.isHost ? (
+          <Button
+            as={Link}
+            to={`/manage/${activity.id}`}
+            color='orange'
+            floated='right'
+          >
+            Manage Event
+          </Button>
+        ) : activity.isGoing ? (
+          <Button loading={loading} onClick={unjoinActivity}>Cancel attendance</Button>
+        ) : (
+          <Button loading={loading} color='teal' onClick={joinActivity}>Join Activity</Button>
+        )}
       </Segment>
     </Segment.Group>
   );

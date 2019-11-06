@@ -1,9 +1,9 @@
 import React from 'react';
 import { List, Item, Popup } from 'semantic-ui-react';
-import { IAtendee } from '../../../app/models/IActivity';
+import { IAttendee } from '../../../app/models/IActivity';
 
 interface IProps {
-  attendees: IAtendee[];
+  attendees: IAttendee[];
 }
 
 const ActivityListAttendee: React.FC<IProps> = ({ attendees }) => {

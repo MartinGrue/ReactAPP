@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
 import { Segment, List, Item, Label, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { IAtendee } from '../../../app/models/IActivity';
+import { IAttendee } from '../../../app/models/IActivity';
+import { observer } from 'mobx-react-lite';
 
 interface IProps {
-  attendees: IAtendee[];
+  attendees: IAttendee[];
 }
-const isHost = true;
 const ActivityDetailedSidebar: React.FC<IProps> = ({ attendees }) => {
   return (
     <Fragment>
@@ -25,15 +25,15 @@ const ActivityDetailedSidebar: React.FC<IProps> = ({ attendees }) => {
       <Segment attached>
         <List relaxed divided>
           {attendees.map(attendee => (
-            <Item key={attendee.displayName} style={{ position: 'relative' }}>
+            <Item key={attendee.userName} style={{ position: 'relative' }}>
               {attendee.isHost &&
               <Item.Description>
-              <Label ribbon='right' color='orange' sytle={{position: 'absolute'}}> </Label>
+              <Label ribbon='right' color='orange' sytle={{position: 'absolute'}}>Host</Label>
               </Item.Description>}
               <Image size='tiny' src={'/assets/user.png'} />
               <Item.Content verticalAlign='middle'>
                 <Item.Header as='h3'>
-                  <Link to={`#`}>{attendee.displayName}</Link>
+                  <Link to={`#`}>{attendee.userName}</Link>
                 </Item.Header>
                 <Item.Extra style={{ color: 'orange' }}>Following</Item.Extra>
               </Item.Content>
@@ -45,4 +45,4 @@ const ActivityDetailedSidebar: React.FC<IProps> = ({ attendees }) => {
   );
 };
 
-export default ActivityDetailedSidebar;
+export default observer(ActivityDetailedSidebar);
