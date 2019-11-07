@@ -45,10 +45,19 @@ export default class ActivityStore {
     return Object.entries(
       sorted.reduce(
         (activities, activity) => {
+          // console.log(activity.date!);
           const key: string = activity.date!.toISOString().split('T')[0];
-          activities[key] = activities[key]
-            ? [...activities[key], activity]
-            : [activity];
+          // // console.log(activities);
+          // activities[key] = activities[key]
+          //   ? [...activities[key], activity]
+          //   : [activity];
+            key in activities ? activities[key] = [...activities[key], activity]
+            : activities[key] = [activity];
+          // if (key in activities) {
+          //   activities[key] = [...activities[key], activity];
+          // } else {
+          //   activities[key] = [activity];
+          // }
           return activities;
         },
         {} as { [key: string]: IActivity[] }
@@ -93,6 +102,26 @@ export default class ActivityStore {
       try {
         const activities = await agent.Activities.list();
         // console.log(Object.entries(activities));
+        // Object.entries(
+        //   activities.reduce(
+        //     (multi, single) => {
+        //       // console.log(JSON.stringify(multi));
+        //       single.date = new Date(single.date!);
+        //       const key: string = single.date!.toISOString().split('T')[0];
+        //       // console.log(single.date);
+        //       // multi[key] = [single];
+        //       if (key in multi) {
+        //         console.log(key + 'gabs schon');
+        //         multi[key] = [...multi[key],single];
+        //       } else {
+        //         console.log(key + 'ist neu');
+        //         multi[key] = [single];
+        //       }
+        //       return multi;
+        //     },
+        //     {} as { [key: string]: IActivity[] }
+        //   )
+        // );
         runInAction('loadingActivities', () => {
           activities.forEach(activity => {
             FillActivityProps(activity, this.rootStore.userStore.user!);
@@ -196,7 +225,7 @@ export default class ActivityStore {
     this.selectedActivity = this.activityRegistry.get(id);
     this.editMode = false;
   };
-  @action joinActivity =  async () => {
+  @action joinActivity = async () => {
     const NewAttendee: IAttendee = {
       userName: this.rootStore.userStore.user!.userName,
       displayName: this.rootStore.userStore.user!.displayName,
@@ -210,11 +239,10 @@ export default class ActivityStore {
         this.selectedActivity!.userActivities.push(NewAttendee);
         this.activityRegistry.set(
           this.selectedActivity!.id,
-          this.selectedActivity!          
+          this.selectedActivity!
         );
         this.selectedActivity!.isGoing = true;
         this.loading = false;
-
       });
     } catch (error) {
       runInAction('JoinActivityError', () => {
@@ -227,8 +255,7 @@ export default class ActivityStore {
     try {
       await agent.Activities.unjoin(this.selectedActivity!.id);
       runInAction('UnJoinActivity', () => {
-        this.selectedActivity!.userActivities =
-        this.selectedActivity!.userActivities.filter(
+        this.selectedActivity!.userActivities = this.selectedActivity!.userActivities.filter(
           at => at.userName !== this.rootStore.userStore.user!.userName
         );
         this.activityRegistry.set(

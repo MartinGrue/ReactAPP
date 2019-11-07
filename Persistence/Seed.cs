@@ -276,6 +276,30 @@ namespace Persistence
                                 DateJoined = DateTime.Now.AddMonths(8)
                             },
                         }
+                    },
+                    new Activity
+                    {
+                        Title = "Future Activity 9",
+                        Date = DateTime.Now.AddMonths(8),
+                        Description = "Activity 8 months in future",
+                        Category = "Drinks",
+                        City = "London",
+                        Venue = "Pub",
+                        UserActivities = new List<UserActivity>
+                        {
+                            new UserActivity
+                            {
+                                AppUserId = "b",
+                                IsHost = true,
+                                DateJoined = DateTime.Now.AddMonths(8)
+                            },
+                            new UserActivity
+                            {
+                                AppUserId = "c",
+                                IsHost = false,
+                                DateJoined = DateTime.Now.AddMonths(8)
+                            },
+                        }
                     }
                 };
 
