@@ -27,7 +27,9 @@ namespace Infrastructure.photos
         }
         public string DeletePhoto(string publicPhotoId)
         {
-            throw new System.NotImplementedException();
+            var deletionParams = new DeletionParams(publicPhotoId);
+            var result = cloudinary.Destroy(deletionParams);
+            return result.Result == "ok" ? result.Result : null;
         }
 
         public PhotoUploadResult UploadPhoto(IFormFile file)
@@ -39,7 +41,8 @@ namespace Infrastructure.photos
                 {
                     var uploadParams = new ImageUploadParams()
                     {
-                        File = new FileDescription(file.Name, stream)
+                        File = new FileDescription(file.Name, stream),
+                        Transformation = new Transformation().Height(500).Width(500).Crop("fill").Gravity("face")
                     };
                     uploadResult = cloudinary.Upload(uploadParams);
                 }
