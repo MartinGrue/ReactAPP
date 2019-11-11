@@ -17,7 +17,7 @@ const ActivityListAttendee: React.FC<IProps> = ({ attendees }) => {
               <Item.Image
                 size='mini'
                 circular
-                src='/assets/user.png'
+                src={attendee.image || '/assets/user.png'}
               ></Item.Image>
             }
           ></Popup>

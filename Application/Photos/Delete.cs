@@ -39,7 +39,6 @@ namespace Application.Photos
                 .SingleOrDefaultAsync(p => p.UserName == userAccessor.GetCurrentUsername());
 
                 var photo = user.Photos.FirstOrDefault(p => p.Id == request.Id);
-
                 if (photo == null)
                 {
                     throw new RestException(HttpStatusCode.NotFound,

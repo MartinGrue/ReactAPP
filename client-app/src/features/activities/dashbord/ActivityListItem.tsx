@@ -15,6 +15,7 @@ import ActivityListAttendee from './ActivityListAttendee';
 
 const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
   const host = activity.userActivities.filter(x => x.isHost)[0];
+  console.log(host);
   return (
     <Segment.Group>
       <Segment>
@@ -23,7 +24,8 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
             <Item.Image
               size='tiny'
               circular
-              src='/assets/user.png'
+              src={host.image || '/assets/user.png'}
+              style={{marginBottom:3}}
             ></Item.Image>
             <Item.Content>
               <Item.Header as='a'>{activity.title}</Item.Header>
