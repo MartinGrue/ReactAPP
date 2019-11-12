@@ -45,7 +45,8 @@ const ActivityDetailedHeader: React.FC<{ activity: IActivity }> = ({
                 />
                 <p>{format(activity.date!, 'eeee do MMMM')}</p>
                 <p>
-                  Hosted by <strong>{host.userName}</strong>
+                  Hosted by
+                  <Link to={`/profiles/${host.userName}`}> {host.userName}</Link>
                 </p>
               </Item.Content>
             </Item>
@@ -63,9 +64,13 @@ const ActivityDetailedHeader: React.FC<{ activity: IActivity }> = ({
             Manage Event
           </Button>
         ) : activity.isGoing ? (
-          <Button loading={loading} onClick={unjoinActivity}>Cancel attendance</Button>
+          <Button loading={loading} onClick={unjoinActivity}>
+            Cancel attendance
+          </Button>
         ) : (
-          <Button loading={loading} color='teal' onClick={joinActivity}>Join Activity</Button>
+          <Button loading={loading} color='teal' onClick={joinActivity}>
+            Join Activity
+          </Button>
         )}
       </Segment>
     </Segment.Group>

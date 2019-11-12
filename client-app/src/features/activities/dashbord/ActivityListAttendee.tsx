@@ -1,6 +1,7 @@
 import React from 'react';
 import { List, Item, Popup } from 'semantic-ui-react';
 import { IAttendee } from '../../../app/models/IActivity';
+import { Link } from 'react-router-dom';
 
 interface IProps {
   attendees: IAttendee[];
@@ -18,6 +19,7 @@ const ActivityListAttendee: React.FC<IProps> = ({ attendees }) => {
                 size='mini'
                 circular
                 src={attendee.image || '/assets/user.png'}
+                as={Link} to={`/profiles/${attendee.userName}`}
               ></Item.Image>
             }
           ></Popup>

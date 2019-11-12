@@ -141,6 +141,7 @@ export default class ActivityStore {
   @action loadActivity = async (id: string) => {
     this.loadingInitial = true;
     let activity: IActivity = this.activityRegistry.get(id);
+    console.log(activity);
     if (activity) {
       console.log('Activity found in registry');
       this.selectedActivity = activity;
@@ -151,6 +152,7 @@ export default class ActivityStore {
         runInAction('loadingActivities', () => {
           FillActivityProps(activity, this.rootStore.userStore.user!);
           console.log('Activity fetched from api');
+          this.activityRegistry.set(activity.id, activity);
           this.selectedActivity = activity;
           this.loadingInitial = false;
         });

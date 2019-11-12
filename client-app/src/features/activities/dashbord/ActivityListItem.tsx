@@ -25,12 +25,15 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
               size='tiny'
               circular
               src={host.image || '/assets/user.png'}
-              style={{marginBottom:3}}
+              style={{ marginBottom: 3 }}
             ></Item.Image>
             <Item.Content>
               <Item.Header as='a'>{activity.title}</Item.Header>
               <Item.Meta>{format(activity.date!, 'hh:mm')}</Item.Meta>
-              <Item.Description>Hosted by {host.userName}</Item.Description>
+              <Item.Description>
+                Hosted by
+                <Link to={`/profiles/${host.userName}`}> {host.userName}</Link>
+              </Item.Description>
               {activity.isHost && (
                 <ItemDescription>
                   <Label

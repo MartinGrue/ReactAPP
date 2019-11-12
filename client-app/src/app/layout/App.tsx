@@ -14,6 +14,8 @@ import LoginForm from '../../features/User/LoginForm';
 import { RootStoreContext } from '../stores/rootStore';
 import LoadingComponent from './LoadingComponent';
 import ModalContainer from '../common/modals/modalContainer';
+import ProfilePage from '../../features/profile/ProfilePage';
+
 
 const App = () => {
   const rootStore = useContext(RootStoreContext);
@@ -25,13 +27,13 @@ const App = () => {
       getUser().finally(() => {
         setApploaded();
       });
-    }else{
+    } else {
       setApploaded();
     }
   }, [getUser, setApploaded, token]);
 
-  if(!appLoaded){
-    return ( <LoadingComponent content='Loading app'></LoadingComponent>)
+  if (!appLoaded) {
+    return <LoadingComponent content='Loading app'></LoadingComponent>;
   }
   return (
     <Fragment>
@@ -43,27 +45,7 @@ const App = () => {
         render={() => (
           <Fragment>
             <Nav />
-            <Container style={{ marginTop: '7em' }}>
-              <Switch>
-                <Route
-                  exact
-                  path='/activities'
-                  component={ActivityDashboard}
-                ></Route>
-                <Route
-                  exact
-                  path={['/createActivity', '/manage/:id']}
-                  component={ActivityForm}
-                ></Route>
-                <Route
-                  exact
-                  path='/activities/:id'
-                  component={ActivityDetails}
-                ></Route>
-                <Route path='/login' component={LoginForm}></Route>
-                <Route component={NotFound}></Route>
-              </Switch>
-            </Container>
+
           </Fragment>
         )}
       />
