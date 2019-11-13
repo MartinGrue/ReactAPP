@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Segment, Item, Header, Button, Image, Label } from 'semantic-ui-react';
+import { Segment, Item, Header, Button, Image } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { IActivity } from '../../../app/models/IActivity';
 import { Link } from 'react-router-dom';
@@ -10,9 +10,6 @@ const activityImageStyle = {
   filter: 'brightness(80%)'
 };
 
-const activityImageTextStyle = {
-
-};
 
 const ActivityDetailedHeader: React.FC<{ activity: IActivity }> = ({
   activity

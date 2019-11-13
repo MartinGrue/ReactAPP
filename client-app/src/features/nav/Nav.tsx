@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Menu,
   Responsive,
@@ -13,8 +13,9 @@ import NavRightMenuItems from './NavRightMenuItems';
 const NavBarMobile: React.FC<{
   onPusherClick: () => void;
   onToggle: () => void;
+  handleToggle: () => void;
   visible: boolean;
-}> = ({ onPusherClick, onToggle, visible }) => (
+}> = ({ onPusherClick, handleToggle,onToggle, visible }) => (
   <Sidebar.Pushable>
     <Sidebar
       as={Menu}
@@ -27,7 +28,7 @@ const NavBarMobile: React.FC<{
       {/* {leftItems.map((item: any) => (
         <Menu.Item {...item} />
       ))} */}
-      <NavLeftMenuItems></NavLeftMenuItems>
+      <NavLeftMenuItems onPusherClick={onPusherClick}></NavLeftMenuItems>
       {/* <Menu.Item as='a'>
         <Icon name='home' />
         Home
@@ -42,9 +43,10 @@ const NavBarMobile: React.FC<{
       </Menu.Item> */}
     </Sidebar>
     <Sidebar.Pusher
-      dimmed={visible}
-      onClick={() => onPusherClick()}
+      dimmed={false}
+      onClick={() => {onPusherClick(); console.log(visible)}}
       style={{ minHeight: '100vh' }}
+      
     >
       <Routes></Routes>
       <Menu fixed='top' inverted>
@@ -90,6 +92,7 @@ const Nav: React.FC = () => {
     <div>
       <Responsive {...Responsive.onlyMobile}>
         <NavBarMobile
+        handleToggle ={handleToggle}
           onPusherClick={handlePusher}
           onToggle={handleToggle}
           visible={visible}

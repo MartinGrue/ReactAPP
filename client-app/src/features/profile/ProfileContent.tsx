@@ -27,7 +27,7 @@ export const ProfileContent = () => {
       panes={panes}
       menuPosition='right'
       menu={{ fluid: true, className: 'wrapped', tabular: false }}
-      activeIndex={1}
+      defaultActiveIndex={1}
     ></Tab>
   );
 };

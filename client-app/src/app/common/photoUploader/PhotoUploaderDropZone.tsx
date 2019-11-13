@@ -26,7 +26,7 @@ export const PhotoUploaderDropZone: React.FC<IProps> = ({ setfiles }) => {
         Object.assign(file, { preview: URL.createObjectURL(file) })
       )
     );
-  }, []);
+  }, [setfiles]);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (

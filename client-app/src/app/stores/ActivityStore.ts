@@ -1,5 +1,4 @@
 import { observable, action, computed, runInAction } from 'mobx';
-import { SyntheticEvent } from 'react';
 import { IActivity, IAttendee } from '../models/IActivity';
 import agent from '../api/agent';
 import { toast } from 'react-toastify';

@@ -1,4 +1,4 @@
-import React, { Component, useRef } from 'react';
+import React, { useRef } from 'react';
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 
@@ -29,7 +29,7 @@ export const PhotoUploaderCropper: React.FC<IProps> = ({
     <Cropper
       ref={cropper}
       src={imagePreview}
-      style={{ height: 200, width: '100%' }}
+      style={{ height: 240, width: '100%' }}
       preview='.img-preview'
       // Cropper.js options
       aspectRatio={1 / 1}

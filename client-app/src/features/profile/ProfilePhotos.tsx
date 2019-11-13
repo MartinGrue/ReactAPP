@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Tab,
   Header,
@@ -39,13 +39,13 @@ const ProfilePhotos = () => {
         {addPhotoToggle ? (
           <PhotoUploader loading={loadingPhoto}></PhotoUploader>
         ) : (
-          <Card.Group itemsPerRow={5}>
+          <Card.Group itemsPerRow={5} stackable doubling>
             {profile &&
               profile.photos.map(photo => (
                 <Card key={photo.id}>
                   <Image src={photo.url}></Image>
                   {isLoggedIn && (
-                    <Button.Group>
+                    <Button.Group fluid >
                       <Button color='red' content='Trash' icon='trash' onClick={ () => {deleteImage(photo.id)}}></Button>
                     <Button color='teal' content='Main' icon='star'></Button>
                     </Button.Group>

@@ -1,6 +1,6 @@
 import { RootStore } from './rootStore';
 import { observable, action, runInAction, computed } from 'mobx';
-import { IProfile, IPhoto } from '../models/IProfile';
+import { IProfile } from '../models/IProfile';
 import agent from '../api/agent';
 import { history } from '../..';
 
@@ -21,6 +21,9 @@ export default class ProfileStore {
   @computed get isLoggedIn() {
     if (this.rootStore.userStore.user && this.profile) {
       return this.rootStore.userStore.user.userName === this.profile.userName;
+    }
+    else{
+      return false
     }
   }
 

@@ -1,6 +1,5 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Segment, Item, Header, Button, Grid, Statistic, Divider, Reveal } from 'semantic-ui-react';
-import { RootStoreContext } from '../../app/stores/rootStore';
 import { IProfile } from '../../app/models/IProfile';
 import { observer } from 'mobx-react-lite';
 
