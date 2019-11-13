@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Segment, Item, Header, Button, Image } from 'semantic-ui-react';
+import { Segment, Item, Header, Button, Image, Label } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { IActivity } from '../../../app/models/IActivity';
 import { Link } from 'react-router-dom';
@@ -11,12 +11,7 @@ const activityImageStyle = {
 };
 
 const activityImageTextStyle = {
-  position: 'absolute',
-  bottom: '5%',
-  left: '5%',
-  width: '100%',
-  height: 'auto',
-  color: 'white'
+
 };
 
 const ActivityDetailedHeader: React.FC<{ activity: IActivity }> = ({
@@ -34,12 +29,12 @@ const ActivityDetailedHeader: React.FC<{ activity: IActivity }> = ({
           fluid
           style={activityImageStyle}
         />
-        <Segment style={activityImageTextStyle} basic>
+        <Segment  className='activityImageTextStyle' basic>
           <Item.Group>
             <Item>
               <Item.Content>
                 <Header
-                  size='huge'
+                size='huge'
                   content={activity.title}
                   style={{ color: 'white' }}
                 />
@@ -64,7 +59,7 @@ const ActivityDetailedHeader: React.FC<{ activity: IActivity }> = ({
             Manage Event
           </Button>
         ) : activity.isGoing ? (
-          <Button loading={loading} onClick={unjoinActivity}>
+          <Button loading={loading} onClick={unjoinActivity} color='red'>
             Cancel attendance
           </Button>
         ) : (

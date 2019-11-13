@@ -3,7 +3,7 @@ import { IActivity } from '../models/IActivity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { IUser, IUserFormValues } from '../models/user';
-import { IProfile } from '../models/IProfile';
+import { IProfile, IPhoto } from '../models/IProfile';
 
 axios.interceptors.request.use(
   config => {
@@ -46,7 +46,14 @@ const requests = {
   get: (url: string) => axios.get(url).then(responseBody),
   post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
   put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
-  delete: (url: string) => axios.delete(url).then(responseBody)
+  delete: (url: string) => axios.delete(url).then(responseBody),
+  postForm: (url: string, file: Blob) => {
+    let data = new FormData();
+    data.append('File', file);
+    return axios.post(url, data, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(responseBody);
+  }
 };
 
 const Activities = {
@@ -70,7 +77,9 @@ const User = {
 
 const Profile = {
   get: (userName: string): Promise<IProfile> =>
-    requests.get(`/Profiles/${userName}`)
+    requests.get(`/Profiles/${userName}`),
+    uploadImage: (file:Blob) : Promise<IPhoto> => requests.postForm('/Photos', file),
+    deleteImage: (id:string) => requests.delete(`/Photos/${id}`)
 };
 
 export default {

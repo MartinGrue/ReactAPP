@@ -6,7 +6,7 @@ export interface IProfile {
     photos: IPhoto[];
 }
 export interface IPhoto{
-    dd:string;
+    id:string;
     url:string;
     isMain:boolean;
 }

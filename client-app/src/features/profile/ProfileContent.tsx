@@ -1,19 +1,12 @@
-import React, { Fragment } from 'react';
-import { Tab, Header } from 'semantic-ui-react';
+import React from 'react';
+import { Tab } from 'semantic-ui-react';
+import ProfilePhotos from './ProfilePhotos';
 
 const panes = [
   { menuItem: 'About', render: () => <Tab.Pane>About Content</Tab.Pane> },
   {
     menuItem: 'Photos',
-    render: () => (
-      <Tab.Pane>
-        Photos Content
-        <Fragment>
-          <strong>
-            Hello strong</strong>
-        </Fragment>
-      </Tab.Pane>
-    )
+    render: () => <ProfilePhotos></ProfilePhotos>
   },
   {
     menuItem: 'Activities',
@@ -33,7 +26,8 @@ export const ProfileContent = () => {
     <Tab
       panes={panes}
       menuPosition='right'
-      menu={{ fluid: true, className: "wrapped", tabular: false}}
+      menu={{ fluid: true, className: 'wrapped', tabular: false }}
+      activeIndex={1}
     ></Tab>
   );
 };

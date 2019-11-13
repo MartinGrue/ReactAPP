@@ -11,7 +11,11 @@ const HomePage = () => {
   const { openModal } = rootStore.modalStore;
   return (
     <Segment inverted textAlign='center' vertical className='masthead'>
-      <Container text>
+      <Container text         style={{
+
+          justifyContent: "center",
+          alignItems: "center"
+        }}>
         <Header as='h1' inverted>
           <Image
             size='massive'

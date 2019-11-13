@@ -12,12 +12,13 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Photo>> Upload([FromForm] Add.Command command)
         {
+            await Task.Delay(5000);
             return await Mediator.Send(command);
         }
         [HttpDelete("{id}")]
         public async Task<ActionResult<Unit>> Delete(string id)
         {
-            return await Mediator.Send(new Delete.Command{Id = id});
+            return await Mediator.Send(new Delete.Command { Id = id });
         }
     }
 }

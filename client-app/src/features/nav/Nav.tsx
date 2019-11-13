@@ -1,51 +1,33 @@
 import React, { useContext, useState } from 'react';
 import {
   Menu,
-  Container,
-  Button,
-  Dropdown,
-  Image,
   Responsive,
   Sidebar,
   Icon
 } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
-import { NavLink, Link, Switch, Route } from 'react-router-dom';
-import { RootStoreContext } from '../../app/stores/rootStore';
-import ActivityDashboard from '../activities/dashbord/ActivityDashboard';
-import ActivityForm from '../activities/form/ActivityForm';
-import ActivityDetails from '../activities/details/ActivityDetails';
-import ProfilePage from '../profile/ProfilePage';
-import LoginForm from '../User/LoginForm';
-import NotFound from '../../app/layout/NotFound';
+import Routes from '../../app/layout/Routes';
+import NavLeftMenuItems from './NavLeftMenuItems';
+import NavRightMenuItems from './NavRightMenuItems';
 
 const NavBarMobile: React.FC<{
-  leftItems: any;
-  onPusherClick: any;
-  onToggle: any;
-  rightItems: any;
-  visible: any;
-}> = ({
-  children,
-  leftItems,
-  onPusherClick,
-  onToggle,
-  rightItems,
-  visible
-}) => (
+  onPusherClick: () => void;
+  onToggle: () => void;
+  visible: boolean;
+}> = ({ onPusherClick, onToggle, visible }) => (
   <Sidebar.Pushable>
     <Sidebar
       as={Menu}
       animation='overlay'
       icon='labeled'
       inverted
-      items={leftItems}
       vertical
       visible={visible}
     >
-      {leftItems.map((item: any) => (
+      {/* {leftItems.map((item: any) => (
         <Menu.Item {...item} />
-      ))}
+      ))} */}
+      <NavLeftMenuItems></NavLeftMenuItems>
       {/* <Menu.Item as='a'>
         <Icon name='home' />
         Home
@@ -66,73 +48,36 @@ const NavBarMobile: React.FC<{
     >
       <Routes></Routes>
       <Menu fixed='top' inverted>
-        <Menu.Item>
+        {/* <Menu.Item>
           <Image size='mini' src='https://react.semantic-ui.com/logo.png' />
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item onClick={() => onToggle()}>
-          <Icon name='sidebar' />
+          <Icon name='sidebar' size='large' />
         </Menu.Item>
         <Menu.Menu position='right'>
-          {rightItems.map((item: any) => (
+          {/* {rightItems.map((item: any) => (
             <Menu.Item {...item} />
-          ))}
+          ))} */}
+          <NavRightMenuItems></NavRightMenuItems>
         </Menu.Menu>
       </Menu>
-      {children}
     </Sidebar.Pusher>
   </Sidebar.Pushable>
 );
 
-const NavBarDesktop: React.FC<{ leftItems: any; rightItems: any }> = ({
-  leftItems,
-  rightItems
-}) => (
+const NavBarDesktop: React.FC = () => (
   <Menu fixed='top' inverted>
-    <Menu.Item>
-      <Image size='mini' src='https://react.semantic-ui.com/logo.png' />
-    </Menu.Item>
-    {leftItems.map((item: any) => (
-      <Menu.Item {...item} />
-    ))}
+    <NavLeftMenuItems></NavLeftMenuItems>
     <Menu.Menu position='right'>
-      {rightItems.map((item: any) => (
+      {/* {rightItems.map((item: any) => (
         <Menu.Item {...item} />
-      ))}
+      ))} */}
+      <NavRightMenuItems></NavRightMenuItems>
     </Menu.Menu>
   </Menu>
 );
 
-const NavBarChildren: React.FC = ({ children }) => (
-  <Container style={{ marginTop: '5em' }}>{children}</Container>
-);
-
-const Routes: React.FC = () => (
-  <Container style={{ marginTop: '7em' }}>
-    <Switch>
-      <Route exact path='/activities' component={ActivityDashboard}></Route>
-      <Route
-        exact
-        path={['/createActivity', '/manage/:id']}
-        component={ActivityForm}
-      ></Route>
-      <Route exact path='/activities/:id' component={ActivityDetails}></Route>
-      <Route path='/profiles/:userName' component={ProfilePage}></Route>
-      <Route path='/login' component={LoginForm}></Route>
-      <Route component={NotFound}></Route>
-    </Switch>
-  </Container>
-);
-
-const Nav: React.FC = ({ children }) => {
-  const leftItems = [
-    { as: 'a', content: 'Home', key: 'home' },
-    { as: 'a', content: 'Users', key: 'users' }
-  ];
-  const rightItems = [
-    { as: 'a', content: 'Login', key: 'login' },
-    { as: 'a', content: 'Register', key: 'register' }
-  ];
-
+const Nav: React.FC = () => {
   const [visible, setvisible] = useState(false);
 
   const handlePusher = () => {
@@ -141,24 +86,17 @@ const Nav: React.FC = ({ children }) => {
 
   const handleToggle = () => setvisible(!visible);
 
-  const rootStore = useContext(RootStoreContext);
-  const { user, logout } = rootStore.userStore;
   return (
     <div>
       <Responsive {...Responsive.onlyMobile}>
         <NavBarMobile
-          leftItems={leftItems}
           onPusherClick={handlePusher}
           onToggle={handleToggle}
-          rightItems={rightItems}
           visible={visible}
-        >
-          <NavBarChildren>{children}</NavBarChildren>
-        </NavBarMobile>
+        ></NavBarMobile>
       </Responsive>
       <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-        <NavBarDesktop leftItems={leftItems} rightItems={rightItems} />
-        <NavBarChildren>{children}</NavBarChildren>
+        <NavBarDesktop />
         <Routes></Routes>
       </Responsive>
     </div>
