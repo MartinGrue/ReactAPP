@@ -1,18 +1,45 @@
-import React from 'react';
-import { Tab, Header, Grid, GridColumn } from 'semantic-ui-react';
+import React, { useContext, useState, useEffect } from 'react';
+import { Tab, Header, Grid, GridColumn, Button } from 'semantic-ui-react';
 import ProfileEditForm from './ProfileEditForm';
+import { RootStoreContext } from '../../app/stores/rootStore';
+import { observer } from 'mobx-react-lite';
 
 export const ProfileDescription = () => {
+  const rootStore = useContext(RootStoreContext);
+  const { user, updateUser, loadingUpdate } = rootStore.userStore;
+  const {
+    isLoggedIn,
+    setdisableUpdateForm,
+    toggledisableUpdateForm
+  } = rootStore.profileStore;
+
+  const [editProfileToggle, seteditProfileToggle] = useState(false);
+
+  useEffect(() => {
+    setdisableUpdateForm();
+  }, [setdisableUpdateForm]);
   return (
     <Tab.Pane>
       <Grid>
         <GridColumn width={16}>
-      <Header floated='left' icon='address card' content='Photos'></Header>
-      </GridColumn>
+          <Header floated='left' icon='address card' content='Photos'></Header>
+          {isLoggedIn && (
+            <Button
+              floated='right'
+              basic
+              content={editProfileToggle ? 'Cancel' : 'Edit Profile'}
+              color={editProfileToggle ? 'red' : 'green'}
+              onClick={() => {
+                seteditProfileToggle(!editProfileToggle);
+                toggledisableUpdateForm();
+              }}
+            ></Button>
+          )}
+        </GridColumn>
       </Grid>
-        {/* <ProfileEditForm></ProfileEditForm> */}
+      <ProfileEditForm></ProfileEditForm>
     </Tab.Pane>
   );
 };
 
-export default ProfileDescription;
+export default observer(ProfileDescription);

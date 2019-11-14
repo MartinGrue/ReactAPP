@@ -3,7 +3,7 @@ import { IActivity } from '../models/IActivity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { IUser, IUserFormValues } from '../models/user';
-import { IProfile, IPhoto } from '../models/IProfile';
+import { IProfile, IPhoto, IProfileFormValues } from '../models/IProfile';
 
 axios.interceptors.request.use(
   config => {
@@ -50,9 +50,11 @@ const requests = {
   postForm: (url: string, file: Blob) => {
     let data = new FormData();
     data.append('File', file);
-    return axios.post(url, data, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    }).then(responseBody);
+    return axios
+      .post(url, data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+      .then(responseBody);
   }
 };
 
@@ -72,15 +74,18 @@ const User = {
   login: (user: IUserFormValues): Promise<IUser> =>
     requests.post(`/User/login`, user),
   register: (user: IUserFormValues): Promise<IUser> =>
-    requests.post(`/User/register`, user)
+    requests.post(`/User/register`, user),
+  update: (values: IProfileFormValues): Promise<IUser> =>
+    requests.put(`/User`, values)
 };
 
 const Profile = {
   get: (userName: string): Promise<IProfile> =>
     requests.get(`/Profiles/${userName}`),
-    uploadImage: (file:Blob) : Promise<IPhoto> => requests.postForm('/Photos', file),
-    deleteImage: (id:string) => requests.delete(`/Photos/${id}`),
-    setMainPhoto: (id:string) => requests.post(`/Photos/${id}/setMain`, {})
+  uploadImage: (file: Blob): Promise<IPhoto> =>
+    requests.postForm('/Photos', file),
+  deleteImage: (id: string) => requests.delete(`/Photos/${id}`),
+  setMainPhoto: (id: string) => requests.post(`/Photos/${id}/setMain`, {})
 };
 
 export default {

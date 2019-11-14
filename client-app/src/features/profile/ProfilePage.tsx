@@ -16,10 +16,11 @@ const ProfilePage: React.FC<RouteComponentProps<ProfileParams>> = ({
 }) => {
   const rootStore = useContext(RootStoreContext);
   const { getProfile, profile, loadingProfile} = rootStore.profileStore;
+  const {user } = rootStore.userStore;
   
   useEffect(() => {
     window.scrollTo(0, 0);
-    getProfile(match.params.userName);
+    getProfile(match.params.userName).finally(() => console.log(profile));
   }, [getProfile, match]);
 
   if(loadingProfile){

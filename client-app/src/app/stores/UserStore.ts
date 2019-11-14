@@ -3,6 +3,7 @@ import { IUser, IUserFormValues } from '../models/user';
 import agent from '../api/agent';
 import { RootStore } from './rootStore';
 import { history } from '../..';
+import { IProfileFormValues } from '../models/IProfile';
 
 export default class UserStore {
   /**
@@ -14,6 +15,7 @@ export default class UserStore {
   rootStore: RootStore;
 
   @observable user: IUser | null = null;
+  @observable loadingUpdate: boolean = false;
   @computed get isLoggedIn() {
     return !!this.user;
   }
@@ -57,4 +59,19 @@ export default class UserStore {
       throw error;
     }
   }
+  @action updateUser = async (values: IProfileFormValues) => {
+    this.loadingUpdate = true;
+    try {
+      const user = await agent.User.update(values);
+      runInAction('UpdateUserAction', () => {
+        this.user = user;
+        console.log(user);
+        history.push(`/profiles/${user.userName}`);
+        this.loadingUpdate = false;
+      });
+      this.rootStore.commonStore.setToken(user.token);
+    } catch (error) {
+      throw error;
+    }
+  };
 }

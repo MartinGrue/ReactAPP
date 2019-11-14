@@ -19,20 +19,22 @@ export default class ProfileStore {
   @observable loadingPhoto: boolean = false;
   @observable loadingDeletePhoto: boolean = false;
   @observable loadingSetMain: boolean = false;
+  @observable disableUpdateForm: boolean = false;
 
   @computed get isLoggedIn() {
     if (this.rootStore.userStore.user && this.profile) {
       return this.rootStore.userStore.user.userName === this.profile.userName;
-    }
-    else{
-      return false
+    } else {
+      return false;
     }
   }
 
   @action getProfile = async (userName: string) => {
     this.loadingProfile = true;
+    console.log(userName)
     try {
       const profile = await agent.Profile.get(userName);
+      console.log(userName)
       runInAction('loginAction', () => {
         this.profile = profile;
         this.loadingProfile = false;
@@ -45,10 +47,10 @@ export default class ProfileStore {
     }
   };
   @action setLoadingPhoto = () => {
-    console.log(this.loadingPhoto + "in set before");
+    console.log(this.loadingPhoto + 'in set before');
     runInAction('UploadPhotoAction', () => {
       this.loadingPhoto = true;
-      console.log(this.loadingPhoto + "in set after");
+      console.log(this.loadingPhoto + 'in set after');
     });
   };
   @action uploadImage = async (file: Blob) => {
@@ -61,7 +63,7 @@ export default class ProfileStore {
         this.profile!.photos.push(photo);
         this.loadingPhoto = false;
         console.log(this.loadingPhoto);
-        history.push(`/Profiles/${this.user!.userName}`);
+        history.push(`/Profiles/${this.user!.displayName}`);
       });
     } catch (error) {
       runInAction('UploadImageInProfileStoreActionError', () => {
@@ -71,7 +73,7 @@ export default class ProfileStore {
     }
   };
   @action deleteImage = async (id: string) => {
-    this.loadingDeletePhoto= true;
+    this.loadingDeletePhoto = true;
     try {
       await agent.Profile.deleteImage(id);
       runInAction('deletePhotoAction', () => {
@@ -90,11 +92,14 @@ export default class ProfileStore {
     try {
       await agent.Profile.setMainPhoto(id);
       runInAction('deletePhotoAction', () => {
-        
         this.profile!.photos.find(p => p.isMain)!.isMain = false;
         this.profile!.photos.find(p => p.id === id)!.isMain = true;
 
         this.user!.image = this.profile!.photos.find(p => p.id === id)!.url;
+        console.log(this.user!.image + ' user image');
+        console.log(
+          this.profile!.photos.find(p => p.id === id) + ' profile image'
+        );
         this.profile!.image = this.profile!.photos.find(p => p.id === id)!.url;
         this.loadingSetMain = false;
       });
@@ -105,4 +110,10 @@ export default class ProfileStore {
       console.log(error);
     }
   };
+  @action toggledisableUpdateForm = () => {
+    this.disableUpdateForm = !this.disableUpdateForm;
+  };
+  @action setdisableUpdateForm = () => {
+    this.disableUpdateForm = true;
+  }
 }

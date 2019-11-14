@@ -3,6 +3,7 @@ import { Menu, Dropdown } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import {Image} from 'semantic-ui-react';
+import { observer } from 'mobx-react-lite';
 
 const NavRightMenuItems: React.FC = () => {
     const rootStore = useContext(RootStoreContext);
@@ -12,7 +13,7 @@ const NavRightMenuItems: React.FC = () => {
       {user && (
         <Menu.Item position='right' className='NavRightMenu'>
           <Image avatar size='tiny' spaced='right' src={user.image || '/assets/user.png'} />
-          <Dropdown pointing='top right' text={user.userName} className='NavRightMenuDropDown'>
+          <Dropdown pointing='top right' text={user.displayName} className='NavRightMenuDropDown'>
             <Dropdown.Menu>
               <Dropdown.Item
                 as={Link}
@@ -28,4 +29,4 @@ const NavRightMenuItems: React.FC = () => {
     </div>
   );
 };
-export default NavRightMenuItems;
+export default observer(NavRightMenuItems);

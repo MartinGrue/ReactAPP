@@ -17,14 +17,13 @@ namespace Application.User
         public class Command : MediatR.IRequest<User>
         {
             public string Bio { get; set; }
-            public string UserName { get; set; }
             public string DisplayName { get; set; }
         }
         public class CommandValidatior : AbstractValidator<Command>
         {
             public CommandValidatior()
             {
-                RuleFor(x => x.UserName).NotEmpty();
+                RuleFor(x => x.DisplayName).NotEmpty();
             }
         }
         public class Handler : IRequestHandler<Command, User>
@@ -50,15 +49,11 @@ namespace Application.User
                 // var appUser = await userManager.Users
                 // .SingleOrDefaultAsync(p => p.UserName == userAccessor.GetCurrentUsername());
 
-                user.UserName = request.UserName;
-                if (request.DisplayName != null)
-                {
-                    user.DisplayName = request.DisplayName;
-                }
+                user.DisplayName = request.DisplayName;
 
                 if (request.Bio != null)
                 {
-                    user.Bio = request.Bio;
+                    _context.Users.FirstOrDefault(p => p.UserName == userAccessor.GetCurrentUsername()).Bio = request.Bio;
                 }
 
                 var success = await _context.SaveChangesAsync() > 0;
