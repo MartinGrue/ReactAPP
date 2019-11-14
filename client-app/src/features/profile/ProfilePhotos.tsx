@@ -11,14 +11,24 @@ import {
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { PhotoUploader } from '../../app/common/photoUploader/PhotoUploader';
 import { observer } from 'mobx-react-lite';
+import { id } from 'date-fns/esm/locale';
 
 const ProfilePhotos = () => {
-
   const rootStore = useContext(RootStoreContext);
-  const { profile, isLoggedIn, deleteImage, loadingPhoto} = rootStore.profileStore;
+  const {
+    profile,
+    isLoggedIn,
+    deleteImage,
+    loadingDeletePhoto,
+    loadingPhoto,
+    loadingSetMain,
+    setMainPhoto
+  } = rootStore.profileStore;
 
   const [addPhotoToggle, setaddPhotoToggle] = useState(false);
+  const [target, settarget] = useState<string | undefined>(undefined);
 
+  let className = 'isNotMainButton';
   return (
     <Tab.Pane>
       <Grid>
@@ -45,9 +55,31 @@ const ProfilePhotos = () => {
                 <Card key={photo.id}>
                   <Image src={photo.url}></Image>
                   {isLoggedIn && (
-                    <Button.Group fluid >
-                      <Button color='red' content='Trash' icon='trash' onClick={ () => {deleteImage(photo.id)}}></Button>
-                    <Button color='teal' content='Main' icon='star'></Button>
+                    <Button.Group fluid>
+                      <Button
+                        color='red'
+                        content='Trash'
+                        icon='trash'
+                        onClick={() => {
+                          deleteImage(photo.id);
+                        }}
+                        loading={loadingDeletePhoto}
+                      ></Button>
+                      {photo.isMain
+                        ? (className = 'isMainButton')
+                        : (className = 'isNotMainButton')}
+                      <Button
+                        name={photo.id}
+                        color='teal'
+                        content='Main'
+                        icon='star'
+                        className={className}
+                        onClick={e => {
+                          setMainPhoto(photo.id);
+                          settarget(e.currentTarget.name);
+                        }}
+                        loading={loadingSetMain && target === photo.id}
+                      ></Button>
                     </Button.Group>
                   )}
                 </Card>

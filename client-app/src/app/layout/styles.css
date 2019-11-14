@@ -103,3 +103,6 @@ bottom: 90%;
     margin-right: auto;
     width: 100%;
   }
+  .button.ui.teal.button.isMainButton > i.star.icon{
+    color: #f8fe10;
+  }

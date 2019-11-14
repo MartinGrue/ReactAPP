@@ -5,7 +5,9 @@ import {
   Segment,
   Icon,
   Label,
-  ItemDescription
+  ItemDescription,
+  Grid,
+  Header
 } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { IActivity } from '../../../app/models/IActivity';
@@ -19,42 +21,53 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
   return (
     <Segment.Group>
       <Segment>
-        <Item.Group>
-          <Item key={activity.id}>
-            <Item.Image
-              size='tiny'
-              circular
-              src={host.image || '/assets/user.png'}
-              style={{ marginBottom: 3 }}
-            ></Item.Image>
-            <Item.Content>
-              <Item.Header as='a'>{activity.title}</Item.Header>
-              <Item.Meta>{format(activity.date!, 'hh:mm')}</Item.Meta>
-              <Item.Description>
-                Hosted by
-                <Link to={`/profiles/${host.userName}`}> {host.userName}</Link>
-              </Item.Description>
-              {activity.isHost && (
-                <ItemDescription>
-                  <Label
-                    tag
-                    color='orange'
-                    content='you are hosting this activity'
-                  ></Label>
-                </ItemDescription>
-              )}
-              {activity.isGoing && !activity.isHost && (
-                <ItemDescription>
-                  <Label
-                    tag
-                    color='green'
-                    content='you are going to this activity'
-                  ></Label>
-                </ItemDescription>
-              )}
-            </Item.Content>
-          </Item>
-        </Item.Group>
+        <Grid stackable>
+          <Grid.Column width={12}>
+            <Item.Group>
+              <Item key={activity.id}>
+                <Item.Image
+                  size='tiny'
+                  circular
+                  src={host.image || '/assets/user.png'}
+                  style={{ marginBottom: 3 }}
+                ></Item.Image>
+                <Item.Content>
+                  <Item.Header as='a'>{activity.title}</Item.Header>
+                  <Item.Meta>{format(activity.date!, 'hh:mm')}</Item.Meta>
+                  <Item.Description>
+                    Hosted by
+                    <Link to={`/profiles/${host.userName}`}>
+                      {' '}
+                      {host.userName}
+                    </Link>
+                  </Item.Description>
+                  {activity.isHost && (
+                    <ItemDescription>
+                      <Label
+                        tag
+                        color='orange'
+                        content='you are hosting this activity'
+                      ></Label>
+                    </ItemDescription>
+                  )}
+                  {activity.isGoing && !activity.isHost && (
+                    <ItemDescription>
+                      <Label
+                        tag
+                        color='green'
+                        content='you are going to this activity'
+                      ></Label>
+                    </ItemDescription>
+                  )}
+                </Item.Content>
+              </Item>
+            </Item.Group>
+          </Grid.Column>
+          {/* <Grid.Column width={4}>
+            <Icon name='upload' size='huge'></Icon>
+            <Header content='Drop Image here'></Header>
+          </Grid.Column> */}
+        </Grid>
       </Segment>
       <Segment>
         <Icon name='clock' />

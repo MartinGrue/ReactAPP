@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Segment, Item, Header, Button, Image } from 'semantic-ui-react';
+import { Segment, Item, Header, Button, Image} from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { IActivity } from '../../../app/models/IActivity';
 import { Link } from 'react-router-dom';
@@ -19,6 +19,7 @@ const ActivityDetailedHeader: React.FC<{ activity: IActivity }> = ({
   const host = activity.userActivities.filter(x => x.isHost)[0];
 
   return (
+
     <Segment.Group>
       <Segment basic attached='top' style={{ padding: '0' }}>
         <Image
@@ -66,6 +67,7 @@ const ActivityDetailedHeader: React.FC<{ activity: IActivity }> = ({
         )}
       </Segment>
     </Segment.Group>
+
   );
 };
 

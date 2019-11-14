@@ -79,7 +79,8 @@ const Profile = {
   get: (userName: string): Promise<IProfile> =>
     requests.get(`/Profiles/${userName}`),
     uploadImage: (file:Blob) : Promise<IPhoto> => requests.postForm('/Photos', file),
-    deleteImage: (id:string) => requests.delete(`/Photos/${id}`)
+    deleteImage: (id:string) => requests.delete(`/Photos/${id}`),
+    setMainPhoto: (id:string) => requests.post(`/Photos/${id}/setMain`, {})
 };
 
 export default {

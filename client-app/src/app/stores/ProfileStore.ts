@@ -17,6 +17,8 @@ export default class ProfileStore {
   @observable profile: IProfile | null = null;
   @observable loadingProfile: boolean = true;
   @observable loadingPhoto: boolean = false;
+  @observable loadingDeletePhoto: boolean = false;
+  @observable loadingSetMain: boolean = false;
 
   @computed get isLoggedIn() {
     if (this.rootStore.userStore.user && this.profile) {
@@ -69,14 +71,36 @@ export default class ProfileStore {
     }
   };
   @action deleteImage = async (id: string) => {
+    this.loadingDeletePhoto= true;
     try {
       await agent.Profile.deleteImage(id);
       runInAction('deletePhotoAction', () => {
         this.profile!.photos = this.profile!.photos.filter(p => p.id !== id);
+        this.loadingDeletePhoto = false;
       });
     } catch (error) {
       runInAction('DeleteImageInProfileStoreActionError', () => {
-        // this.loadingProfile = false;
+        this.loadingDeletePhoto = false;
+      });
+      console.log(error);
+    }
+  };
+  @action setMainPhoto = async (id: string) => {
+    this.loadingSetMain = true;
+    try {
+      await agent.Profile.setMainPhoto(id);
+      runInAction('deletePhotoAction', () => {
+        
+        this.profile!.photos.find(p => p.isMain)!.isMain = false;
+        this.profile!.photos.find(p => p.id === id)!.isMain = true;
+
+        this.user!.image = this.profile!.photos.find(p => p.id === id)!.url;
+        this.profile!.image = this.profile!.photos.find(p => p.id === id)!.url;
+        this.loadingSetMain = false;
+      });
+    } catch (error) {
+      runInAction('DeleteImageInProfileStoreActionError', () => {
+        this.loadingSetMain = false;
       });
       console.log(error);
     }
