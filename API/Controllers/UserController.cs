@@ -1,6 +1,8 @@
+using System;
 using System.Threading.Tasks;
 using Application.User;
 using Domain;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,8 +22,16 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
         [HttpGet]
-        public async Task<ActionResult<User>> CurrentUser(){
+        public async Task<ActionResult<User>> CurrentUser()
+        {
             return await Mediator.Send(new CurrentUser.Query());
+        }
+        [HttpPut]
+        public async Task<ActionResult<User>> Update(Update.Command command)
+        {
+            await Task.Delay(1000);
+            return await Mediator.Send(command);
+
         }
     }
 }

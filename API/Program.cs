@@ -1,5 +1,7 @@
 ﻿using System;
+using Application.interfaces;
 using Domain;
+using Infrastructure.photos;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -25,7 +27,8 @@ namespace API
                     var context = services.GetRequiredService<DataContext>();
                     context.Database.Migrate();
                     var userManager = services.GetRequiredService<UserManager<AppUser>>();
-                    Seed.SeedData(context, userManager).Wait();
+                    var photoAccessor = services.GetRequiredService<IPhotoAccessor>();
+                    Seed.SeedData(context, userManager, photoAccessor).Wait();
                }
                catch(Exception ex){
                    var logger = services.GetRequiredService<ILogger<Program>>();

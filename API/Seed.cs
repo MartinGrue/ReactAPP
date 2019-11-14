@@ -2,15 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.interfaces;
 using Domain;
 using Microsoft.AspNetCore.Identity;
+using Persistence;
 
-namespace Persistence
+namespace API
 {
     public class Seed
     {
         public static async Task SeedData(DataContext context,
-            UserManager<AppUser> userManager)
+            UserManager<AppUser> userManager, IPhotoAccessor photoAccessor)
         {
             if (!userManager.Users.Any())
             {
@@ -21,22 +23,43 @@ namespace Persistence
                         Id = "a",
                         DisplayName = "Bob",
                         UserName = "bob",
-                        Email = "bob@test.com"
+                        Email = "bob@test.com",
+                        Photos = new List<Photo>{
+                            photoAccessor.GetPhotoFromUrl("https://randomuser.me/api/portraits/men/69.jpg", true),
+                            photoAccessor.GetPhotoFromUrl("https://picsum.photos/id/896/300/300.jpg",false),
+                            photoAccessor.GetPhotoFromUrl("https://picsum.photos/id/603/300/300.jpg",false),
+                            photoAccessor.GetPhotoFromUrl("https://picsum.photos/id/2/300/300.jpg",false),
+                            photoAccessor.GetPhotoFromUrl("https://picsum.photos/id/183/300/300.jpg",false),
+                        }
                     },
                     new AppUser
                     {
                         Id = "b",
                         DisplayName = "Jane",
                         UserName = "jane",
-                        Email = "jane@test.com"
+                        Email = "jane@test.com",
+                        Photos = new List<Photo>{
+                        photoAccessor.GetPhotoFromUrl("https://randomuser.me/api/portraits/women/42.jpg", true),
+                        photoAccessor.GetPhotoFromUrl("https://picsum.photos/id/814/300/300.jpg",false),
+                        photoAccessor.GetPhotoFromUrl("https://picsum.photos/id/811/300/300.jpg",false),
+                        photoAccessor.GetPhotoFromUrl("https://picsum.photos/id/659/300/300.jpg",false),
+                        photoAccessor.GetPhotoFromUrl("https://picsum.photos/id/615/300/300.jpg",false)
+                        }
                     },
                     new AppUser
                     {
                         Id = "c",
                         DisplayName = "Tom",
                         UserName = "tom",
-                        Email = "tom@test.com"
-                    },
+                        Email = "tom@test.com",
+                        Photos = new List<Photo>{
+                        photoAccessor.GetPhotoFromUrl("https://randomuser.me/api/portraits/men/36.jpg", true),
+                        photoAccessor.GetPhotoFromUrl("https://picsum.photos/id/877/300/300.jpg",false),
+                        photoAccessor.GetPhotoFromUrl("https://picsum.photos/id/87/300/300.jpg",false),
+                        photoAccessor.GetPhotoFromUrl("https://picsum.photos/id/52/300/300.jpg",false),
+                        photoAccessor.GetPhotoFromUrl("https://picsum.photos/id/848/300/300.jpg",false)
+                        }
+                    }
                 };
 
                 foreach (var user in users)
