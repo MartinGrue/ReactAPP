@@ -53,7 +53,7 @@ namespace Application.User
 
                 if (request.Bio != null)
                 {
-                    _context.Users.FirstOrDefault(p => p.UserName == userAccessor.GetCurrentUsername()).Bio = request.Bio;
+                    user.Bio = request.Bio;
                 }
 
                 var success = await _context.SaveChangesAsync() > 0;

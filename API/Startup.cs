@@ -24,6 +24,8 @@ using Application.User;
 using AutoMapper;
 using System;
 using Infrastructure.photos;
+using API.SingalR;
+using System.Threading.Tasks;
 
 namespace API
 {
@@ -55,7 +57,7 @@ namespace API
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 opt.Filters.Add(new AuthorizeFilter(policy));
             })
-            .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Create>())
+            .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Application.Activities.Create>())
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             // services.AddCors();
             services.AddMediatR(typeof(List.Handler).Assembly);
@@ -67,17 +69,37 @@ namespace API
             identityBuilder.AddEntityFrameworkStores<DataContext>();
             identityBuilder.AddSignInManager<SignInManager<AppUser>>();
 
+            services.AddSignalR();
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.
             GetBytes("Super secret key"));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(Options =>
-                Options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = key
-                });
+                    Options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = key
+                    };
+                    Options.Events = new JwtBearerEvents()
+                    {
+                        OnMessageReceived =
+                         (MessageReceivedContext) =>
+                         {
+                             var accessToken = MessageReceivedContext.Request.Query["access_token"];
+                             var path = MessageReceivedContext.Request.Path;
+                             if (!string.IsNullOrEmpty(accessToken)
+                                && path.StartsWithSegments("/chat"))
+                             {
+                                 MessageReceivedContext.Token = accessToken;
+                             };
+                             return Task.CompletedTask;
+                         }
+                    };
+                }
+               );
             services.AddScoped<IJwtGenerator, JwtGenerator>();
             services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
@@ -100,6 +122,7 @@ namespace API
             }
 
             // app.UseHttpsRedirection();
+            app.UseSignalR(configure => { configure.MapHub<ChatHub>("/chat"); });
             app.UseAuthentication();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseMvc();
