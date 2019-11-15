@@ -2,7 +2,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Segment, Form, Button, Grid, GridColumn } from 'semantic-ui-react';
 import {
   IActivityFormValues,
-  ActivityFormValues
+  ActivityFormValues,
+  IActivity
 } from '../../../app/models/IActivity';
 import { v4 as uuid } from 'uuid';
 import { observer } from 'mobx-react-lite';
@@ -108,7 +109,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
       history.push(`/activities/`);
     } else {
       if (!activity.id) {
-        let newActivity = { ...activity, id: uuid() };
+        let newActivity:IActivity = { ...activity, id: uuid(),isHost:true, isGoing:true };
         console.log(newActivity);
         createActivity(newActivity).then(() =>
           history.push(`/activities/${newActivity.id}`)
@@ -143,8 +144,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   });
 
   return (
-    <Grid>
-      <GridColumn width={10}>
+    <Grid centered>
+      <GridColumn mobile={16} tablet={14} computer={10}>
         <Segment clearing>
           <FinalForm
             validate={validate}

@@ -14,6 +14,7 @@ export default class ProfileStore {
   rootStore: RootStore;
   @observable user = this.rootStore.userStore.user;
 
+
   @observable profile: IProfile | null = null;
   @observable loadingProfile: boolean = true;
   @observable loadingPhoto: boolean = false;
@@ -63,7 +64,7 @@ export default class ProfileStore {
         this.profile!.photos.push(photo);
         this.loadingPhoto = false;
         console.log(this.loadingPhoto);
-        history.push(`/Profiles/${this.user!.displayName}`);
+        history.push(`/Profiles/${this.user!.userName}`);
       });
     } catch (error) {
       runInAction('UploadImageInProfileStoreActionError', () => {
@@ -102,6 +103,7 @@ export default class ProfileStore {
         );
         this.profile!.image = this.profile!.photos.find(p => p.id === id)!.url;
         this.loadingSetMain = false;
+        this.rootStore.activityStore.activityRegistryHasNotChanged = false;
       });
     } catch (error) {
       runInAction('DeleteImageInProfileStoreActionError', () => {

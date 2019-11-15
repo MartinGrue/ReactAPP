@@ -68,6 +68,7 @@ export default class UserStore {
         console.log(user);
         history.push(`/profiles/${user.userName}`);
         this.loadingUpdate = false;
+        this.rootStore.activityStore.activityRegistryHasNotChanged = false;
       });
       this.rootStore.commonStore.setToken(user.token);
     } catch (error) {

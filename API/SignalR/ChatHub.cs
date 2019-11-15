@@ -19,7 +19,7 @@ namespace API.SignalR
         {
             var username = Context.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
-            command.Username = username;
+            command.UserName = username;
 
             var comment = await _mediator.Send(command);
 

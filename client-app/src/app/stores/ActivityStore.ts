@@ -18,6 +18,7 @@ export default class ActivityStore {
   rootStore: RootStore;
 
   @observable activityRegistry = new Map(); // um die activities als eine observableMap darzustellen
+  @observable activityRegistryHasNotChanged: boolean = true;
   @observable activities: IActivity[] = [];
   @observable loadingInitial = false;
   @observable selectedActivity: IActivity | undefined;
@@ -28,7 +29,7 @@ export default class ActivityStore {
 
   @action setloadinginitial = () => {
     this.loadingInitial = true;
-  }
+  };
   @observable.ref hubConnection: signalR.HubConnection | null = null;
 
   @action connectToSignalRHub = () => {
@@ -132,7 +133,10 @@ export default class ActivityStore {
     //implicity returning a promise
     this.loadingInitial = true;
     // let activities = this.activityRegistry;
-    if (Array.from(this.activityRegistry.values()).length !== 0) {
+    if (
+      Array.from(this.activityRegistry.values()).length !== 0 &&
+      this.activityRegistryHasNotChanged
+    ) {
       this.loadingInitial = false;
     } else {
       try {
@@ -165,11 +169,13 @@ export default class ActivityStore {
             this.activityRegistry.set(activity.id, activity);
           });
           this.loadingInitial = false;
+          this.activityRegistryHasNotChanged = true;
         });
       } catch (error) {
         runInAction('loadingActivitiesError', () => {
           console.log(error);
           this.loadingInitial = false;
+          this.activityRegistryHasNotChanged = true;
         });
       }
     }
@@ -221,6 +227,7 @@ export default class ActivityStore {
       runInAction('createActivity', () => {
         // this.activities.push(activity);
         this.activityRegistry.set(activity.id, activity);
+        this.selectedActivity = activity;
         this.editMode = false;
         this.submitting = false;
       });

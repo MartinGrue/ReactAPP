@@ -13,47 +13,57 @@ namespace Application.Comments
 {
     public class Create
     {
-        public class Command : IRequest<CommentDto>
+        public class Command : IRequest<CommentDTO>
         {
+            public Guid ActivityId { get; set; } //ActivityId
+            public string UserName { get; set; }
             public string Body { get; set; }
-            public Guid ActivityId { get; set; }
-            public string Username { get; set; }
         }
 
-        public class Handler : IRequestHandler<Command, CommentDto>
+        public class Handler : IRequestHandler<Command, CommentDTO>
         {
-            private readonly DataContext _context;
-            private readonly IMapper _mapper;
+            private readonly IMapper mapper;
             public Handler(DataContext context, IMapper mapper)
             {
-                _mapper = mapper;
+                this.mapper = mapper;
+
                 _context = context;
             }
 
-            public async Task<CommentDto> Handle(Command request, CancellationToken cancellationToken)
+            public DataContext _context { get; }
+
+            public async Task<CommentDTO> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activity = await _context.Activities.FindAsync(request.ActivityId);
+                var user = await _context.Users
+                .SingleOrDefaultAsync(p => p.UserName == request.UserName);
+
+                if (user == null)
+                {
+                    throw new RestException(HttpStatusCode.Unauthorized);
+                }
+
+                var activity = await _context.Activities
+                .SingleOrDefaultAsync(p => p.Id == request.ActivityId);
 
                 if (activity == null)
-                    throw new RestException(HttpStatusCode.NotFound, new {Activity = "Not found"});
-
-                var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == request.Username);
-
+                {
+                    throw new RestException(HttpStatusCode.NotFound,
+                     new { Activity = "Could not found Activity" });
+                }
                 var comment = new Comment
                 {
+                    Body = request.Body,
                     Author = user,
                     Activity = activity,
-                    Body = request.Body,
                     CreatedAt = DateTime.Now
                 };
 
                 _context.Comments.Add(comment);
 
                 var success = await _context.SaveChangesAsync() > 0;
-
-                if (success) return _mapper.Map<Comment, CommentDto>(comment);
-
-                throw new Exception("Problem saving changes");
+                var toreturn =  mapper.Map<Comment, CommentDTO>(comment);
+                if (success) return toreturn;
+                throw new Exception("Problem in create Comment handler");
             }
         }
     }
