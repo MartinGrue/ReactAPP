@@ -33,6 +33,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
 }) => {
   const rootStore = useContext(RootStoreContext);
   const {
+    setloadinginitial,
     createActivity,
     editActivity,
     submitting,
@@ -78,7 +79,11 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
         city: ''
       });
     }
-  }, [match.params.id, loadActivity, rootStore.activityStore.selectedActivity]);
+    return () => {
+      setloadinginitial();
+    };
+  }
+, [match.params.id, loadActivity, rootStore.activityStore.selectedActivity]);
 
   // const handleSubmit = () => {
   //   if (activity.id.length === 0) {
@@ -98,12 +103,13 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     const dateAndTime = combineDateAndTime(values.date, values.time);
     const { date, time, ...activity } = values;
     activity.date = dateAndTime;
-    if (rootStore.activityStore.selectedActivity) {
+    if (rootStore.activityStore.selectedActivity && match.params.id) {
       console.log('here');
       history.push(`/activities/`);
     } else {
       if (!activity.id) {
         let newActivity = { ...activity, id: uuid() };
+        console.log(newActivity);
         createActivity(newActivity).then(() =>
           history.push(`/activities/${newActivity.id}`)
         );

@@ -9,7 +9,7 @@ export interface IActivity {
   city: string;
   venue: string;
   userActivities: IAttendee[];
-
+  comments: IComment[];
   //Props from user
   isGoing: boolean;
   isHost:boolean
@@ -19,6 +19,14 @@ export interface IAttendee {
   displayName: string;
   image:string | null;
   isHost: boolean
+}
+export interface IComment{
+  activityId:string;
+  body:string;
+  userName:string,
+  displayName:string;
+  image:string;
+  createdAt:string;
 }
 export interface IActivityFormValues extends Partial<IActivity> {
   time?: Date;

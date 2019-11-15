@@ -4,6 +4,8 @@ import agent from '../api/agent';
 import { toast } from 'react-toastify';
 import { RootStore } from './rootStore';
 import { FillActivityProps } from '../common/util/util';
+import * as signalR from '@aspnet/signalr';
+import { IHttpConnectionOptions } from '@aspnet/signalr';
 
 // class ActivityStore {
 export default class ActivityStore {
@@ -24,6 +26,43 @@ export default class ActivityStore {
   @observable target = '';
   @observable loading = false;
 
+  @action setloadinginitial = () => {
+    this.loadingInitial = true;
+  }
+  @observable.ref hubConnection: signalR.HubConnection | null = null;
+
+  @action connectToSignalRHub = () => {
+    var hubConnectionBuilder = new signalR.HubConnectionBuilder();
+    this.hubConnection = hubConnectionBuilder
+      .withUrl('http://localhost:5000/chat', {
+        accessTokenFactory: (): string => {
+          return this.rootStore.commonStore.token!;
+        }
+      })
+      .configureLogging(signalR.LogLevel.Information)
+      .build();
+    this.hubConnection
+      .start()
+      .then(() => console.log(this.hubConnection!.state));
+
+    this.hubConnection.on('ReceiveComment', comment => {
+      console.log(comment);
+      runInAction('connectToSignalRHubAction', () => {
+        this.selectedActivity!.comments.push(comment);
+      });
+    });
+  };
+  @action stopSignalRHub = () => {
+    this.hubConnection!.stop();
+  };
+  @action addComment = async (values: any) => {
+    values.activityId = this.selectedActivity!.id;
+    try {
+      await this.hubConnection!.invoke('SendComment', values);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   @computed get activitiesByDate() {
     //um die anzeige zu sortieren (clientseitig)
     // return this.activities.sort(
@@ -42,25 +81,23 @@ export default class ActivityStore {
 
     // console.log(Object.entries(sorted.reduce((a,b)=>{return a}, {})));
     return Object.entries(
-      sorted.reduce(
-        (activities, activity) => {
-          // console.log(activity.date!);
-          const key: string = activity.date!.toISOString().split('T')[0];
-          // // console.log(activities);
-          // activities[key] = activities[key]
-          //   ? [...activities[key], activity]
-          //   : [activity];
-            key in activities ? activities[key] = [...activities[key], activity]
-            : activities[key] = [activity];
-          // if (key in activities) {
-          //   activities[key] = [...activities[key], activity];
-          // } else {
-          //   activities[key] = [activity];
-          // }
-          return activities;
-        },
-        {} as { [key: string]: IActivity[] }
-      )
+      sorted.reduce((activities, activity) => {
+        // console.log(activity.date!);
+        const key: string = activity.date!.toISOString().split('T')[0];
+        // // console.log(activities);
+        // activities[key] = activities[key]
+        //   ? [...activities[key], activity]
+        //   : [activity];
+        key in activities
+          ? (activities[key] = [...activities[key], activity])
+          : (activities[key] = [activity]);
+        // if (key in activities) {
+        //   activities[key] = [...activities[key], activity];
+        // } else {
+        //   activities[key] = [activity];
+        // }
+        return activities;
+      }, {} as { [key: string]: IActivity[] })
     );
   }
   @action openEditForm = (id: string) => {
@@ -180,7 +217,7 @@ export default class ActivityStore {
       let attendees = [];
       attendees.push(NewAttendee);
       activity.userActivities = attendees;
-
+      activity.comments = [];
       runInAction('createActivity', () => {
         // this.activities.push(activity);
         this.activityRegistry.set(activity.id, activity);

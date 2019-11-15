@@ -24,7 +24,7 @@ using Application.User;
 using AutoMapper;
 using System;
 using Infrastructure.photos;
-using API.SingalR;
+using API.SignalR;
 using System.Threading.Tasks;
 
 namespace API
@@ -41,11 +41,24 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            Action<AuthorizationPolicyBuilder> configurePolicy = (authpolbuilder) => { authpolbuilder.Requirements.Add(new IsHostRequirement()); };
-            Action<AuthorizationOptions> configure = (authopt) => { authopt.AddPolicy("IsActivityHost", configurePolicy); };
+            // Action<AuthorizationPolicyBuilder> configurePolicy = (authpolbuilder) => { authpolbuilder.Requirements.Add(new IsHostRequirement()); };
+            // Action<AuthorizationOptions> configure = (authopt) => { authopt.AddPolicy("IsActivityHost", configurePolicy); };
+            // Action<AuthorizationOptions> configure = (authopt) =>
+            //  {
+            //      authopt.AddPolicy("IsActivityHost", (authpolbuilder) =>
+            //     {
+            //         authpolbuilder.Requirements.Add(new IsHostRequirement());
+            //     });
+            //  };
             // Action<AuthorizationOptions> auth2 = (configure) => {};
 
-            services.AddAuthorization(configure);
+            services.AddAuthorization(authopt =>
+             {
+                 authopt.AddPolicy("IsActivityHost", authpolbuilder =>
+                {
+                    authpolbuilder.Requirements.Add(new IsHostRequirement());
+                });
+             });
             services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
             services.AddDbContext<DataContext>(opt =>
             {
@@ -59,7 +72,16 @@ namespace API
             })
             .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Application.Activities.Create>())
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            // services.AddCors();
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .WithOrigins("http://localhost:3000")
+                    .AllowCredentials();
+                });
+            });
             services.AddMediatR(typeof(List.Handler).Assembly);
             services.AddMediatR(typeof(CurrentUser.Handler).Assembly);
             services.AddAutoMapper(typeof(List.Handler).Assembly);
@@ -100,6 +122,7 @@ namespace API
                     };
                 }
                );
+
             services.AddScoped<IJwtGenerator, JwtGenerator>();
             services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
@@ -122,10 +145,11 @@ namespace API
             }
 
             // app.UseHttpsRedirection();
-            app.UseSignalR(configure => { configure.MapHub<ChatHub>("/chat"); });
             app.UseAuthentication();
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            // app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+            app.UseCors("CorsPolicy");
             app.UseMvc();
+            app.UseSignalR(configure => { configure.MapHub<ChatHub>("/chat"); });
         }
     }
 }
