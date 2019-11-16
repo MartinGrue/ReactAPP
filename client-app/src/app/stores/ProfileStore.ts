@@ -1,9 +1,8 @@
 import { RootStore } from './rootStore';
-import { observable, action, runInAction, computed } from 'mobx';
+import { observable, action, runInAction, computed, reaction } from 'mobx';
 import { IProfile, IProfileForFollowerOrFollowing } from '../models/IProfile';
 import agent from '../api/agent';
 import { history } from '../..';
-import { async } from 'q';
 
 export default class ProfileStore {
   /**
@@ -11,23 +10,22 @@ export default class ProfileStore {
    */
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
+
+  
   }
-  
+
   rootStore: RootStore;
-  
+
   @observable user = this.rootStore.userStore.user;
 
   @observable profile: IProfile | null = null;
-  @observable followingsOrFollower:
-    | IProfileForFollowerOrFollowing[]
-    | null = null;
 
   @observable loadingPhoto: boolean = false;
   @observable loadingDeletePhoto: boolean = false;
   @observable loadingSetMain: boolean = false;
   @observable loadingFollow: boolean = false;
-  @observable loadingGetFollowers: boolean = true;
-  // @observable activeTab: number = 0;
+
+
 
   @observable disableUpdateForm: boolean = false;
   @observable loadingProfile: boolean = true;
@@ -55,7 +53,6 @@ export default class ProfileStore {
         this.loadingProfile = false;
         console.log(error);
       });
-
     }
   };
   @action setLoadingPhoto = () => {
@@ -129,7 +126,7 @@ export default class ProfileStore {
     try {
       await agent.Profile.followUser(this.profile!.userName);
       runInAction('followUserAction', () => {
-        this.profile!.follwersCount += 1;
+        this.profile!.followersCount += 1;
         this.profile!.isFollowed = true;
         this.loadingFollow = false;
       });
@@ -144,7 +141,7 @@ export default class ProfileStore {
     try {
       await agent.Profile.unfollowUser(this.profile!.userName);
       runInAction('unfollowUserAction', () => {
-        this.profile!.follwersCount -= 1;
+        this.profile!.followersCount -= 1;
         this.profile!.isFollowed = false;
         this.loadingFollow = false;
       });
@@ -154,29 +151,5 @@ export default class ProfileStore {
       });
     }
   };
-  @action getFollowersOrFollowing = async (predicate: string) => {
-    this.loadingGetFollowers = true;
-    try {
-      var profiles = await agent.Profile.getFollowersOrFollowing(
-        this.profile!.userName,
-        predicate
-      );
-      runInAction('getFollowersOrFollowingAction', () => {
-        this.followingsOrFollower = profiles;
-        console.log('fetched profiles normal');
-        console.log(profiles);
-        console.log('fetched profiles observable');
-        console.log(this.followingsOrFollower);
-        this.loadingGetFollowers = false;
-        console.log(this.loadingPhoto);
-      });
-    } catch (error) {
-      runInAction('getFollowersOrFollowingError', () => {
-        this.loadingGetFollowers = false;
-      });
-    }
-  };
-  // @action setActiveTab = (activeIndex: number) => {
-  //   this.activeTab = activeIndex;
-  // };
+  
 }

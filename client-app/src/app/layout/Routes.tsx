@@ -7,6 +7,7 @@ import ActivityDetails from '../../features/activities/details/ActivityDetails';
 import ProfilePage from '../../features/profile/ProfilePage';
 import LoginForm from '../../features/User/LoginForm';
 import NotFound from './NotFound';
+import { observer } from 'mobx-react-lite';
 
 const Routes: React.FC = () => (
     <Container style={{ marginTop: '7em' }}>
@@ -24,4 +25,4 @@ const Routes: React.FC = () => (
       </Switch>
     </Container>
   );
-  export default Routes;
+  export default observer(Routes);

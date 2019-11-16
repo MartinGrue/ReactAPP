@@ -9,10 +9,12 @@ const ActivityDashboard: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
 
   const { loadActivities, loadingInitial } = rootStore.activityStore;
+  const {loading, loadFollowings} = rootStore.followersStore;
   useEffect(() => {
     loadActivities();
-  }, [loadActivities]);
-  if (loadingInitial) {
+    loadFollowings('followers');
+  }, [loadActivities,loadFollowings]);
+  if (loading) {
     return <LoadingComponent content='Fetching Activity...'></LoadingComponent>;
   }
   return (

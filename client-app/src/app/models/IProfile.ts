@@ -5,7 +5,7 @@ export interface IProfile {
   image: string;
   photos: IPhoto[];
   isFollowed?: boolean;
-  follwersCount: number;
+  followersCount: number;
   followingCount: number;
 }
 export interface IPhoto {
@@ -22,7 +22,6 @@ export interface IProfileForFollowerOrFollowing {
   bio: string;
   userName: string;
   image: string;
-  isFollowed?: boolean;
-  follwersCount: number;
+  followersCount: number;
   followingCount: number;
 }

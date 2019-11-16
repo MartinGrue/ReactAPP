@@ -98,7 +98,7 @@ const Profile = {
   getFollowersOrFollowing: (
     userName: string,
     predicate: string
-  ): Promise<IProfileForFollowerOrFollowing[]> =>
+  ): Promise<IProfile[]> =>
     requests.get(`/Profiles/${userName}/follow?predicate=${predicate}`)
 };
 
