@@ -23,7 +23,6 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
 
   useEffect(() => {
     loadActivity(match.params.id);
-    console.log(selectedActivity)
     window.scrollTo(0, 0);
   }, [match.params.id, loadActivity]);
 

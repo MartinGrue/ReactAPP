@@ -17,10 +17,10 @@ body {
   display: flex;
   align-items: center;
   background-image: linear-gradient(
-          135deg,
-          rgb(24, 42, 115) 0%,
-          rgb(33, 138, 174) 69%,
-          rgb(32, 167, 172) 89%
+    135deg,
+    rgb(24, 42, 115) 0%,
+    rgb(33, 138, 174) 69%,
+    rgb(32, 167, 172) 89%
   ) !important;
   height: 100vh;
 }
@@ -43,66 +43,72 @@ body {
 /*end home page styles*/
 
 /*Segment Styles for ActivityList*/
-.ui.segment{
+.ui.segment {
   border-color: #2185d0;
   margin-top: auto;
 }
 /*End Segment Styles for ActivityList*/
-body.dimmable>.dimmer {
-    background: rgba(255, 255, 255, 0.1);
+body.dimmable > .dimmer {
+  background: rgba(255, 255, 255, 0.1);
 }
-.ui.items>.item>.image{
+.ui.items > .item > .image {
   max-width: 180px;
   width: 100%;
   height: auto;
 }
-.wrapped{
+.wrapped {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
-.ui.tiny.images img, .ui.tiny.image {
-  width:40px;
+.ui.tiny.images img,
+.ui.tiny.image {
+  width: 40px;
   max-width: none;
 }
-div.right.item.NavRightMenu{
+div.right.item.NavRightMenu {
   padding-right: 50px;
 }
-.ui.dropdown>.text {
-font-size: large;
+.ui.dropdown > .text {
+  font-size: large;
 }
-div.ui.basic.segment{
+div.ui.basic.segment {
   bottom: 100%!;
-  top:1%!;
+  top: 1%!;
 }
 @media screen and (max-width: 570px) {
-div.ui.basic.segment.activityImageTextStyle{ 
-  font-size: 10px; 
-  position: absolute;
-  top:10%;
-bottom: 90%;
-
-  width: 100%;
-  height: auto;
-  color: white;}
-}
-@media screen and (min-width: 571px) {
-  div.ui.basic.segment.activityImageTextStyle{ 
-    font-size: 20px; 
+  div.ui.basic.segment.activityImageTextStyle {
+    font-size: 10px;
     position: absolute;
-    top:20%;
-  bottom: 80%;
-  
+    top: 10%;
+    bottom: 90%;
+
     width: 100%;
     height: auto;
-    color: white;}
+    color: white;
   }
-  .center {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+}
+@media screen and (min-width: 571px) {
+  div.ui.basic.segment.activityImageTextStyle {
+    font-size: 20px;
+    position: absolute;
+    top: 20%;
+    bottom: 80%;
+
     width: 100%;
+    height: auto;
+    color: white;
   }
-  .button.ui.teal.button.isMainButton > i.star.icon{
-    color: #f8fe10;
-  }
+}
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+.button.ui.teal.button.isMainButton > i.star.icon {
+  color: #f8fe10;
+}
+.borderImage > img {
+  border: 2px solid #ff4800 !important;
+}

@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Errors;
 using Application.Profiles;
+using AutoMapper;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,36 +15,39 @@ namespace Application.Followers
 {
     public class GetFollowing
     {
-        public class Command : IRequest<List<Profile>>
+        public class Command : IRequest<List<ProfileForFollowersDto>>
         {
             public string UserName { get; set; }
             public string followingORfollowers { get; set; }
         }
 
-        public class Handler : IRequestHandler<Command, List<Profile>>
+        public class Handler : IRequestHandler<Command, List<ProfileForFollowersDto>>
         {
             public DataContext _context;
             private readonly IProfileReader profileReader;
+            private readonly IMapper mapper;
 
-            public Handler(DataContext context, IProfileReader profileReader)
+            public Handler(DataContext context, IProfileReader profileReader, IMapper mapper)
             {
+                this.mapper = mapper;
                 this.profileReader = profileReader;
                 _context = context;
             }
 
-            public async Task<List<Profile>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<List<ProfileForFollowersDto>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users
                 .FirstOrDefaultAsync(p => p.UserName == request.UserName);
 
-                var userList = new List<Profile>();
+                var userList = new List<ProfileForFollowersDto>();
                 if (request.followingORfollowers == "followers")
                 {
                     var users = user.Followers;
                     foreach (var item in users)
                     {
                         var profile = await profileReader.ReadProfile(item.UserA.UserName);
-                        userList.Add(profile);
+                        var profileToReturn = mapper.Map<Profiles.Profile, ProfileForFollowersDto>(profile);
+                        userList.Add(profileToReturn);
                     }
                 }
                 else if (request.followingORfollowers == "following")
@@ -52,7 +56,8 @@ namespace Application.Followers
                     foreach (var item in users)
                     {
                         var profile = await profileReader.ReadProfile(item.UserB.UserName);
-                        userList.Add(profile);
+                        var profileToReturn = mapper.Map<Profiles.Profile, ProfileForFollowersDto>(profile);
+                        userList.Add(profileToReturn);
                     }
                 }
                 else

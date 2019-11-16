@@ -3,7 +3,12 @@ import { IActivity } from '../models/IActivity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { IUser, IUserFormValues } from '../models/user';
-import { IProfile, IPhoto, IProfileFormValues } from '../models/IProfile';
+import {
+  IProfile,
+  IPhoto,
+  IProfileFormValues,
+  IProfileForFollowerOrFollowing
+} from '../models/IProfile';
 
 axios.interceptors.request.use(
   config => {
@@ -85,7 +90,16 @@ const Profile = {
   uploadImage: (file: Blob): Promise<IPhoto> =>
     requests.postForm('/Photos', file),
   deleteImage: (id: string) => requests.delete(`/Photos/${id}`),
-  setMainPhoto: (id: string) => requests.post(`/Photos/${id}/setMain`, {})
+  setMainPhoto: (id: string) => requests.post(`/Photos/${id}/setMain`, {}),
+  followUser: (userName: string) =>
+    requests.post(`/Profiles/${userName}/follow`, {}),
+  unfollowUser: (userName: string) =>
+    requests.post(`/Profiles/${userName}/unfollow`, {}),
+  getFollowersOrFollowing: (
+    userName: string,
+    predicate: string
+  ): Promise<IProfileForFollowerOrFollowing[]> =>
+    requests.get(`/Profiles/${userName}/follow?predicate=${predicate}`)
 };
 
 export default {

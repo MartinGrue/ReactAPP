@@ -18,10 +18,10 @@ const ProfilePage: React.FC<RouteComponentProps<ProfileParams>> = ({
   const { getProfile, profile, loadingProfile} = rootStore.profileStore;
   const {user } = rootStore.userStore;
   
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    getProfile(match.params.userName).finally(() => console.log(profile));
-  }, [getProfile, match]);
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  //   getProfile(match.params.userName).finally(() => console.log(profile));
+  // }, [getProfile, match]);
 
   if(loadingProfile){
     return (
@@ -33,7 +33,7 @@ const ProfilePage: React.FC<RouteComponentProps<ProfileParams>> = ({
     <Grid>
       <GridColumn width={16} stretched>
         <ProfileHeader profile={profile!}></ProfileHeader>
-        <ProfileContent></ProfileContent>
+        {/* <ProfileContent ></ProfileContent> */}
       </GridColumn>
     </Grid>
   );

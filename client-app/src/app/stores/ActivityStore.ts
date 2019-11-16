@@ -163,6 +163,7 @@ export default class ActivityStore {
         //   )
         // );
         runInAction('loadingActivities', () => {
+          console.log(activities);
           activities.forEach(activity => {
             FillActivityProps(activity, this.rootStore.userStore.user!);
             // this.activities.push(activity);

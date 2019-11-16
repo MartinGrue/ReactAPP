@@ -1,8 +1,9 @@
 import { RootStore } from './rootStore';
 import { observable, action, runInAction, computed } from 'mobx';
-import { IProfile } from '../models/IProfile';
+import { IProfile, IProfileForFollowerOrFollowing } from '../models/IProfile';
 import agent from '../api/agent';
 import { history } from '../..';
+import { async } from 'q';
 
 export default class ProfileStore {
   /**
@@ -11,16 +12,25 @@ export default class ProfileStore {
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
   }
+  
   rootStore: RootStore;
+  
   @observable user = this.rootStore.userStore.user;
 
-
   @observable profile: IProfile | null = null;
-  @observable loadingProfile: boolean = true;
+  @observable followingsOrFollower:
+    | IProfileForFollowerOrFollowing[]
+    | null = null;
+
   @observable loadingPhoto: boolean = false;
   @observable loadingDeletePhoto: boolean = false;
   @observable loadingSetMain: boolean = false;
+  @observable loadingFollow: boolean = false;
+  @observable loadingGetFollowers: boolean = true;
+  // @observable activeTab: number = 0;
+
   @observable disableUpdateForm: boolean = false;
+  @observable loadingProfile: boolean = true;
 
   @computed get isLoggedIn() {
     if (this.rootStore.userStore.user && this.profile) {
@@ -32,10 +42,10 @@ export default class ProfileStore {
 
   @action getProfile = async (userName: string) => {
     this.loadingProfile = true;
-    console.log(userName)
+
     try {
       const profile = await agent.Profile.get(userName);
-      console.log(userName)
+
       runInAction('loginAction', () => {
         this.profile = profile;
         this.loadingProfile = false;
@@ -43,8 +53,9 @@ export default class ProfileStore {
     } catch (error) {
       runInAction('loadingProfileActionError', () => {
         this.loadingProfile = false;
+        console.log(error);
       });
-      console.log(error);
+
     }
   };
   @action setLoadingPhoto = () => {
@@ -58,12 +69,11 @@ export default class ProfileStore {
     this.loadingPhoto = true;
     try {
       const photo = await agent.Profile.uploadImage(file);
-      console.log(photo);
-      console.log(this.loadingPhoto);
+
       runInAction('UploadPhotoAction', () => {
         this.profile!.photos.push(photo);
         this.loadingPhoto = false;
-        console.log(this.loadingPhoto);
+
         history.push(`/Profiles/${this.user!.userName}`);
       });
     } catch (error) {
@@ -97,10 +107,6 @@ export default class ProfileStore {
         this.profile!.photos.find(p => p.id === id)!.isMain = true;
 
         this.user!.image = this.profile!.photos.find(p => p.id === id)!.url;
-        console.log(this.user!.image + ' user image');
-        console.log(
-          this.profile!.photos.find(p => p.id === id) + ' profile image'
-        );
         this.profile!.image = this.profile!.photos.find(p => p.id === id)!.url;
         this.loadingSetMain = false;
         this.rootStore.activityStore.activityRegistryHasNotChanged = false;
@@ -117,5 +123,60 @@ export default class ProfileStore {
   };
   @action setdisableUpdateForm = () => {
     this.disableUpdateForm = true;
-  }
+  };
+  @action followUser = async () => {
+    this.loadingFollow = true;
+    try {
+      await agent.Profile.followUser(this.profile!.userName);
+      runInAction('followUserAction', () => {
+        this.profile!.follwersCount += 1;
+        this.profile!.isFollowed = true;
+        this.loadingFollow = false;
+      });
+    } catch (error) {
+      runInAction('followUserActionError', () => {
+        this.loadingFollow = false;
+      });
+    }
+  };
+  @action unfollowUser = async () => {
+    this.loadingFollow = true;
+    try {
+      await agent.Profile.unfollowUser(this.profile!.userName);
+      runInAction('unfollowUserAction', () => {
+        this.profile!.follwersCount -= 1;
+        this.profile!.isFollowed = false;
+        this.loadingFollow = false;
+      });
+    } catch (error) {
+      runInAction('unfollowUserActionError', () => {
+        this.loadingFollow = false;
+      });
+    }
+  };
+  @action getFollowersOrFollowing = async (predicate: string) => {
+    this.loadingGetFollowers = true;
+    try {
+      var profiles = await agent.Profile.getFollowersOrFollowing(
+        this.profile!.userName,
+        predicate
+      );
+      runInAction('getFollowersOrFollowingAction', () => {
+        this.followingsOrFollower = profiles;
+        console.log('fetched profiles normal');
+        console.log(profiles);
+        console.log('fetched profiles observable');
+        console.log(this.followingsOrFollower);
+        this.loadingGetFollowers = false;
+        console.log(this.loadingPhoto);
+      });
+    } catch (error) {
+      runInAction('getFollowersOrFollowingError', () => {
+        this.loadingGetFollowers = false;
+      });
+    }
+  };
+  // @action setActiveTab = (activeIndex: number) => {
+  //   this.activeTab = activeIndex;
+  // };
 }

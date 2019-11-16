@@ -1,16 +1,11 @@
-using System.Collections.Generic;
-using Domain;
-using Newtonsoft.Json;
-
-namespace Application.Profiles
+namespace Application.Followers
 {
-    public class Profile
+    public class ProfileForFollowersDto
     {
         public string DisplayName { get; set; }
         public string Bio { get; set; }
         public string UserName { get; set; }
         public string Image { get; set; }
-        public ICollection<Photo> Photos { get; set; }        
         public bool isFollowed { get; set; }
         public int FollwersCount { get; set; }
         public int FollowingCount { get; set; }

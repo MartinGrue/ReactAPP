@@ -12,13 +12,14 @@ export interface IActivity {
   comments: IComment[];
   //Props from user
   isGoing: boolean;
-  isHost:boolean
+  isHost:boolean;
 }
 export interface IAttendee {
   userName: string;
   displayName: string;
   image:string | null;
-  isHost: boolean
+  isHost: boolean;
+  following?: boolean ;
 }
 export interface IComment{
   activityId:string;
