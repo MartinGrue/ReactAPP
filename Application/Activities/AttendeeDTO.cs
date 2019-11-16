@@ -9,5 +9,6 @@ namespace Application.Activities
         public string DateJoined { get; set; }
         public string  Image { get; set; }
         public bool isHost { get; set; }
+        public bool Following { get; set; }
     }
 }
