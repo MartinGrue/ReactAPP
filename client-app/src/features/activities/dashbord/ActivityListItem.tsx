@@ -6,8 +6,7 @@ import {
   Icon,
   Label,
   ItemDescription,
-  Grid,
-  Header
+  Grid
 } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { IActivity } from '../../../app/models/IActivity';
@@ -30,10 +29,11 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
                   circular
                   src={host.image || '/assets/user.png'}
                   style={{ marginBottom: 3 }}
+                  as={Link}
+                  to={`/profiles/${host.userName}`}
                 ></Item.Image>
                 <Item.Content>
                   <Item.Header as='a'>{activity.title}</Item.Header>
-                  <Item.Meta>{format(activity.date!, 'hh:mm')}</Item.Meta>
                   <Item.Description>
                     Hosted by
                     <Link to={`/profiles/${host.userName}`}>
@@ -71,7 +71,7 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
       </Segment>
       <Segment>
         <Icon name='clock' />
-        {format(activity.date!, 'hh:mm')}
+        {format(activity.date!, 'HH:mm')}
         <Icon name='marker' />
         {activity.venue},{activity.city}
       </Segment>

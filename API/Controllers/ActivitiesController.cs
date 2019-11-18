@@ -18,7 +18,6 @@ namespace API.Controllers
         [Authorize]
         public async Task<ActionResult<ActivityDTO>> Details(Guid id)
         {
-            await Task.Delay(1000);
             return await Mediator.Send(new Details.Query { Id = id });
         }
 
@@ -29,7 +28,7 @@ namespace API.Controllers
             // Query q = new List.Query();
             // CancellationToken token = new CancellationToken();
             // return await _handler.Handle(q, token );
-            await Task.Delay(1000);
+
             return await Mediator.Send(new List.Query
             {
                 Limit = limit,
@@ -49,7 +48,7 @@ namespace API.Controllers
         public async Task<ActionResult<Unit>> Update(Guid id, Update.Command command)
         {
             command.Id = id;
-            await Task.Delay(1000);
+
             return await Mediator.Send(command);
         }
         [HttpDelete("{id}")]
@@ -57,7 +56,7 @@ namespace API.Controllers
         public async Task<ActionResult<Unit>> Delete(Guid id)
         {
             // Delete.Command command = new Delete.Command{Id = id};
-            await Task.Delay(1000);
+
             return await Mediator.Send(new Delete.Command { Id = id });
         }
         [HttpPost("{id}/attend")]

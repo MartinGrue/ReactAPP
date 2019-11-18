@@ -1,6 +1,6 @@
 import { RootStore } from './rootStore';
-import { observable, action, runInAction, computed, reaction } from 'mobx';
-import { IProfile, IProfileForFollowerOrFollowing } from '../models/IProfile';
+import { observable, action, runInAction, computed } from 'mobx';
+import { IProfile } from '../models/IProfile';
 import agent from '../api/agent';
 import { history } from '../..';
 import { IUserActivity } from '../models/IActivity';

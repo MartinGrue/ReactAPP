@@ -17,7 +17,6 @@ namespace API.Controllers
         [HttpGet("{username}/activities")]
         public async Task<ActionResult<List<UserActivityDto>>> GetActivitiesForProfile(string username, string predicate)
         {
-           await Task.Delay(3000);
             return await Mediator.Send(new ListActivities.Query { Username = username, Predicate = predicate });
         }
     }

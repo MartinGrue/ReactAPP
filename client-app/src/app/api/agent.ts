@@ -10,8 +10,7 @@ import { IUser, IUserFormValues } from '../models/user';
 import {
   IProfile,
   IPhoto,
-  IProfileFormValues,
-  IProfileForFollowerOrFollowing
+  IProfileFormValues
 } from '../models/IProfile';
 
 axios.interceptors.request.use(

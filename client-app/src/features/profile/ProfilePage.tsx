@@ -20,7 +20,7 @@ const ProfilePage: React.FC<RouteComponentProps<ProfileParams>> = ({
   
   useEffect(() => {
     window.scrollTo(0, 0);
-    getProfile(match.params.userName).finally(() => console.log(profile));
+    getProfile(match.params.userName);
   }, [getProfile, match]);
 
   if(loadingProfile){

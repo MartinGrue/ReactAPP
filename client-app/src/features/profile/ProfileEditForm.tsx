@@ -1,7 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Form as FinalForm, Field } from 'react-final-form';
 import { FORM_ERROR } from 'final-form';
-import { Form, Header, Button, Segment } from 'semantic-ui-react';
+import { Form, Button, Segment } from 'semantic-ui-react';
 import TextInput from '../../app/common/form/TextInput';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { IProfileFormValues } from '../../app/models/IProfile';
@@ -15,11 +15,6 @@ export const ProfileEditForm: React.FC = () => {
   const validate = combineValidators({
     userName: isRequired('displayName')
   });
-
-  useEffect(() => {
-    console.log("das ist profile")
-console.log(profile!.bio)
-  }, [])
 
   return (
     <Segment clearing>

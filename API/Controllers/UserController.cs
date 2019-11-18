@@ -29,9 +29,7 @@ namespace API.Controllers
         [HttpPut]
         public async Task<ActionResult<User>> Update(Update.Command command)
         {
-            await Task.Delay(1000);
             return await Mediator.Send(command);
-
         }
     }
 }

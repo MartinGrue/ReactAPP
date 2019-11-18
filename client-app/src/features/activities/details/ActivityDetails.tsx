@@ -28,11 +28,12 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
 
   // return <p>Details {match.params.id}</p>
 
-  if (!selectedActivity) {
-    return <NotFound></NotFound>;
-  }
+
   if (loadingInitial || !selectedActivity) {
     return <LoadingComponent content='Fetching Activity...'></LoadingComponent>;
+  }
+  if (!selectedActivity) {
+    return <NotFound></NotFound>;
   }
   return (
     <Grid>

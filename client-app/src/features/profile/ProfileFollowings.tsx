@@ -1,20 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Tab, Grid, Header, Card, Segment } from 'semantic-ui-react';
+import React, { useContext, useEffect } from 'react';
+import { Tab, Grid, Header, Card } from 'semantic-ui-react';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import ProfileCard from './ProfileCard';
 import { observer } from 'mobx-react-lite';
-import LoadingComponent from '../../app/layout/LoadingComponent';
 
 const ProfileFollowings = () => {
   const rootStore = useContext(RootStoreContext);
   const { profile } = rootStore.profileStore;
   const {
     followings,
-    loading,
     activeTab,
     resetFollowings
   } = rootStore.followersStore;
-  const localload = true;
+
 
   useEffect(() => {
     return () => {

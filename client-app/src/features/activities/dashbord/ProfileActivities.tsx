@@ -73,8 +73,8 @@ const ProfileEvents = () => {
                 <Card.Content>
                   <Card.Header textAlign='center'>{activity.title}</Card.Header>
                   <Card.Meta textAlign='center'>
-                    <div>{format(new Date(activity.date), 'do LLL')}</div>
-                    <div>{format(new Date(activity.date), 'h:mm a')}</div>
+                    <div>{format(new Date(activity.date), 'd.MM')}</div>
+                    <div>{format(new Date(activity.date), 'HH:mm')}</div>
                   </Card.Meta>
                 </Card.Content>
               </Card>

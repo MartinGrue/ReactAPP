@@ -6,7 +6,6 @@ import { observer } from 'mobx-react-lite';
 
 export const ProfileDescription = () => {
   const rootStore = useContext(RootStoreContext);
-  const { user, updateUser, loadingUpdate } = rootStore.userStore;
   const {
     isLoggedIn,
     setdisableUpdateForm,

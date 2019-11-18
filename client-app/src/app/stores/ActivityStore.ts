@@ -5,15 +5,11 @@ import { toast } from 'react-toastify';
 import { RootStore } from './rootStore';
 import { FillActivityProps } from '../common/util/util';
 import * as signalR from '@aspnet/signalr';
-import { IHttpConnectionOptions } from '@aspnet/signalr';
-import { throwStatement } from '@babel/types';
+
 
 const PagingLimit = 2;
 // class ActivityStore {
 export default class ActivityStore {
-  /**
-   *
-   */
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     reaction(
@@ -27,25 +23,30 @@ export default class ActivityStore {
   }
   rootStore: RootStore;
 
-  @observable activityRegistry = new Map(); // um die activities als eine observableMap darzustellen
-  @observable activityRegistryHasNotChanged: boolean = true;
-  @observable activities: IActivity[] = [];
-  @observable loadingInitial = false;
   @observable selectedActivity: IActivity | undefined;
   @observable editMode = false;
   @observable submitting = false;
   @observable target = '';
   @observable loading = false;
+  /*
+    get: /activities
+   */
+  @observable activityRegistry = new Map(); // um die activities als eine observableMap darzustellen
+  @observable activityRegistryHasNotChanged: boolean = true;
+  @observable activities: IActivity[] = [];
+  @observable loadingInitial = false;
+  /*
+    get: /activities with params
+  */
   @observable activityCount = 0;
   @observable page = 0;
   @observable predicate = new Map();
 
-  @action setPredicate = (predicate: string, value: string | Date) => {
-    this.predicate.clear();
-    if (predicate !== 'all') {
-      this.predicate.set(predicate, value);
-    }
-  };
+  /*
+   SignalR
+  */
+  @observable.ref hubConnection: signalR.HubConnection | null = null;
+
   @computed get axiosParams() {
     const params = new URLSearchParams();
     params.append('limit', String(PagingLimit));
@@ -63,6 +64,7 @@ export default class ActivityStore {
   @computed get totalPages() {
     return Math.ceil(this.activityCount / PagingLimit);
   }
+  
   @action setPage = (page: number) => {
     this.page = page;
   };
@@ -70,7 +72,7 @@ export default class ActivityStore {
   @action setloadinginitial = () => {
     this.loadingInitial = true;
   };
-  @observable.ref hubConnection: signalR.HubConnection | null = null;
+
 
   @action connectToSignalRHub = () => {
     var hubConnectionBuilder = new signalR.HubConnectionBuilder();
@@ -93,9 +95,11 @@ export default class ActivityStore {
       });
     });
   };
+
   @action stopSignalRHub = () => {
     this.hubConnection!.stop();
   };
+
   @action addComment = async (values: any) => {
     values.activityId = this.selectedActivity!.id;
     try {
@@ -104,6 +108,7 @@ export default class ActivityStore {
       console.log(error);
     }
   };
+
   @computed get activitiesByDate() {
     //um die anzeige zu sortieren (clientseitig)
     // return this.activities.sort(
@@ -141,16 +146,20 @@ export default class ActivityStore {
       }, {} as { [key: string]: IActivity[] })
     );
   }
+
   @action openEditForm = (id: string) => {
     this.selectedActivity = this.activityRegistry.get(id);
     this.editMode = true;
   };
+
   @action cancelSelectedActivity = () => {
     this.selectedActivity = undefined;
   };
+
   @action cancelFormOpen = () => {
     this.editMode = false;
   };
+
   @action editActivity = async (activity: IActivity) => {
     this.submitting = true;
     try {
@@ -169,6 +178,7 @@ export default class ActivityStore {
       });
     }
   };
+
   @action loadActivities = async () => {
     //implicity returning a promise
     this.loadingInitial = true;
@@ -216,6 +226,7 @@ export default class ActivityStore {
       });
     }
   };
+
   @action loadActivity = async (id: string) => {
     this.loadingInitial = true;
     let activity: IActivity = this.activityRegistry.get(id);
@@ -242,6 +253,7 @@ export default class ActivityStore {
       }
     }
   };
+
   @action createActivity = async (activity: IActivity) => {
     this.submitting = true;
     if (activity.date === null) {
@@ -275,6 +287,7 @@ export default class ActivityStore {
       });
     }
   };
+
   @action deleteActivity = async (
     // event: SyntheticEvent<HTMLButtonElement>,
     id: string
@@ -296,6 +309,7 @@ export default class ActivityStore {
       });
     }
   };
+  
   @action openCreateForm = () => {
     this.editMode = true;
     this.selectedActivity = undefined;
@@ -306,6 +320,7 @@ export default class ActivityStore {
     this.selectedActivity = this.activityRegistry.get(id);
     this.editMode = false;
   };
+
   @action joinActivity = async () => {
     const NewAttendee: IAttendee = {
       userName: this.rootStore.userStore.user!.userName,
@@ -331,6 +346,7 @@ export default class ActivityStore {
       });
     }
   };
+
   @action unjoinActivity = async () => {
     this.loading = true;
     try {
@@ -351,6 +367,13 @@ export default class ActivityStore {
         this.loading = false;
         console.log(error);
       });
+    }
+  };
+
+  @action setPredicate = (predicate: string, value: string | Date) => {
+    this.predicate.clear();
+    if (predicate !== 'all') {
+      this.predicate.set(predicate, value);
     }
   };
 }

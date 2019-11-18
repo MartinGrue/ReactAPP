@@ -84,7 +84,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
       setloadinginitial();
     };
   }
-, [match.params.id, loadActivity, rootStore.activityStore.selectedActivity]);
+, [match.params.id, loadActivity, rootStore.activityStore.selectedActivity, setloadinginitial]);
 
   // const handleSubmit = () => {
   //   if (activity.id.length === 0) {

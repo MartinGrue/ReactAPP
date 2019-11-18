@@ -20,7 +20,7 @@ export const PhotoUploaderDropZone: React.FC<IProps> = ({ setfiles }) => {
   };
 
   const onDrop = useCallback(acceptedFiles => {
-    console.log(acceptedFiles);
+     console.log(acceptedFiles);
     setfiles(
       acceptedFiles.map((file: object) =>
         Object.assign(file, { preview: URL.createObjectURL(file) })

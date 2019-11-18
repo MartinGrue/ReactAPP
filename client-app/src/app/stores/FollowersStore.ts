@@ -1,6 +1,6 @@
 import { RootStore } from "./rootStore";
 import { reaction, observable, action, runInAction } from "mobx";
-import { IProfileForFollowerOrFollowing, IProfile } from "../models/IProfile";
+import { IProfile } from "../models/IProfile";
 import agent from "../api/agent";
 
 export default class FollowersStore {

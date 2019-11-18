@@ -12,7 +12,6 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Photo>> Upload([FromForm] Add.Command command)
         {
-            await Task.Delay(5000);
             return await Mediator.Send(command);
         }
         [HttpDelete("{id}")]

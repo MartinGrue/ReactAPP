@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Segment, Item, Header, Button, Grid, Statistic, Divider, Reveal } from 'semantic-ui-react';
 import { IProfile } from '../../app/models/IProfile';
 import { observer } from 'mobx-react-lite';
@@ -14,9 +14,6 @@ const ProfileHeader: React.FC<IProps> = ({
   const rootContext = useContext(RootStoreContext);
   const {loadingFollow, unfollowUser, followUser} = rootContext.profileStore;
 
-  useEffect(() => {
-    console.log(profile)
-  }, [])
   return (
     <Segment padded>
       <Grid relaxed stackable container >
