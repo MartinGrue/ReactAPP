@@ -31,7 +31,7 @@ namespace Application.Profiles
                 Photos = requestedUser.Photos,
                 Bio = requestedUser.Bio,
                 FollowingCount = requestedUser.Followings.Count(),
-                FollwersCount = requestedUser.Followers.Count()
+                FollowersCount = requestedUser.Followers.Count()
             };
             if (loggedInUser.Followings.Any(x => x.UserB.Id == requestedUser.Id))
             { profile.isFollowed = true; }

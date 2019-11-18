@@ -23,30 +23,12 @@ const ProfileFollowings = () => {
   }, [resetFollowings]);
   if (followings === undefined) {
     return (
-      <Segment>
-        <Grid>
-          <Grid.Column width={16}>
-            <Header
-              floated='left'
-              icon='user'
-              content={
-                activeTab === 3
-                  ? `People following ${profile!.displayName}`
-                  : `People ${profile!.displayName} is following`
-              }
-            />{' '}
-            <Grid>
-              <Grid.Column width={16}>
-                <Tab.Pane loading={true}> </Tab.Pane>
-              </Grid.Column>
-            </Grid>
-          </Grid.Column>
-        </Grid>
-      </Segment>
+
+        <Tab.Pane loading={true}></Tab.Pane>
     );
   }
   return (
-    <Segment>
+    <Tab.Pane>
       <Grid>
         <Grid.Column width={16}>
           <Header
@@ -57,22 +39,19 @@ const ProfileFollowings = () => {
                 ? `People following ${profile!.displayName}`
                 : `People ${profile!.displayName} is following`
             }
-          />
-          <Grid>
-            <Grid.Column width={16}>
-              <Tab.Pane loading={loading}>
-                <Card.Group itemsPerRow={5}>
-                  {followings &&
-                    followings.map(profile => (
-                      <ProfileCard key={profile.userName} profile={profile} />
-                    ))}
-                </Card.Group>
-              </Tab.Pane>
-            </Grid.Column>
-          </Grid>
+          />{' '}
         </Grid.Column>
-      </Grid>
-    </Segment>
+        </Grid>
+        <Grid.Column width={16}>
+          <Card.Group itemsPerRow={5} stackable doubling>
+            {followings &&
+              followings.map(profile => (
+                <ProfileCard key={profile.userName} profile={profile} />
+              ))}
+          </Card.Group>
+        </Grid.Column>
+
+    </Tab.Pane>
   );
 };
 

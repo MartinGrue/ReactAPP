@@ -5,6 +5,7 @@ import ProfileDescription from './ProfileDescription';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import ProfileFollowings from './ProfileFollowings';
+import ProfileActivities from '../activities/dashbord/ProfileActivities';
 
 
 export const ProfileContent: React.FC<{
@@ -25,7 +26,7 @@ export const ProfileContent: React.FC<{
         },
         {
           menuItem: 'Activities',
-          render: () => <Tab.Pane>Activities Content</Tab.Pane>
+          render: () => <ProfileActivities></ProfileActivities>
         },
         {
           menuItem: 'Followers',

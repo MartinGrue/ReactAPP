@@ -12,7 +12,7 @@ namespace Application.Profiles
         public string Image { get; set; }
         public ICollection<Photo> Photos { get; set; }        
         public bool isFollowed { get; set; }
-        public int FollwersCount { get; set; }
+        public int FollowersCount { get; set; }
         public int FollowingCount { get; set; }
     }
 }

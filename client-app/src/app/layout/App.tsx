@@ -38,7 +38,6 @@ const App = () => {
         render={() => (
           <Fragment>
             <Nav />
-
           </Fragment>
         )}
       />

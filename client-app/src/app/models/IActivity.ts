@@ -1,3 +1,13 @@
+export interface IUserActivity {
+  id: string;
+  title: string;
+  category: string;
+  date: Date;
+}
+export interface IActivityEnvelope {
+  activities: IActivity[];
+  activityCount: number;
+}
 export interface IActivity {
   // Id: number;
   id: string;
@@ -12,22 +22,22 @@ export interface IActivity {
   comments: IComment[];
   //Props from user
   isGoing: boolean;
-  isHost:boolean;
+  isHost: boolean;
 }
 export interface IAttendee {
   userName: string;
   displayName: string;
-  image:string | null;
+  image: string | null;
   isHost: boolean;
-  following?: boolean ;
+  following?: boolean;
 }
-export interface IComment{
-  activityId:string;
-  body:string;
-  userName:string,
-  displayName:string;
-  image:string;
-  createdAt:string;
+export interface IComment {
+  activityId: string;
+  body: string;
+  userName: string;
+  displayName: string;
+  image: string;
+  createdAt: string;
 }
 export interface IActivityFormValues extends Partial<IActivity> {
   time?: Date;

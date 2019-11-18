@@ -3,6 +3,7 @@ import { observable, action, runInAction, computed, reaction } from 'mobx';
 import { IProfile, IProfileForFollowerOrFollowing } from '../models/IProfile';
 import agent from '../api/agent';
 import { history } from '../..';
+import { IUserActivity } from '../models/IActivity';
 
 export default class ProfileStore {
   /**
@@ -10,8 +11,6 @@ export default class ProfileStore {
    */
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
-
-  
   }
 
   rootStore: RootStore;
@@ -25,10 +24,10 @@ export default class ProfileStore {
   @observable loadingSetMain: boolean = false;
   @observable loadingFollow: boolean = false;
 
-
-
   @observable disableUpdateForm: boolean = false;
   @observable loadingProfile: boolean = true;
+  @observable userActivities: IUserActivity[] = [];
+  @observable loadingUserActivities: boolean = false;
 
   @computed get isLoggedIn() {
     if (this.rootStore.userStore.user && this.profile) {
@@ -45,6 +44,7 @@ export default class ProfileStore {
       const profile = await agent.Profile.get(userName);
 
       runInAction('loginAction', () => {
+        console.log(profile);
         this.profile = profile;
         this.loadingProfile = false;
       });
@@ -151,5 +151,21 @@ export default class ProfileStore {
       });
     }
   };
-  
+  @action loadUserActivities = async (predicate?: string) => {
+    this.loadingUserActivities = true;
+    try {
+      var userActivities = await agent.Profile.listActivites(
+        this.profile!.userName,
+        predicate!
+      );
+      runInAction('ListUserActivitiesAction', () => {
+      this.userActivities = userActivities;
+        this.loadingUserActivities = false;
+      });
+    } catch (error) {
+      runInAction('ListUserActivitiesActionError', () => {
+        this.loadingUserActivities = false;
+      });
+    }
+  };
 }

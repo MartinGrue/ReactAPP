@@ -1,4 +1,4 @@
-import { observable, action, computed, runInAction } from 'mobx';
+import { observable, action, computed, runInAction, reaction } from 'mobx';
 import { IActivity, IAttendee } from '../models/IActivity';
 import agent from '../api/agent';
 import { toast } from 'react-toastify';
@@ -6,7 +6,9 @@ import { RootStore } from './rootStore';
 import { FillActivityProps } from '../common/util/util';
 import * as signalR from '@aspnet/signalr';
 import { IHttpConnectionOptions } from '@aspnet/signalr';
+import { throwStatement } from '@babel/types';
 
+const PagingLimit = 2;
 // class ActivityStore {
 export default class ActivityStore {
   /**
@@ -14,6 +16,14 @@ export default class ActivityStore {
    */
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
+    reaction(
+      () => this.predicate.keys(),
+      () => {
+        this.page = 0;
+        this.activityRegistry.clear();
+        this.loadActivities();
+      }
+    );
   }
   rootStore: RootStore;
 
@@ -26,6 +36,36 @@ export default class ActivityStore {
   @observable submitting = false;
   @observable target = '';
   @observable loading = false;
+  @observable activityCount = 0;
+  @observable page = 0;
+  @observable predicate = new Map();
+
+  @action setPredicate = (predicate: string, value: string | Date) => {
+    this.predicate.clear();
+    if (predicate !== 'all') {
+      this.predicate.set(predicate, value);
+    }
+  };
+  @computed get axiosParams() {
+    const params = new URLSearchParams();
+    params.append('limit', String(PagingLimit));
+    params.append('offset', `${this.page ? this.page * PagingLimit : 0}`);
+    this.predicate.forEach((value, key) => {
+      if (key === 'startDate') {
+        params.append(key, value.toISOString());
+      } else {
+        params.append(key, value);
+      }
+    });
+    return params;
+  }
+
+  @computed get totalPages() {
+    return Math.ceil(this.activityCount / PagingLimit);
+  }
+  @action setPage = (page: number) => {
+    this.page = page;
+  };
 
   @action setloadinginitial = () => {
     this.loadingInitial = true;
@@ -133,52 +173,47 @@ export default class ActivityStore {
     //implicity returning a promise
     this.loadingInitial = true;
     // let activities = this.activityRegistry;
-    if (
-      Array.from(this.activityRegistry.values()).length !== 0 &&
-      this.activityRegistryHasNotChanged
-    ) {
-      this.loadingInitial = false;
-    } else {
-      try {
-        const activities = await agent.Activities.list();
-        // console.log(Object.entries(activities));
-        // Object.entries(
-        //   activities.reduce(
-        //     (multi, single) => {
-        //       // console.log(JSON.stringify(multi));
-        //       single.date = new Date(single.date!);
-        //       const key: string = single.date!.toISOString().split('T')[0];
-        //       // console.log(single.date);
-        //       // multi[key] = [single];
-        //       if (key in multi) {
-        //         console.log(key + 'gabs schon');
-        //         multi[key] = [...multi[key],single];
-        //       } else {
-        //         console.log(key + 'ist neu');
-        //         multi[key] = [single];
-        //       }
-        //       return multi;
-        //     },
-        //     {} as { [key: string]: IActivity[] }
-        //   )
-        // );
-        runInAction('loadingActivities', () => {
-          console.log(activities);
-          activities.forEach(activity => {
-            FillActivityProps(activity, this.rootStore.userStore.user!);
-            // this.activities.push(activity);
-            this.activityRegistry.set(activity.id, activity);
-          });
-          this.loadingInitial = false;
-          this.activityRegistryHasNotChanged = true;
+    try {
+      const activitiesEnvelope = await agent.Activities.list(this.axiosParams);
+      const { activities, activityCount } = activitiesEnvelope;
+      // console.log(Object.entries(activities));
+      // Object.entries(
+      //   activities.reduce(
+      //     (multi, single) => {
+      //       // console.log(JSON.stringify(multi));
+      //       single.date = new Date(single.date!);
+      //       const key: string = single.date!.toISOString().split('T')[0];
+      //       // console.log(single.date);
+      //       // multi[key] = [single];
+      //       if (key in multi) {
+      //         console.log(key + 'gabs schon');
+      //         multi[key] = [...multi[key],single];
+      //       } else {
+      //         console.log(key + 'ist neu');
+      //         multi[key] = [single];
+      //       }
+      //       return multi;
+      //     },
+      //     {} as { [key: string]: IActivity[] }
+      //   )
+      // );
+      runInAction('loadingActivities', () => {
+        console.log(activities);
+        activities.forEach(activity => {
+          FillActivityProps(activity, this.rootStore.userStore.user!);
+          // this.activities.push(activity);
+          this.activityRegistry.set(activity.id, activity);
         });
-      } catch (error) {
-        runInAction('loadingActivitiesError', () => {
-          console.log(error);
-          this.loadingInitial = false;
-          this.activityRegistryHasNotChanged = true;
-        });
-      }
+        this.loadingInitial = false;
+        this.activityRegistryHasNotChanged = true;
+        this.activityCount = activityCount;
+      });
+    } catch (error) {
+      runInAction('loadingActivitiesError', () => {
+        console.log(error);
+        this.loadingInitial = false;
+        this.activityRegistryHasNotChanged = true;
+      });
     }
   };
   @action loadActivity = async (id: string) => {

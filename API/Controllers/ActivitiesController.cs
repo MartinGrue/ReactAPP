@@ -23,13 +23,21 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ActivityDTO>>> List()
+        public async Task<ActionResult<List.ActivitiesEnvelope>> List(int? limit, int? offset,
+         bool isGoing, bool isHost, DateTime? startDate)
         {
             // Query q = new List.Query();
             // CancellationToken token = new CancellationToken();
             // return await _handler.Handle(q, token );
             await Task.Delay(1000);
-            return await Mediator.Send(new List.Query());
+            return await Mediator.Send(new List.Query
+            {
+                Limit = limit,
+                Offset = offset,
+                IsGoing = isGoing,
+                IsHost = isHost,
+                StartDate = startDate ?? DateTime.Now
+            });
         }
         [HttpPost]
         public async Task<ActionResult<Unit>> Create(Create.Command command)

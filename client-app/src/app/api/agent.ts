@@ -1,5 +1,9 @@
 import axios, { AxiosResponse } from 'axios';
-import { IActivity } from '../models/IActivity';
+import {
+  IActivity,
+  IActivityEnvelope,
+  IUserActivity
+} from '../models/IActivity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { IUser, IUserFormValues } from '../models/user';
@@ -64,7 +68,12 @@ const requests = {
 };
 
 const Activities = {
-  list: (): Promise<IActivity[]> => requests.get('/activities'),
+  // list: (limit?: number, page?: number): Promise<IActivityEnvelope> =>
+  //   requests.get(
+  //     `/activities?limit=${limit}&offset=${page ? page * limit! : 0}`
+  //   ),
+  list: (params: URLSearchParams): Promise<IActivityEnvelope> =>
+    axios.get('/activities', { params: params }).then(responseBody),
   details: (id: string) => requests.get(`/activities/${id}`),
   create: (activity: IActivity) => requests.post('/Activities', activity),
   update: (activity: IActivity) =>
@@ -99,7 +108,12 @@ const Profile = {
     userName: string,
     predicate: string
   ): Promise<IProfile[]> =>
-    requests.get(`/Profiles/${userName}/follow?predicate=${predicate}`)
+    requests.get(`/Profiles/${userName}/follow?predicate=${predicate}`),
+  listActivites: (
+    userName: string,
+    predicate: string
+  ): Promise<IUserActivity[]> =>
+    requests.get(`/Profiles/${userName}/activities?predicate=${predicate}`)
 };
 
 export default {
