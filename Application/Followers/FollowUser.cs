@@ -34,6 +34,7 @@ namespace Application.Followers
                 var follower = await _context.Users
                 .SingleOrDefaultAsync(p => p.UserName == userAccessor.GetCurrentUsername());
 
+              
                 var following = await _context.Users
                 .FirstOrDefaultAsync(p => p.UserName == request.UserName);
 
@@ -42,11 +43,7 @@ namespace Application.Followers
                     throw new RestException(HttpStatusCode.BadRequest,
                     new { activity = "Can not find user to follow" });
                 }
-                if (following.UserName == follower.UserName)
-                {
-                    throw new RestException(HttpStatusCode.BadRequest,
-                    new { activity = "You can not follow Yourself" });
-                }
+
 
                 var follow = await _context.FollowerFollowings
                 .FirstOrDefaultAsync(p => p.UserAId == follower.Id

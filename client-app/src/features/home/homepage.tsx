@@ -80,7 +80,9 @@ const HomePage = () => {
               <div>
               <strong>This is a demo single page application</strong>
               <br></br>
-              <strong>Please login with email:bob@test.com Password: Pa$$w0rd Or feel free to register a new Account</strong>
+              <strong>Please login with email:bob@test.com Password: Pa$$w0rd</strong>
+              <br></br>
+              <strong>Or feel free to register a new Account</strong>
               <br></br>
               <strong>You can login with any other user, the password is always : Pa$$w0rd</strong>
               </div>

@@ -1,5 +1,13 @@
 import React, { Fragment, useState, useEffect, useContext } from 'react';
-import { Grid, Header, Button } from 'semantic-ui-react';
+import {
+  Grid,
+  Header,
+  Button,
+  Step,
+  Icon,
+  GridColumn,
+  StrictGridColumnProps
+} from 'semantic-ui-react';
 import PhotoUploaderDropZone from './PhotoUploaderDropZone';
 import PhotoUploaderCropper from './PhotoUploaderCropper';
 import { RootStoreContext } from '../../stores/rootStore';
@@ -15,6 +23,7 @@ export const PhotoUploader: React.FC<iProps> = ({ loading }) => {
   const rootStore = useContext(RootStoreContext);
   const { uploadImage, setLoadingPhoto } = rootStore.profileStore;
 
+
   //Component will unmount
   //Remove image from memory
   useEffect(() => {
@@ -24,6 +33,8 @@ export const PhotoUploader: React.FC<iProps> = ({ loading }) => {
   });
   return (
     <Fragment>
+
+
       <Grid stackable>
         <Grid.Column width={4}>
           <Header color='teal' sub content='Step 1 - Add Photo' />
@@ -43,28 +54,28 @@ export const PhotoUploader: React.FC<iProps> = ({ loading }) => {
         <Grid.Column width={4} stretched>
           <Header sub color='teal' content='Step 3 - Preview & Upload' />
           {files.length > 0 && (
-            <Fragment >
-                <div
-                  className='img-preview center'
-                  style={{ minHeight: '240px', overflow: 'hidden' }}
-                ></div>
-                <Button.Group fluid >
-                  <Button
-                    positive
-                    icon='check'
-                    disabled={loading}
-                    loading={loading}
-                    onClick={() => {
-                      setLoadingPhoto();
-                      uploadImage(image!);
-                    }}
-                  ></Button>
-                  <Button
-                    icon='close'
-                    disabled={loading}
-                    onClick={() => setfiles([])}
-                  ></Button>
-                </Button.Group>
+            <Fragment>
+              <div
+                className='img-preview center'
+                style={{ minHeight: '240px', overflow: 'hidden' }}
+              ></div>
+              <Button.Group fluid>
+                <Button
+                  positive
+                  icon='check'
+                  disabled={loading}
+                  loading={loading}
+                  onClick={() => {
+                    setLoadingPhoto();
+                    uploadImage(image!);
+                  }}
+                ></Button>
+                <Button
+                  icon='close'
+                  disabled={loading}
+                  onClick={() => setfiles([])}
+                ></Button>
+              </Button.Group>
             </Fragment>
           )}
         </Grid.Column>

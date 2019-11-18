@@ -7,11 +7,7 @@ import {
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { IUser, IUserFormValues } from '../models/user';
-import {
-  IProfile,
-  IPhoto,
-  IProfileFormValues
-} from '../models/IProfile';
+import { IProfile, IPhoto, IProfileFormValues } from '../models/IProfile';
 
 axios.interceptors.request.use(
   config => {
@@ -43,6 +39,9 @@ axios.interceptors.response.use(undefined, error => {
     history.push('/NotFound');
   }
   if (status === 500) {
+    toast.error('Server error');
+  }
+  if (status === 401) {
     toast.error('Server error');
   }
   throw error.response;
