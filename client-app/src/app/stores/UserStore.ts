@@ -25,7 +25,7 @@ export default class UserStore {
       const user = await agent.User.login(values);
       runInAction('loginAction', () => {
         this.user = user;
-        console.log(user);
+        //console.log(user);
         history.push('/activities')
       });
       this.rootStore.commonStore.setToken(user.token);
@@ -46,7 +46,7 @@ export default class UserStore {
         this.user = user;
       });
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   };
   @action register = async (values: IUserFormValues) => {
@@ -65,7 +65,7 @@ export default class UserStore {
       const user = await agent.User.update(values);
       runInAction('UpdateUserAction', () => {
         this.user = user;
-        console.log(user);
+        //console.log(user);
         history.push(`/profiles/${user.userName}`);
         this.loadingUpdate = false;
         this.rootStore.activityStore.activityRegistryHasNotChanged = false;

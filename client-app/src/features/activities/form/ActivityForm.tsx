@@ -105,12 +105,12 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     const { date, time, ...activity } = values;
     activity.date = dateAndTime;
     if (rootStore.activityStore.selectedActivity && match.params.id) {
-      console.log('here');
+      //console.log('here');
       history.push(`/activities/`);
     } else {
       if (!activity.id) {
         let newActivity:IActivity = { ...activity, id: uuid(),isHost:true, isGoing:true };
-        console.log(newActivity);
+        //console.log(newActivity);
         createActivity(newActivity).then(() =>
           history.push(`/activities/${newActivity.id}`)
         );

@@ -44,22 +44,22 @@ export default class ProfileStore {
       const profile = await agent.Profile.get(userName);
 
       runInAction('loginAction', () => {
-        console.log(profile);
+        //console.log(profile);
         this.profile = profile;
         this.loadingProfile = false;
       });
     } catch (error) {
       runInAction('loadingProfileActionError', () => {
         this.loadingProfile = false;
-        console.log(error);
+        //console.log(error);
       });
     }
   };
   @action setLoadingPhoto = () => {
-    console.log(this.loadingPhoto + 'in set before');
+    //console.log(this.loadingPhoto + 'in set before');
     runInAction('UploadPhotoAction', () => {
       this.loadingPhoto = true;
-      console.log(this.loadingPhoto + 'in set after');
+      //console.log(this.loadingPhoto + 'in set after');
     });
   };
   @action uploadImage = async (file: Blob) => {
@@ -77,7 +77,7 @@ export default class ProfileStore {
       runInAction('UploadImageInProfileStoreActionError', () => {
         this.loadingPhoto = false;
       });
-      console.log(error);
+      //console.log(error);
     }
   };
   @action deleteImage = async (id: string) => {
@@ -92,7 +92,7 @@ export default class ProfileStore {
       runInAction('DeleteImageInProfileStoreActionError', () => {
         this.loadingDeletePhoto = false;
       });
-      console.log(error);
+      //console.log(error);
     }
   };
   @action setMainPhoto = async (id: string) => {
@@ -112,7 +112,7 @@ export default class ProfileStore {
       runInAction('DeleteImageInProfileStoreActionError', () => {
         this.loadingSetMain = false;
       });
-      console.log(error);
+      //console.log(error);
     }
   };
   @action toggledisableUpdateForm = () => {

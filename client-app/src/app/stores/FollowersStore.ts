@@ -45,7 +45,7 @@ export default class FollowersStore {
           );
           runInAction(() => {
               this.followings = profiles;
-              console.log(profiles);
+              //console.log(profiles);
               this.loading = false;
           })
         } catch (error) {
