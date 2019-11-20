@@ -11,7 +11,7 @@ const Marker: React.FC<{ lat: any; lng: any }> = ({ lat, lng }) => (
 interface IProps {
   lat?: number;
   lng?: number;
-  opt?: {};
+  opt: {};
 }
 export const SimpleMap: React.FC<IProps> = ({ lat, lng, opt }) => {
   // var center: { lat: number; lng: number } = { lat: 52.372513, lng: 9.732968 };

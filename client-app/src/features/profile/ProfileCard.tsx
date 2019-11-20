@@ -7,16 +7,20 @@ const ProfileCard: React.FC<{ profile: IProfileForFollowerOrFollowing }> = ({
   profile
 }) => {
   return (
-    <Card as={Link} to={`/profile/${profile.userName}`}>
+    <Card as={Link} to={`/profiles/${profile.userName}`}>
       <Image src={profile.image || '/assets/user.png'} />
       <Card.Content>
         <Card.Header>{profile.displayName}</Card.Header>
       </Card.Content>
       <Card.Content extra>
-        <div>
-          <Icon name='user' />
-          22 Followers
-        </div>
+          {profile.followersCount ? (
+            <div>
+              <Icon name='user' />
+              {profile.followersCount} Followers
+            </div>
+          ) : (
+            <div></div>
+          )}
       </Card.Content>
     </Card>
   );

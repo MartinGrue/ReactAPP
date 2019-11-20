@@ -21,6 +21,8 @@ namespace Application.Activities
             public DateTime Date { get; set; }
             public string City { get; set; }
             public string Venue { get; set; }
+            public double Latitute { get; set; }
+            public double Longitute { get; set; }
         }
         public class CommandValidatior : AbstractValidator<Command>
         {
@@ -51,13 +53,15 @@ namespace Application.Activities
                 {
                     throw new RestException(HttpStatusCode.NotFound, new { activity = "Could not find Activity to update" });
                 }
-                
+
                 activityFromRepo.Title = request.Title;
                 activityFromRepo.Description = request.Description;
                 activityFromRepo.Category = request.Category;
                 activityFromRepo.Date = request.Date;
                 activityFromRepo.City = request.City;
                 activityFromRepo.Venue = request.Venue;
+                activityFromRepo.Latitute = request.Latitute;
+                activityFromRepo.Longitute = request.Longitute;
 
                 var success = await _context.SaveChangesAsync() > 0;
                 if (success) return Unit.Value;

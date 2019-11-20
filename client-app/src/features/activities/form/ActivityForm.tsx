@@ -55,7 +55,6 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   );
   // 52.372513, 9.732968
   const [loading, setloading] = useState(false);
-  const [latLngIsSet, setlatLngIsSet] = useState(false);
   const [latlng, setLatlng] = useState();
 
   const [address, setaddress] = useState('');
@@ -70,8 +69,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
         // cords.lng = latLng!.lng;
         setLatlng(latLng);
         console.log('HookValues:', latLng);
-        setlatLngIsSet(true);
         setaddress(address);
+        activity.venue = address;
       })
       .catch(error => console.error('Error', error));
   };
@@ -84,8 +83,10 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
         // cords.lng = latLng!.lng;
         setLatlng(latLng);
         console.log('HookValues:', latLng);
-        setlatLngIsSet(true);
         setcity(city);
+        console.log(city);
+        activity.city = city;
+        console.log(activity);
       })
       .catch(error => console.error('Error', error));
   };
@@ -102,6 +103,10 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
               );
             setcity(rootStore.activityStore.selectedActivity!.city);
             setaddress(rootStore.activityStore.selectedActivity!.venue);
+            setLatlng({
+              lat: rootStore.activityStore.selectedActivity!.latitute,
+              lng: rootStore.activityStore.selectedActivity!.longitute
+            });
           })
           .finally(() => {
             setloading(false);
@@ -113,6 +118,10 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
           );
         setcity(rootStore.activityStore.selectedActivity!.city);
         setaddress(rootStore.activityStore.selectedActivity!.venue);
+        setLatlng({
+          lat: rootStore.activityStore.selectedActivity!.latitute,
+          lng: rootStore.activityStore.selectedActivity!.longitute
+        });
         setloading(false);
       }
     } else {
@@ -140,24 +149,38 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     const dateAndTime = combineDateAndTime(values.date, values.time);
     const { date, time, ...activity } = values;
     activity.date = dateAndTime;
+    if (city) {
+      activity.city = city;
+    }
+    if (address) {
+      activity.venue = address;
+    }
+
+    if (latlng) {
+      activity.longitute = latlng.lng;
+      activity.latitute = latlng.lat;
+    }
+
     if (rootStore.activityStore.selectedActivity && match.params.id) {
       //console.log('here');
-      history.push(`/activities/`);
+      console.log('Edited Activity');
+      console.log(activity);
+      editActivity(activity).then(() =>
+        history.push(`/activities/${activity.id}`)
+      );
     } else {
       if (!activity.id) {
+        console.log(activity);
         let newActivity: IActivity = {
           ...activity,
           id: uuid(),
           isHost: true,
           isGoing: true
         };
-        //console.log(newActivity);
+        console.log('newActivity');
+        console.log(newActivity);
         createActivity(newActivity).then(() =>
           history.push(`/activities/${newActivity.id}`)
-        );
-      } else {
-        editActivity(activity).then(() =>
-          history.push(`/activities/${activity.id}`)
         );
       }
     }
@@ -289,6 +312,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                       negative
                       content='Delete'
                       onClick={() => {
+                        history.push(`/activities`);
                         deleteActivity(
                           rootStore.activityStore.selectedActivity!.id
                         );
@@ -310,7 +334,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
           </Segment>
         </GridColumn>
         <GridColumn mobile={16} tablet={14} computer={8} floated='right'>
-          {latLngIsSet ? (
+          {latlng ? (
             <SimpleMap
               lat={latlng.lat}
               lng={latlng.lng}

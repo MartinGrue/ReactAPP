@@ -17,6 +17,8 @@ export interface IActivity {
   date: Date;
   // date: string
   city: string;
+  longitute: number;
+  latitute: number;
   venue: string;
   userActivities: IAttendee[];
   comments: IComment[];

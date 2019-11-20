@@ -35,7 +35,7 @@ namespace API.Controllers
                 Offset = offset,
                 IsGoing = isGoing,
                 IsHost = isHost,
-                StartDate = startDate ?? DateTime.Now
+                StartDate = startDate
             });
         }
         [HttpPost]

@@ -48,10 +48,13 @@ namespace Application.Activities
                 .FirstOrDefaultAsync(p => p.UserName == UserAccessor.GetCurrentUsername());
 
                 var queryable = _context.Activities
-                .Where(a => a.Date >= request.StartDate)
                 .OrderBy(p => p.Date)
                 .AsQueryable();
 
+                if (request.StartDate != null)
+                {
+                    queryable = queryable.Where(a => a.Date >= request.StartDate);
+                }
                 if (request.IsHost)
                 {
                     queryable = queryable

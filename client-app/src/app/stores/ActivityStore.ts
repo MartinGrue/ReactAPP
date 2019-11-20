@@ -208,7 +208,8 @@ export default class ActivityStore {
       //   )
       // );
       runInAction('loadingActivities', () => {
-        console.log(activities);
+        console.log("here are activities: ");
+        console.log(activities)
         activities.forEach(activity => {
           FillActivityProps(activity, this.rootStore.userStore.user!);
           // this.activities.push(activity);
@@ -326,7 +327,7 @@ export default class ActivityStore {
       userName: this.rootStore.userStore.user!.userName,
       displayName: this.rootStore.userStore.user!.displayName,
       isHost: false,
-      image: null
+      image:  this.rootStore.userStore.user!.image
     };
     this.loading = true;
     try {

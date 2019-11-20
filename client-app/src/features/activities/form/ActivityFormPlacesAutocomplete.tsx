@@ -54,6 +54,7 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
   return (
     <Form.Field disabled={disableUpdateForm} error={touched && !!error}>
       <PlacesAutocomplete
+
         value={address}
         onChange={value => {
           setaddress(value);
@@ -72,7 +73,10 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
                 console.log();
                 setaddress(e.currentTarget.value);
               }}
-              onClick={e => setaddress(e.currentTarget.value)}
+              // onClick={e => {
+              //   setaddress(e.currentTarget.value);
+              //   input.value = e.currentTarget.value;
+              // }}
               value={address}
               placeholder={getInputProps(FieldProps).placeholder}
               className={getInputProps(FieldProps).className}
@@ -100,7 +104,7 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
                       style
                     })}
                   >
-                    <span>{suggestion.description}</span>
+                    <span >{suggestion.description}</span>
                   </div>
                 );
               })}
