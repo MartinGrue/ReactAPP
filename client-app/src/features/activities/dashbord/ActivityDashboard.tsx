@@ -31,10 +31,10 @@ const ActivityDashboard: React.FC = () => {
 
   return (
     <Grid stackable>
-      <Grid.Column width={6}>
+      <Grid.Column width={4}>
         <ActivityFilters></ActivityFilters>
       </Grid.Column>
-      <Grid.Column width={10}>
+      <Grid.Column width={12}>
         {loadingInitial && page === 0 ? (
           <ActivityListItemPlaceholder></ActivityListItemPlaceholder>
         ) : (

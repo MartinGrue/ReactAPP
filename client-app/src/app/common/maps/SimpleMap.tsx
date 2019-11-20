@@ -1,15 +1,59 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
+import { Segment, Icon } from 'semantic-ui-react';
 import GoogleMapReact from 'google-map-react';
+import { getLatLng } from 'react-places-autocomplete';
 
-export const SimpleMap = () => {
-  const defaultProps = {
-    center: {
-      lat: 59.95,
-      lng: 30.33
+const Marker: React.FC<{ lat: any; lng: any }> = ({ lat, lng }) => (
+  <Icon name='marker' size='big' color='red' />
+);
+
+interface IProps {
+  lat?: number;
+  lng?: number;
+  opt?: {};
+}
+export const SimpleMap: React.FC<IProps> = ({ lat, lng, opt }) => {
+  // var center: { lat: number; lng: number } = { lat: 52.372513, lng: 9.732968 };
+  useEffect(() => {
+    if (lat && lng) {
+      // center.lat = lat;
+      // center.lng = lng;
+      console.log('From Child', lat, lng);
+    }
+  }, [lat, lng]);
+
+  const defaultOpt = {
+    defaultZoom: 14,
+    defaultCenter: { lat: 52.372513, lng: 9.732968 },
+    bootstrapURLKeys: {
+      key: 'AIzaSyCHYvacLxG7odfjovNDb1GpTHon3BMIXlw'
     },
-    zoom: 11
+    key: 52.372513
   };
-  return <div></div>;
-};
+  const zoom = 14;
 
-export default SimpleMap;
+  return (
+    <Segment attached='bottom' style={{ padding: 0 }}>
+      <div >
+        {lat && lng ? (
+          <GoogleMapReact
+            {...defaultOpt}
+            center={{ lat: lat!, lng: lng! }}
+            {...opt}
+          >
+            <Marker lat={lat} lng={lng} />
+          </GoogleMapReact>
+        ) : (
+          <GoogleMapReact {...defaultOpt} {...opt} >
+            <Marker
+              lat={defaultOpt.defaultCenter.lat}
+              lng={defaultOpt.defaultCenter.lng}
+            />
+          </GoogleMapReact>
+        )}
+      </div>
+    </Segment>
+  );
+};
+export default observer(SimpleMap);

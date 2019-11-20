@@ -11,4 +11,5 @@ node_modules
 coverage
 
 # production
+wwwroot
 build

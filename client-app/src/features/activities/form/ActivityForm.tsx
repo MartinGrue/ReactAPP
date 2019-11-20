@@ -24,6 +24,13 @@ import {
 } from 'revalidate';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng
+} from 'react-places-autocomplete';
+import { SimpleMap } from '../../../app/common/maps/SimpleMap';
+import { ActivityFormPlacesAutocomplete } from './ActivityFormPlacesAutocomplete';
+
 interface DetailsParams {
   id: string;
 }
@@ -46,7 +53,42 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   const [activity, setActivity] = useState<IActivityFormValues>(
     new ActivityFormValues()
   );
+  // 52.372513, 9.732968
   const [loading, setloading] = useState(false);
+  const [latLngIsSet, setlatLngIsSet] = useState(false);
+  const [latlng, setLatlng] = useState();
+
+  const [address, setaddress] = useState('');
+  const [city, setcity] = useState('');
+
+  const handleSelect = (address: string) => {
+    geocodeByAddress(address)
+      .then(results => getLatLng(results[0]))
+      .then(latLng => {
+        console.log('Success', latLng);
+        // cords.lat = latLng!.lat;
+        // cords.lng = latLng!.lng;
+        setLatlng(latLng);
+        console.log('HookValues:', latLng);
+        setlatLngIsSet(true);
+        setaddress(address);
+      })
+      .catch(error => console.error('Error', error));
+  };
+  const handleSelectCity = (city: string) => {
+    geocodeByAddress(city)
+      .then(results => getLatLng(results[0]))
+      .then(latLng => {
+        console.log('Success', latLng);
+        // cords.lat = latLng!.lat;
+        // cords.lng = latLng!.lng;
+        setLatlng(latLng);
+        console.log('HookValues:', latLng);
+        setlatLngIsSet(true);
+        setcity(city);
+      })
+      .catch(error => console.error('Error', error));
+  };
 
   useEffect(() => {
     if (match.params.id) {
@@ -58,6 +100,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
               setActivity(
                 new ActivityFormValues(rootStore.activityStore.selectedActivity)
               );
+            setcity(rootStore.activityStore.selectedActivity!.city);
+            setaddress(rootStore.activityStore.selectedActivity!.venue);
           })
           .finally(() => {
             setloading(false);
@@ -67,6 +111,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
           setActivity(
             new ActivityFormValues(rootStore.activityStore.selectedActivity)
           );
+        setcity(rootStore.activityStore.selectedActivity!.city);
+        setaddress(rootStore.activityStore.selectedActivity!.venue);
         setloading(false);
       }
     } else {
@@ -83,23 +129,13 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     return () => {
       setloadinginitial();
     };
-  }
-, [match.params.id, loadActivity, rootStore.activityStore.selectedActivity, setloadinginitial]);
+  }, [
+    match.params.id,
+    loadActivity,
+    rootStore.activityStore.selectedActivity,
+    setloadinginitial
+  ]);
 
-  // const handleSubmit = () => {
-  //   if (activity.id.length === 0) {
-  //     let newActivity = { ...activity, id: uuid() };
-  //     createActivity(newActivity).then(() =>
-  //       history.push(`/activities/${newActivity.id}`)
-  //     );
-  //   } else {
-  //     editActivity(activity).then(() =>
-  //       history.push(`/activities/${activity.id}`)
-  //     );
-  //   }
-
-  //   console.log(activity);
-  // };
   const handleFinalFormSubmit = (values: any) => {
     const dateAndTime = combineDateAndTime(values.date, values.time);
     const { date, time, ...activity } = values;
@@ -109,7 +145,12 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
       history.push(`/activities/`);
     } else {
       if (!activity.id) {
-        let newActivity:IActivity = { ...activity, id: uuid(),isHost:true, isGoing:true };
+        let newActivity: IActivity = {
+          ...activity,
+          id: uuid(),
+          isHost: true,
+          isGoing: true
+        };
         //console.log(newActivity);
         createActivity(newActivity).then(() =>
           history.push(`/activities/${newActivity.id}`)
@@ -144,102 +185,145 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   });
 
   return (
-    <Grid centered>
-      <GridColumn mobile={16} tablet={14} computer={10}>
-        <Segment clearing>
-          <FinalForm
-            validate={validate}
-            initialValues={activity}
-            onSubmit={handleFinalFormSubmit}
-            render={({ handleSubmit, invalid, pristine }) => (
-              <Form loading={loading} onSubmit={handleSubmit}>
-                <Field
-                  name='title'
-                  placeholder='title'
-                  value={activity.title}
-                  component={TextInput}
-                ></Field>
-                <Field
-                  component={TextAreaInput}
-                  name='description'
-                  rows={2}
-                  placeholder='description'
-                  value={activity.description}
-                ></Field>
-                <Field
-                  component={SelectInput}
-                  options={category}
-                  name='category'
-                  placeholder='category'
-                  value={activity.category}
-                ></Field>
-                <Form.Group widths='equal'>
+    <Segment>
+      <Grid centered>
+        <GridColumn mobile={16} tablet={14} computer={8} floated='left'>
+          <Segment clearing>
+            <FinalForm
+              validate={validate}
+              initialValues={activity}
+              onSubmit={handleFinalFormSubmit}
+              render={({ handleSubmit, invalid, pristine }) => (
+                <Form loading={loading} onSubmit={handleSubmit}>
                   <Field
-                    component={DateInput}
-                    date={true}
-                    name='date'
-                    placeholder='date'
-                    value={activity.date}
+                    name='title'
+                    placeholder='title'
+                    value={activity.title}
+                    component={TextInput}
                   ></Field>
                   <Field
-                    component={DateInput}
-                    time={true}
-                    name='time'
-                    placeholder='time'
-                    value={activity.time}
-                    // format(activity.date!,'hh:mm')}
+                    component={TextAreaInput}
+                    name='description'
+                    rows={2}
+                    placeholder='description'
+                    value={activity.description}
                   ></Field>
-                </Form.Group>
+                  <Field
+                    component={SelectInput}
+                    options={category}
+                    name='category'
+                    placeholder='category'
+                    value={activity.category}
+                  ></Field>
+                  <Form.Group widths='equal'>
+                    <Field
+                      component={DateInput}
+                      date={true}
+                      name='date'
+                      placeholder='date'
+                      value={activity.date}
+                    ></Field>
+                    <Field
+                      component={DateInput}
+                      time={true}
+                      name='time'
+                      placeholder='time'
+                      value={activity.time}
+                      // format(activity.date!,'hh:mm')}
+                    ></Field>
+                  </Form.Group>
 
-                <Field
-                  component={TextInput}
-                  name='city'
-                  placeholder='city'
-                  value={activity.city}
-                ></Field>
-                <Field
-                  component={TextInput}
-                  name='venue'
-                  placeholder='venue'
-                  value={activity.venue}
-                ></Field>
-                <Button
-                  disabled={loading || invalid || pristine}
-                  loading={submitting}
-                  floated='right'
-                  positive
-                  type='submit'
-                  content='submit'
-                ></Button>
-                {match.params.id && (
+                  <Field
+                    name='city'
+                    value={activity.city}
+                    render={({ input, meta }) => (
+                      <ActivityFormPlacesAutocomplete
+                        key='city'
+                        name='city'
+                        placeholder='city'
+                        validate={validate}
+                        input={input}
+                        meta={meta}
+                        address={city}
+                        setaddress={setcity}
+                        handleSelect={handleSelectCity}
+                        Options={{
+                          types: ['(regions)']
+                        }}
+                      ></ActivityFormPlacesAutocomplete>
+                    )}
+                  ></Field>
+                  <Field
+                    name='venue'
+                    value={activity.venue}
+                    render={({ input, meta }) => (
+                      <ActivityFormPlacesAutocomplete
+                        key='venue'
+                        name='venue'
+                        placeholder='venue'
+                        validate={validate}
+                        input={input}
+                        meta={meta}
+                        address={address}
+                        setaddress={setaddress}
+                        handleSelect={handleSelect}
+                        Options={{
+                          types: ['address']
+                        }}
+                      ></ActivityFormPlacesAutocomplete>
+                    )}
+                  ></Field>
                   <Button
-                    disabled={loading}
+                    disabled={loading || invalid || pristine}
                     loading={submitting}
                     floated='right'
-                    negative
-                    content='Delete'
+                    positive
+                    type='submit'
+                    content='submit'
+                  ></Button>
+                  {match.params.id && (
+                    <Button
+                      disabled={loading}
+                      loading={submitting}
+                      floated='right'
+                      negative
+                      content='Delete'
+                      onClick={() => {
+                        deleteActivity(
+                          rootStore.activityStore.selectedActivity!.id
+                        );
+                      }}
+                    ></Button>
+                  )}
+                  <Button
+                    disabled={loading}
+                    floated='right'
+                    content='Cancel'
                     onClick={() => {
-                      deleteActivity(
-                        rootStore.activityStore.selectedActivity!.id
-                      );
+                      cancelFormOpen();
+                      handleCancel();
                     }}
                   ></Button>
-                )}
-                <Button
-                  disabled={loading}
-                  floated='right'
-                  content='Cancel'
-                  onClick={() => {
-                    cancelFormOpen();
-                    handleCancel();
-                  }}
-                ></Button>
-              </Form>
-            )}
-          />
-        </Segment>
-      </GridColumn>
-    </Grid>
+                </Form>
+              )}
+            />
+          </Segment>
+        </GridColumn>
+        <GridColumn mobile={16} tablet={14} computer={8} floated='right'>
+          {latLngIsSet ? (
+            <SimpleMap
+              lat={latlng.lat}
+              lng={latlng.lng}
+              opt={{ style: { width: '100%', height: 300 } }}
+            ></SimpleMap>
+          ) : (
+            <SimpleMap
+              opt={{ style: { width: '100%', height: 300 } }}
+            ></SimpleMap>
+          )}
+        </GridColumn>
+      </Grid>
+    </Segment>
   );
 };
 

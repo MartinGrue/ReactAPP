@@ -13,6 +13,7 @@ import { IActivity } from '../../../app/models/IActivity';
 import { observer } from 'mobx-react-lite';
 import { format } from 'date-fns';
 import ActivityListAttendee from './ActivityListAttendee';
+import { SimpleMap } from '../../../app/common/maps/SimpleMap';
 
 const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
   const host = activity.userActivities.filter(x => x.isHost)[0];
@@ -21,7 +22,7 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
     <Segment.Group>
       <Segment>
         <Grid stackable>
-          <Grid.Column width={12}>
+          <Grid.Column width={8}>
             <Item.Group>
               <Item key={activity.id}>
                 <Item.Image
@@ -63,10 +64,11 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
               </Item>
             </Item.Group>
           </Grid.Column>
-          {/* <Grid.Column width={4}>
-            <Icon name='upload' size='huge'></Icon>
-            <Header content='Drop Image here'></Header>
-          </Grid.Column> */}
+          <Grid.Column width={8} fluid>
+            <SimpleMap
+              opt={{ style: { width: '100%', height: 200 } }}
+            ></SimpleMap>
+          </Grid.Column>
         </Grid>
       </Segment>
       <Segment>
