@@ -24,10 +24,7 @@ import {
 } from 'revalidate';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng
-} from 'react-places-autocomplete';
+import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import { SimpleMap } from '../../../app/common/maps/SimpleMap';
 import { ActivityFormPlacesAutocomplete } from './ActivityFormPlacesAutocomplete';
 
@@ -53,7 +50,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   const [activity, setActivity] = useState<IActivityFormValues>(
     new ActivityFormValues()
   );
-  // 52.372513, 9.732968
+
   const [loading, setloading] = useState(false);
   const [latlng, setLatlng] = useState();
 
@@ -64,13 +61,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     geocodeByAddress(address)
       .then(results => getLatLng(results[0]))
       .then(latLng => {
-        console.log('Success', latLng);
-        // cords.lat = latLng!.lat;
-        // cords.lng = latLng!.lng;
         setLatlng(latLng);
-        console.log('HookValues:', latLng);
-        setaddress(address);
-        activity.venue = address;
+        setActivity(prev => ({ ...prev, venue: address }));
       })
       .catch(error => console.error('Error', error));
   };
@@ -78,15 +70,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     geocodeByAddress(city)
       .then(results => getLatLng(results[0]))
       .then(latLng => {
-        console.log('Success', latLng);
-        // cords.lat = latLng!.lat;
-        // cords.lng = latLng!.lng;
         setLatlng(latLng);
-        console.log('HookValues:', latLng);
-        setcity(city);
-        console.log(city);
-        activity.city = city;
-        console.log(activity);
+        setActivity(prev => ({ ...prev, city: city }));
       })
       .catch(error => console.error('Error', error));
   };
@@ -116,13 +101,6 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
           setActivity(
             new ActivityFormValues(rootStore.activityStore.selectedActivity)
           );
-        setcity(rootStore.activityStore.selectedActivity!.city);
-        setaddress(rootStore.activityStore.selectedActivity!.venue);
-        setLatlng({
-          lat: rootStore.activityStore.selectedActivity!.latitute,
-          lng: rootStore.activityStore.selectedActivity!.longitute
-        });
-        setloading(false);
       }
     } else {
       setActivity({
@@ -155,30 +133,25 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     if (address) {
       activity.venue = address;
     }
-
     if (latlng) {
       activity.longitute = latlng.lng;
       activity.latitute = latlng.lat;
     }
 
     if (rootStore.activityStore.selectedActivity && match.params.id) {
-      //console.log('here');
-      console.log('Edited Activity');
-      console.log(activity);
       editActivity(activity).then(() =>
         history.push(`/activities/${activity.id}`)
       );
     } else {
       if (!activity.id) {
-        console.log(activity);
+
         let newActivity: IActivity = {
           ...activity,
           id: uuid(),
           isHost: true,
           isGoing: true
         };
-        console.log('newActivity');
-        console.log(newActivity);
+
         createActivity(newActivity).then(() =>
           history.push(`/activities/${newActivity.id}`)
         );

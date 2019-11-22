@@ -43,6 +43,10 @@ namespace Application.User
             public async Task<User> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await userManager.FindByEmailAsync(request.Email);
+
+                if(!user.EmailConfirmed){
+                    user.EmailConfirmed=true;
+                }
                 if (user == null)
                 {
                     throw new RestException(HttpStatusCode.Unauthorized);

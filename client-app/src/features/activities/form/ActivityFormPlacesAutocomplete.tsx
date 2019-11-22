@@ -54,7 +54,6 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
   return (
     <Form.Field disabled={disableUpdateForm} error={touched && !!error}>
       <PlacesAutocomplete
-
         value={address}
         onChange={value => {
           setaddress(value);
@@ -104,7 +103,9 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
                       style
                     })}
                   >
-                    <span >{suggestion.description}</span>
+                    <span onClick={e => setaddress(suggestion.description)}>
+                      {suggestion.description}
+                    </span>
                   </div>
                 );
               })}

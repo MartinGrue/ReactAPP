@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +28,14 @@ using Infrastructure.photos;
 using API.SignalR;
 using System.Threading.Tasks;
 using Application.Profiles;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.Authentication;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace API
 {
@@ -42,6 +51,9 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IAuthenticationSchemeProvider, CustomAuthenticationSchemeProvider>();
+
             // Action<AuthorizationPolicyBuilder> configurePolicy = (authpolbuilder) => { authpolbuilder.Requirements.Add(new IsHostRequirement()); };
             // Action<AuthorizationOptions> configure = (authopt) => { authopt.AddPolicy("IsActivityHost", configurePolicy); };
             // Action<AuthorizationOptions> configure = (authopt) =>
@@ -87,14 +99,18 @@ namespace API
             services.AddMediatR(typeof(CurrentUser.Handler).Assembly);
             services.AddAutoMapper(typeof(List.Handler).Assembly);
 
-            var builder = services.AddIdentityCore<AppUser>();
-            var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
-            identityBuilder.AddEntityFrameworkStores<DataContext>();
-            identityBuilder.AddSignInManager<SignInManager<AppUser>>();
+            // var builder = services.AddIdentity<AppUser, IdentityRole>();
+            // var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
+            // identityBuilder.AddEntityFrameworkStores<DataContext>();
+            // identityBuilder.AddSignInManager<SignInManager<AppUser>>();
+            // identityBuilder.AddDefaultTokenProviders();
+            services.AddIdentity<AppUser, IdentityRole>(config => { config.SignIn.RequireConfirmedEmail = true; })
+           .AddEntityFrameworkStores<DataContext>()
+           .AddDefaultTokenProviders();
 
-            services.AddSignalR();
+            // services.AddSignalR();
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.
+           var key = new SymmetricSecurityKey(Encoding.UTF8.
             GetBytes("Super secret key"));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(Options =>
@@ -126,6 +142,32 @@ namespace API
                 }
                );
 
+            services.AddAuthentication().AddGoogle(options =>
+         {
+             IConfigurationSection googleAuthNSection =
+             Configuration.GetSection("Authentication:Google");
+
+             options.ClientId = googleAuthNSection["ClientId"];
+             options.ClientSecret = googleAuthNSection["ClientSecret"];
+         });
+            services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.Name = ".AspNetCoreIdentityCookie";
+    options.Events.OnRedirectToLogin = context =>
+    {
+        context.Response.Headers["Location"] = context.RedirectUri;
+        context.Response.StatusCode = 401;
+        return Task.CompletedTask;
+    };
+    options.Events.OnRedirectToAccessDenied = context =>
+    {
+        context.Response.Headers["Location"] = context.RedirectUri;
+        context.Response.StatusCode = 403;
+        return Task.CompletedTask;
+    };
+});
+
+
             services.AddScoped<IJwtGenerator, JwtGenerator>();
             services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
@@ -133,6 +175,7 @@ namespace API
 
 
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -143,7 +186,7 @@ namespace API
             app.UseStaticFiles();
             if (env.IsDevelopment())
             {
-                // app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();
             }
             else
             {
@@ -151,11 +194,15 @@ namespace API
             }
 
             // app.UseHttpsRedirection();
-            app.UseAuthentication();
             // app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
             app.UseCors("CorsPolicy");
+
+            app.UseAuthentication();
+
             app.UseMvc();
-            app.UseSignalR(configure => { configure.MapHub<ChatHub>("/chat"); });
+
+
+            // app.UseSignalR(configure => { configure.MapHub<ChatHub>("/chat"); });
         }
     }
 }
