@@ -17,7 +17,6 @@ export const FormMap: React.FC<IProps> = ({ lat, lng }) => {
       if(lat && lng){
         center.lat = lat;
         center.lng = lng;
-        console.log("From Child",lat,lng);
       }
   }, [lat, lng]);
 

@@ -44,9 +44,6 @@ namespace Application.User
             {
                 var user = await userManager.FindByEmailAsync(request.Email);
 
-                if(!user.EmailConfirmed){
-                    user.EmailConfirmed=true;
-                }
                 if (user == null)
                 {
                     throw new RestException(HttpStatusCode.Unauthorized);
@@ -54,7 +51,6 @@ namespace Application.User
                 var results = await signInManager.CheckPasswordSignInAsync(user, request.Password, false);
                 if (results.Succeeded)
                 {
-                    //TODO: generate token
                     return new User
                     {
                         DisplayName = user.DisplayName,

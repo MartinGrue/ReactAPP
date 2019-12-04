@@ -62,7 +62,6 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
       .then(results => getLatLng(results[0]))
       .then(latLng => {
         setLatlng(latLng);
-        setActivity(prev => ({ ...prev, venue: address }));
       })
       .catch(error => console.error('Error', error));
   };
@@ -71,7 +70,6 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
       .then(results => getLatLng(results[0]))
       .then(latLng => {
         setLatlng(latLng);
-        setActivity(prev => ({ ...prev, city: city }));
       })
       .catch(error => console.error('Error', error));
   };
@@ -101,6 +99,13 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
           setActivity(
             new ActivityFormValues(rootStore.activityStore.selectedActivity)
           );
+        setcity(rootStore.activityStore.selectedActivity!.city);
+        setaddress(rootStore.activityStore.selectedActivity!.venue);
+        setLatlng({
+          lat: rootStore.activityStore.selectedActivity!.latitute,
+          lng: rootStore.activityStore.selectedActivity!.longitute
+        });
+        setloading(false);
       }
     } else {
       setActivity({
@@ -115,12 +120,15 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     }
     return () => {
       setloadinginitial();
+      setaddress('');
+      setcity('');
     };
   }, [
     match.params.id,
     loadActivity,
     rootStore.activityStore.selectedActivity,
-    setloadinginitial
+    setloadinginitial,
+    setActivity
   ]);
 
   const handleFinalFormSubmit = (values: any) => {
@@ -144,7 +152,6 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
       );
     } else {
       if (!activity.id) {
-
         let newActivity: IActivity = {
           ...activity,
           id: uuid(),
@@ -306,16 +313,16 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
             />
           </Segment>
         </GridColumn>
-        <GridColumn mobile={16} tablet={14} computer={8} floated='right'>
+        <GridColumn mobile={16} tablet={14} computer={8} floated='left'>
           {latlng ? (
             <SimpleMap
               lat={latlng.lat}
               lng={latlng.lng}
-              opt={{ style: { width: '100%', height: 300 } }}
+              opt={{ style: { width: '100%', height: 400 } }}
             ></SimpleMap>
           ) : (
             <SimpleMap
-              opt={{ style: { width: '100%', height: 300 } }}
+              opt={{ style: { width: '100%', height: 400 } }}
             ></SimpleMap>
           )}
         </GridColumn>

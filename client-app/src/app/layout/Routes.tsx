@@ -41,6 +41,7 @@ const Routes: React.FC = () => {
       </Container>
     );
   } else {
+    // return <div></div>;
     return <Route render={() => <Redirect to={'/'}></Redirect>}></Route>;
   }
 };

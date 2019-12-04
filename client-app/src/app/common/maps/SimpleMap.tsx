@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { Segment, Icon } from 'semantic-ui-react';
 import GoogleMapReact from 'google-map-react';
-import { getLatLng } from 'react-places-autocomplete';
 
 const Marker: React.FC<{ lat: any; lng: any }> = ({ lat, lng }) => (
   <Icon name='marker' size='big' color='red' />
@@ -14,14 +13,7 @@ interface IProps {
   opt: {};
 }
 export const SimpleMap: React.FC<IProps> = ({ lat, lng, opt }) => {
-  // var center: { lat: number; lng: number } = { lat: 52.372513, lng: 9.732968 };
-  useEffect(() => {
-    if (lat && lng) {
-      // center.lat = lat;
-      // center.lng = lng;
-      console.log('From Child', lat, lng);
-    }
-  }, [lat, lng]);
+
 
   const defaultOpt = {
     defaultZoom: 14,
@@ -31,7 +23,6 @@ export const SimpleMap: React.FC<IProps> = ({ lat, lng, opt }) => {
     },
     key: 52.372513
   };
-  const zoom = 14;
 
   return (
     <Segment attached='bottom' style={{ padding: 0 }}>

@@ -2,11 +2,7 @@ import React, { Fragment, useState, useEffect, useContext } from 'react';
 import {
   Grid,
   Header,
-  Button,
-  Step,
-  Icon,
-  GridColumn,
-  StrictGridColumnProps
+  Button
 } from 'semantic-ui-react';
 import PhotoUploaderDropZone from './PhotoUploaderDropZone';
 import PhotoUploaderCropper from './PhotoUploaderCropper';

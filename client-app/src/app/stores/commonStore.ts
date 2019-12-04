@@ -21,6 +21,7 @@ export default class CommonStore {
     );
   }
   @observable token: string | null = window.localStorage.getItem('jwt');
+  @observable google_id_token: string|null = null;
   @observable appLoaded = false;
 
   @action setToken = (token: string | null) => {
@@ -30,4 +31,7 @@ export default class CommonStore {
   @action setApploaded = () => {
     this.appLoaded = true;
   };
+  @action setGoogleToken = (id_token:string) => {
+    window.localStorage.setItem('google_id_token', id_token);
+  }
 }

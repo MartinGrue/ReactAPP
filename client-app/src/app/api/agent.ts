@@ -6,7 +6,7 @@ import {
 } from '../models/IActivity';
 import { history } from '../..';
 import { toast } from 'react-toastify';
-import { IUser, IUserFormValues } from '../models/user';
+import { IUser, IUserFormValues, IExternalLoginInfo } from '../models/user';
 import { IProfile, IPhoto, IProfileFormValues } from '../models/IProfile';
 
 axios.interceptors.request.use(
@@ -42,15 +42,15 @@ axios.interceptors.response.use(undefined, error => {
     toast.error('Server error');
   }
   if (status === 401) {
-    toast.error('Server error');
+    toast.error('401 Unauthorized');
   }
-  throw error.response;
+  // throw error.response;
 });
 
 const responseBody = (response: AxiosResponse) => response.data;
 
 const requests = {
-  get: (url: string) => axios.get(url).then(responseBody),
+  get: (url: string, params?: {}) => axios.get(url, params).then(responseBody),
   post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
   put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
   delete: (url: string) => axios.delete(url).then(responseBody),
@@ -66,12 +66,8 @@ const requests = {
 };
 
 const Activities = {
-  // list: (limit?: number, page?: number): Promise<IActivityEnvelope> =>
-  //   requests.get(
-  //     `/activities?limit=${limit}&offset=${page ? page * limit! : 0}`
-  //   ),
   list: (params: URLSearchParams): Promise<IActivityEnvelope> =>
-    axios.get('/activities', { params: params }).then(responseBody),
+    requests.get('/activities', { params: params }),
   details: (id: string) => requests.get(`/activities/${id}`),
   create: (activity: IActivity) => requests.post('/Activities', activity),
   update: (activity: IActivity) =>
@@ -88,7 +84,9 @@ const User = {
   register: (user: IUserFormValues): Promise<IUser> =>
     requests.post(`/User/register`, user),
   update: (values: IProfileFormValues): Promise<IUser> =>
-    requests.put(`/User`, values)
+    requests.put(`/User`, values),
+  loginExternal: (ExternalLoginInfo: IExternalLoginInfo): Promise<IUser> =>
+    requests.post(`/User/ExternalLogin`, ExternalLoginInfo)
 };
 
 const Profile = {

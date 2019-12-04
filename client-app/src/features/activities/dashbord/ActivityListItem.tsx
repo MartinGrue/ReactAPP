@@ -19,7 +19,6 @@ import { SimpleMap } from '../../../app/common/maps/SimpleMap';
 
 const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
   const host = activity.userActivities.filter(x => x.isHost)[0];
-  console.log(host);
   return (
     <Segment.Group>
       <Segment>
@@ -40,11 +39,11 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
                 <Item.Content>
               
                   <Item.Description>
-                    Hosted by
+                    <Header> Hosted by {' '}
                     <Link to={`/profiles/${host.userName}`}>
-                      {' '}
                       {host.displayName}
-                    </Link>
+                    </Link></Header>
+                   
                   </Item.Description>
                   {activity.isHost && (
                     <ItemDescription>

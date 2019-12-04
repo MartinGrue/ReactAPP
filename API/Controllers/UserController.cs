@@ -31,5 +31,12 @@ namespace API.Controllers
         {
             return await Mediator.Send(command);
         }
+        
+        [AllowAnonymous]
+        [HttpPost("ExternalLogin")]
+        public async Task<ActionResult<User>> GoogleLogin([FromBody]ExternalLogin.Query query)
+        {
+            return await Mediator.Send(query);
+        }
     }
 }

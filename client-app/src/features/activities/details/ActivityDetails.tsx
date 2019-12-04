@@ -38,7 +38,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   }
   return (
     <Grid>
-      <GridColumn width={10}>
+      <GridColumn mobile={16} tablet={14} computer={8} floated='left'>
         <ActivityDetailedHeader
           activity={selectedActivity}
         ></ActivityDetailedHeader>
@@ -51,7 +51,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
         ></ActivityDetailedInfo>
         <ActivityDetailedChat></ActivityDetailedChat>
       </GridColumn>
-      <GridColumn width={6}>
+      <GridColumn  mobile={16} tablet={14} computer={8} floated='left'>
         <ActivityDetailedSideBar attendees={selectedActivity.userActivities}></ActivityDetailedSideBar>
       </GridColumn>
     </Grid>

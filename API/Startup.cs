@@ -36,6 +36,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using System.IdentityModel.Tokens.Jwt;
+using Infrastructure.security.soicalAccounts;
 
 namespace API
 {
@@ -51,20 +52,6 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<IAuthenticationSchemeProvider, CustomAuthenticationSchemeProvider>();
-
-            // Action<AuthorizationPolicyBuilder> configurePolicy = (authpolbuilder) => { authpolbuilder.Requirements.Add(new IsHostRequirement()); };
-            // Action<AuthorizationOptions> configure = (authopt) => { authopt.AddPolicy("IsActivityHost", configurePolicy); };
-            // Action<AuthorizationOptions> configure = (authopt) =>
-            //  {
-            //      authopt.AddPolicy("IsActivityHost", (authpolbuilder) =>
-            //     {
-            //         authpolbuilder.Requirements.Add(new IsHostRequirement());
-            //     });
-            //  };
-            // Action<AuthorizationOptions> auth2 = (configure) => {};
-
             services.AddAuthorization(authopt =>
              {
                  authopt.AddPolicy("IsActivityHost", authpolbuilder =>
@@ -99,18 +86,14 @@ namespace API
             services.AddMediatR(typeof(CurrentUser.Handler).Assembly);
             services.AddAutoMapper(typeof(List.Handler).Assembly);
 
-            // var builder = services.AddIdentity<AppUser, IdentityRole>();
-            // var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
-            // identityBuilder.AddEntityFrameworkStores<DataContext>();
-            // identityBuilder.AddSignInManager<SignInManager<AppUser>>();
-            // identityBuilder.AddDefaultTokenProviders();
-            services.AddIdentity<AppUser, IdentityRole>(config => { config.SignIn.RequireConfirmedEmail = true; })
-           .AddEntityFrameworkStores<DataContext>()
-           .AddDefaultTokenProviders();
+            var builder = services.AddIdentityCore<AppUser>();
+            var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
+            identityBuilder.AddEntityFrameworkStores<DataContext>();
+            identityBuilder.AddSignInManager<SignInManager<AppUser>>();
 
-            // services.AddSignalR();
+            services.AddSignalR();
 
-           var key = new SymmetricSecurityKey(Encoding.UTF8.
+            var key = new SymmetricSecurityKey(Encoding.UTF8.
             GetBytes("Super secret key"));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(Options =>
@@ -142,67 +125,42 @@ namespace API
                 }
                );
 
-            services.AddAuthentication().AddGoogle(options =>
-         {
-             IConfigurationSection googleAuthNSection =
-             Configuration.GetSection("Authentication:Google");
-
-             options.ClientId = googleAuthNSection["ClientId"];
-             options.ClientSecret = googleAuthNSection["ClientSecret"];
-         });
-            services.ConfigureApplicationCookie(options =>
-{
-    options.Cookie.Name = ".AspNetCoreIdentityCookie";
-    options.Events.OnRedirectToLogin = context =>
-    {
-        context.Response.Headers["Location"] = context.RedirectUri;
-        context.Response.StatusCode = 401;
-        return Task.CompletedTask;
-    };
-    options.Events.OnRedirectToAccessDenied = context =>
-    {
-        context.Response.Headers["Location"] = context.RedirectUri;
-        context.Response.StatusCode = 403;
-        return Task.CompletedTask;
-    };
-});
-
-
             services.AddScoped<IJwtGenerator, JwtGenerator>();
             services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
             services.AddScoped<IProfileReader, ProfileReader>();
-
-
+            services.AddScoped<IGoogleAccessor, GoogleAccessor>();
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseMiddleware<ErrorHandlingMiddleware>();
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
+
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+              //  app.UseDeveloperExceptionPage();
             }
             else
             {
-                // app.UseHsts();
+                 app.UseHsts();
             }
 
             // app.UseHttpsRedirection();
+
             // app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
-            app.UseCors("CorsPolicy");
+
 
             app.UseAuthentication();
+            app.UseCors("CorsPolicy");
+            // app.UseMvc();
 
-            app.UseMvc();
-
-
-            // app.UseSignalR(configure => { configure.MapHub<ChatHub>("/chat"); });
+            app.UseSignalR(configure => { configure.MapHub<ChatHub>("/chat"); });
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            app.UseMvc(routes => routes.MapSpaFallbackRoute(name: "spa-fallback",
+            defaults: new { controller = "Fallback", action = "Index" }));
         }
     }
 }
