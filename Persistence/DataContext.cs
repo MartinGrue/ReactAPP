@@ -45,7 +45,6 @@ namespace Persistence
             builder.Entity<FollowerFollowings>(x => x.HasOne(a => a.UserB)
             .WithMany(b => b.Followers)
             .HasForeignKey(k => k.UserBId));
-
         }
     }
 }

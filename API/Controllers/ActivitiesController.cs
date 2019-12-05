@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Activities;
-using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,10 +22,6 @@ namespace API.Controllers
         public async Task<ActionResult<List.ActivitiesEnvelope>> List(int? limit, int? offset,
          bool isGoing, bool isHost, DateTime? startDate)
         {
-            // Query q = new List.Query();
-            // CancellationToken token = new CancellationToken();
-            // return await _handler.Handle(q, token );
-
             return await Mediator.Send(new List.Query
             {
                 Limit = limit,

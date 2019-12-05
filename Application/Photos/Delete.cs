@@ -5,10 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Errors;
 using Application.interfaces;
-using Domain;
-using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 

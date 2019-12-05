@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Application.Errors;
 using Application.Profiles;
 using AutoMapper;
-using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;

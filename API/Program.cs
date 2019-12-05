@@ -1,7 +1,6 @@
 ﻿using System;
 using Application.interfaces;
 using Domain;
-using Infrastructure.photos;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Followers;
-using Application.Profiles;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

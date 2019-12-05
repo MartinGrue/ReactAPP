@@ -8,12 +8,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using Persistence;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -28,14 +26,6 @@ using Infrastructure.photos;
 using API.SignalR;
 using System.Threading.Tasks;
 using Application.Profiles;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Rewrite;
-using Microsoft.AspNetCore.Authentication;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
-using System.IdentityModel.Tokens.Jwt;
 using Infrastructure.security.soicalAccounts;
 
 namespace API

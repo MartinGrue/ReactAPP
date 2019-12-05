@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Domain;
-using Newtonsoft.Json;
 
 namespace Application.Profiles
 {
