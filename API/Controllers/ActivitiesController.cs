@@ -15,7 +15,6 @@ namespace API.Controllers
     {
 
         [HttpGet("{id}")]
-        [Authorize]
         public async Task<ActionResult<ActivityDTO>> Details(Guid id)
         {
             return await Mediator.Send(new Details.Query { Id = id });
@@ -35,7 +34,7 @@ namespace API.Controllers
                 Offset = offset,
                 IsGoing = isGoing,
                 IsHost = isHost,
-                StartDate = startDate ?? DateTime.Now
+                StartDate = startDate
             });
         }
         [HttpPost]

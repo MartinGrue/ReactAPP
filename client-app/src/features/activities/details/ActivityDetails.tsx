@@ -9,6 +9,7 @@ import ActivityDetailedChat from './ActivityDetailedChat';
 import ActivityDetailedSideBar from './ActivityDetailedSideBar';
 import NotFound from '../../../app/layout/NotFound';
 import { RootStoreContext } from '../../../app/stores/rootStore';
+import { SimpleMap } from '../../../app/common/maps/SimpleMap';
 
 interface DetailParams {
   id: string;
@@ -37,16 +38,20 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   }
   return (
     <Grid>
-      <GridColumn width={10}>
+      <GridColumn mobile={16} tablet={14} computer={8} floated='left'>
         <ActivityDetailedHeader
           activity={selectedActivity}
         ></ActivityDetailedHeader>
+        <SimpleMap 
+        lat={selectedActivity.latitute}
+        lng={selectedActivity.longitute}
+        opt={{ style: { width: '100%', height: 300 } }}></SimpleMap>
         <ActivityDetailedInfo
           activity={selectedActivity}
         ></ActivityDetailedInfo>
         <ActivityDetailedChat></ActivityDetailedChat>
       </GridColumn>
-      <GridColumn width={6}>
+      <GridColumn  mobile={16} tablet={14} computer={8} floated='left'>
         <ActivityDetailedSideBar attendees={selectedActivity.userActivities}></ActivityDetailedSideBar>
       </GridColumn>
     </Grid>

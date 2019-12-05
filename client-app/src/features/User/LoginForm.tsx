@@ -35,7 +35,7 @@ const LoginForm: React.FC = () => {
         <Form onSubmit={handleSubmit} error>
           <Header
             as='h2'
-            content='Login to Reactivities'
+            content='Login to Social Groups'
             color='teal'
             textAlign='center'
           ></Header>

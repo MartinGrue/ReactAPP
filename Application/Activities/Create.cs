@@ -21,6 +21,8 @@ namespace Application.Activities
             public DateTime Date { get; set; }
             public string City { get; set; }
             public string Venue { get; set; }
+            public double Latitute { get; set; }
+            public double Longitute { get; set; }
         }
         public class CommandValidatior : AbstractValidator<Command>
         {
@@ -55,7 +57,9 @@ namespace Application.Activities
                     Category = request.Category,
                     City = request.City,
                     Venue = request.Venue,
-                    Date = request.Date
+                    Date = request.Date,
+                    Latitute = request.Latitute,
+                    Longitute = request.Longitute
                 };
                 _context.Activities.Add(activity);
 

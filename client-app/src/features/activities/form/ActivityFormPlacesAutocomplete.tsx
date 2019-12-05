@@ -1,23 +1,16 @@
 import React, {
   SetStateAction,
   Dispatch,
-  useState,
-  useContext,
-  Component
+  useContext  
 } from 'react';
 import { observer } from 'mobx-react-lite';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {
-  FormFieldProps,
   Form,
-  Label,
-  InputProps,
-  Input
+  Label
 } from 'semantic-ui-react';
 import {
   FieldRenderProps,
-  FieldInputProps,
-  FieldMetaState,
   FieldProps
 } from 'react-final-form';
 import { RootStoreContext } from '../../../app/stores/rootStore';
@@ -69,10 +62,8 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
               onChange={e => {
                 getInputProps().onChange(e);
                 input.onChange(e);
-                console.log();
                 setaddress(e.currentTarget.value);
               }}
-              onClick={e => setaddress(e.currentTarget.value)}
               value={address}
               placeholder={getInputProps(FieldProps).placeholder}
               className={getInputProps(FieldProps).className}
@@ -100,7 +91,9 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
                       style
                     })}
                   >
-                    <span>{suggestion.description}</span>
+                    <span onClick={e => setaddress(suggestion.description)}>
+                      {suggestion.description}
+                    </span>
                   </div>
                 );
               })}
@@ -112,13 +105,5 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
   );
 };
 
-{
-  /* <input {...input} placeholder={placeholder}></input>
-      {touched && !!error && (
-        <Label basic color='red'></Label>
-          {error}
-        </Label>
-      )} */
-}
 
 export default observer(ActivityFormPlacesAutocomplete);

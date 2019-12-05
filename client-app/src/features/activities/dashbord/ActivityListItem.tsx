@@ -6,7 +6,9 @@ import {
   Icon,
   Label,
   ItemDescription,
-  Grid
+  Grid,
+  Header,
+  Divider
 } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { IActivity } from '../../../app/models/IActivity';
@@ -17,10 +19,11 @@ import { SimpleMap } from '../../../app/common/maps/SimpleMap';
 
 const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
   const host = activity.userActivities.filter(x => x.isHost)[0];
-  console.log(host);
   return (
     <Segment.Group>
       <Segment>
+      <Header as={Link} to={`/activities/${activity.id}`}>{activity.title}</Header>
+      <Divider></Divider>
         <Grid stackable>
           <Grid.Column width={8}>
             <Item.Group>
@@ -34,13 +37,13 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
                   to={`/profiles/${host.userName}`}
                 ></Item.Image>
                 <Item.Content>
-                  <Item.Header as='a'>{activity.title}</Item.Header>
+              
                   <Item.Description>
-                    Hosted by
+                    <Header> Hosted by {' '}
                     <Link to={`/profiles/${host.userName}`}>
-                      {' '}
                       {host.displayName}
-                    </Link>
+                    </Link></Header>
+                   
                   </Item.Description>
                   {activity.isHost && (
                     <ItemDescription>
@@ -64,8 +67,9 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
               </Item>
             </Item.Group>
           </Grid.Column>
-          <Grid.Column width={8} fluid>
+          <Grid.Column width={8}>
             <SimpleMap
+            lat={activity.latitute} lng={activity.longitute}
               opt={{ style: { width: '100%', height: 200 } }}
             ></SimpleMap>
           </Grid.Column>

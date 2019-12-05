@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +28,15 @@ using Infrastructure.photos;
 using API.SignalR;
 using System.Threading.Tasks;
 using Application.Profiles;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.Authentication;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using System.IdentityModel.Tokens.Jwt;
+using Infrastructure.security.soicalAccounts;
 
 namespace API
 {
@@ -42,17 +52,6 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Action<AuthorizationPolicyBuilder> configurePolicy = (authpolbuilder) => { authpolbuilder.Requirements.Add(new IsHostRequirement()); };
-            // Action<AuthorizationOptions> configure = (authopt) => { authopt.AddPolicy("IsActivityHost", configurePolicy); };
-            // Action<AuthorizationOptions> configure = (authopt) =>
-            //  {
-            //      authopt.AddPolicy("IsActivityHost", (authpolbuilder) =>
-            //     {
-            //         authpolbuilder.Requirements.Add(new IsHostRequirement());
-            //     });
-            //  };
-            // Action<AuthorizationOptions> auth2 = (configure) => {};
-
             services.AddAuthorization(authopt =>
              {
                  authopt.AddPolicy("IsActivityHost", authpolbuilder =>
@@ -130,8 +129,7 @@ namespace API
             services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
             services.AddScoped<IProfileReader, ProfileReader>();
-
-
+            services.AddScoped<IGoogleAccessor, GoogleAccessor>();
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
         }
 
@@ -139,23 +137,30 @@ namespace API
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseMiddleware<ErrorHandlingMiddleware>();
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
+
             if (env.IsDevelopment())
             {
-                // app.UseDeveloperExceptionPage();
+              //  app.UseDeveloperExceptionPage();
             }
             else
             {
-                // app.UseHsts();
+                 app.UseHsts();
             }
 
             // app.UseHttpsRedirection();
-            app.UseAuthentication();
+
             // app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+
+
+            app.UseAuthentication();
             app.UseCors("CorsPolicy");
-            app.UseMvc();
+            // app.UseMvc();
+
             app.UseSignalR(configure => { configure.MapHub<ChatHub>("/chat"); });
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            app.UseMvc(routes => routes.MapSpaFallbackRoute(name: "spa-fallback",
+            defaults: new { controller = "Fallback", action = "Index" }));
         }
     }
 }

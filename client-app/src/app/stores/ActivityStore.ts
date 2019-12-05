@@ -89,7 +89,6 @@ export default class ActivityStore {
       .then(() => console.log(this.hubConnection!.state));
 
     this.hubConnection.on('ReceiveComment', comment => {
-      console.log(comment);
       runInAction('connectToSignalRHubAction', () => {
         this.selectedActivity!.comments.push(comment);
       });
@@ -169,6 +168,7 @@ export default class ActivityStore {
         this.selectedActivity = activity;
         this.submitting = false;
         this.editMode = false;
+        toast.success('Activity Updated');
       });
     } catch (error) {
       runInAction('UpdateActivityError', () => {
@@ -208,7 +208,7 @@ export default class ActivityStore {
       //   )
       // );
       runInAction('loadingActivities', () => {
-        console.log(activities);
+
         activities.forEach(activity => {
           FillActivityProps(activity, this.rootStore.userStore.user!);
           // this.activities.push(activity);
@@ -230,9 +230,7 @@ export default class ActivityStore {
   @action loadActivity = async (id: string) => {
     this.loadingInitial = true;
     let activity: IActivity = this.activityRegistry.get(id);
-    console.log(activity);
     if (activity) {
-      console.log('Activity found in registry');
       this.selectedActivity = activity;
       this.loadingInitial = false;
     } else {
@@ -240,7 +238,6 @@ export default class ActivityStore {
         activity = await agent.Activities.details(id);
         runInAction('loadingActivities', () => {
           FillActivityProps(activity, this.rootStore.userStore.user!);
-          console.log('Activity fetched from api');
           this.activityRegistry.set(activity.id, activity);
           this.selectedActivity = activity;
           this.loadingInitial = false;
@@ -278,6 +275,7 @@ export default class ActivityStore {
         this.selectedActivity = activity;
         this.editMode = false;
         this.submitting = false;
+        toast.success('Activity Created');
       });
     } catch (error) {
       runInAction('createActivityError', () => {
@@ -326,7 +324,7 @@ export default class ActivityStore {
       userName: this.rootStore.userStore.user!.userName,
       displayName: this.rootStore.userStore.user!.displayName,
       isHost: false,
-      image: null
+      image:  this.rootStore.userStore.user!.image
     };
     this.loading = true;
     try {

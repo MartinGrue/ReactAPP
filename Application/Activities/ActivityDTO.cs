@@ -13,6 +13,8 @@ namespace Application.Activities
         public DateTime Date { get; set; }
         public string City { get; set; }
         public string Venue { get; set; }
+        public double Latitute { get; set; }
+        public double Longitute { get; set; }
         public ICollection<AttendeeDTO> UserActivities { get; set; }
         public ICollection<CommentDTO> Comments { get; set; }
     }

@@ -44,7 +44,7 @@ const NavBarMobile: React.FC<{
     </Sidebar>
     <Sidebar.Pusher
       dimmed={false}
-      onClick={() => {onPusherClick(); console.log(visible)}}
+      onClick={() => {onPusherClick()}}
       style={{ minHeight: '100vh' }}
       
     >

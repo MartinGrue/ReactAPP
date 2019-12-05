@@ -79,6 +79,8 @@ namespace API
                         Description = "Activity 2 months ago",
                         Category = "Drinks",
                         City = "London",
+                        Latitute= 51.5073509,
+                        Longitute= -0.12775829999998223,
                         Venue = "Pub",
                         UserActivities = new List<UserActivity>
                         {
@@ -97,6 +99,8 @@ namespace API
                         Description = "Activity 1 month ago",
                         Category = "Culture",
                         City = "Paris",
+                        Latitute= 48.856614,
+                        Longitute = 2.3522219000000177,
                         Venue = "The Louvre",
                         UserActivities = new List<UserActivity>
                         {
@@ -120,8 +124,10 @@ namespace API
                         Date = DateTime.Now.AddMonths(1),
                         Description = "Activity 1 month in future",
                         Category = "Music",
-                        City = "London",
-                        Venue = "Wembly Stadium",
+                        City = "Braunschweig",
+                        Latitute=52.2688736,
+                        Longitute=10.526769599999966,
+                        Venue = "Eintracht-Stadion",
                         UserActivities = new List<UserActivity>
                         {
                             new UserActivity
@@ -144,8 +150,10 @@ namespace API
                         Date = DateTime.Now.AddMonths(2),
                         Description = "Activity 2 months in future",
                         Category = "Food",
-                        City = "London",
-                        Venue = "Jamies Italian",
+                        City = "Berlin",
+                        Latitute= 52.52000659999999,
+                        Longitute=13.404953999999975,
+                        Venue = "Italian Food",
                         UserActivities = new List<UserActivity>
                         {
                             new UserActivity
@@ -169,6 +177,8 @@ namespace API
                         Description = "Activity 3 months in future",
                         Category = "Drinks",
                         City = "London",
+                        Latitute= 51.5073509,
+                        Longitute= -0.12775829999998223,
                         Venue = "Pub",
                         UserActivities = new List<UserActivity>
                         {
@@ -192,8 +202,10 @@ namespace API
                         Date = DateTime.Now.AddMonths(4),
                         Description = "Activity 4 months in future",
                         Category = "Culture",
-                        City = "London",
-                        Venue = "British Museum",
+                        City = "Paris",
+                        Latitute= 48.856614,
+                        Longitute = 2.3522219000000177,
+                        Venue = "Eiffel Tower",
                         UserActivities = new List<UserActivity>
                         {
                             new UserActivity
@@ -210,8 +222,10 @@ namespace API
                         Date = DateTime.Now.AddMonths(5),
                         Description = "Activity 5 months in future",
                         Category = "Drinks",
-                        City = "London",
-                        Venue = "Punch and Judy",
+                        City = "Brunswick",
+                        Latitute=52.2688736,
+                        Longitute=10.526769599999966,
+                        Venue = "Brunswick castle",
                         UserActivities = new List<UserActivity>
                         {
                             new UserActivity
@@ -234,8 +248,10 @@ namespace API
                         Date = DateTime.Now.AddMonths(6),
                         Description = "Activity 6 months in future",
                         Category = "Music",
-                        City = "London",
-                        Venue = "O2 Arena",
+                        City = "Berlin",
+                        Latitute= 52.52000659999999,
+                        Longitute=13.404953999999975,
+                        Venue = "Brandenburg Gate",
                         UserActivities = new List<UserActivity>
                         {
                             new UserActivity
@@ -259,7 +275,9 @@ namespace API
                         Description = "Activity 7 months in future",
                         Category = "Travel",
                         City = "Berlin",
-                        Venue = "All",
+                        Latitute= 52.52000659999999,
+                        Longitute=13.404953999999975,
+                        Venue = "Berlin Television Tower",
                         UserActivities = new List<UserActivity>
                         {
                             new UserActivity
@@ -282,8 +300,10 @@ namespace API
                         Date = DateTime.Now.AddMonths(8),
                         Description = "Activity 8 months in future",
                         Category = "Drinks",
-                        City = "London",
-                        Venue = "Pub",
+                        City = "Berlin",
+                        Latitute= 52.52000659999999,
+                        Longitute=13.404953999999975,
+                        Venue = "Berlin Cathedral",
                         UserActivities = new List<UserActivity>
                         {
                             new UserActivity
@@ -306,8 +326,10 @@ namespace API
                         Date = DateTime.Now.AddMonths(8),
                         Description = "Activity 8 months in future",
                         Category = "Drinks",
-                        City = "London",
-                        Venue = "Pub",
+                        City = "Berlin",
+                        Latitute= 52.52000659999999,
+                        Longitute=13.404953999999975,
+                        Venue = "Kurfürstendamm",
                         UserActivities = new List<UserActivity>
                         {
                             new UserActivity
@@ -327,8 +349,34 @@ namespace API
                 };
 
                 await context.Activities.AddRangeAsync(activities);
-                await context.SaveChangesAsync();
             }
+            if (!context.FollowerFollowings.Any())
+            {
+                var FollowerFollowings = new List<FollowerFollowings>(){
+                    new FollowerFollowings{
+                        UserAId = "a",
+                        UserBId ="b"
+                    },
+                     new FollowerFollowings{
+                        UserAId = "b",
+                        UserBId ="a"
+                    },
+                    new FollowerFollowings{
+                        UserAId = "a",
+                        UserBId ="c"
+                    },
+                    new FollowerFollowings{
+                        UserAId = "c",
+                        UserBId ="a"
+                    },
+                    new FollowerFollowings{
+                        UserAId = "c",
+                        UserBId ="b"
+                    }
+                };
+                await context.FollowerFollowings.AddRangeAsync(FollowerFollowings);
+            }
+            await context.SaveChangesAsync();
         }
     }
 }

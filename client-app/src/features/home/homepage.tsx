@@ -6,23 +6,36 @@ import {
   Button,
   Image,
   Divider,
-  Transition
+  Transition,
+  Icon
 } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import LoginForm from '../User/LoginForm';
 import RegisterForm from '../User/RegisterForm';
+import { GoogleLogin } from 'react-google-login';
+import { IExternalLoginInfo } from '../../app/models/user';
 
-const HomePage = () => {
+const HomePage: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
-  const { isLoggedIn, user } = rootStore.userStore;
+  const { isLoggedIn, user, loginExternal } = rootStore.userStore;
   const { openModal } = rootStore.modalStore;
+  const { setGoogleToken } = rootStore.commonStore;
 
   const [visible, setvisible] = useState(false);
   const containerStyle = {
     padding: '5%',
     justifyContent: 'center',
     alignItems: 'center'
+  };
+
+  const onSuccess = (response: any) => {
+    setGoogleToken(response.Zi.id_token);
+    const info: IExternalLoginInfo = {
+      provider: 'google',
+      token: response.Zi.id_token
+    };
+    loginExternal(info);
   };
   return (
     <Segment inverted textAlign='center' vertical className='masthead'>
@@ -34,7 +47,7 @@ const HomePage = () => {
             alt='logo'
             style={{ marginBottom: 12 }}
           />
-          Reactivities
+          Social Groups
         </Header>
         {isLoggedIn && user ? (
           <Fragment>
@@ -49,7 +62,7 @@ const HomePage = () => {
           </Fragment>
         ) : (
           <Fragment>
-            <Header as='h2' inverted content='Welcome to Reactivities' />
+            <Header as='h2' inverted content='Welcome to Social Groups' />
             <Button
               onClick={() => openModal(<LoginForm />)}
               size='huge'
@@ -67,6 +80,29 @@ const HomePage = () => {
           </Fragment>
         )}
         <Divider hidden />
+        {
+          !isLoggedIn &&
+          <GoogleLogin
+          clientId='1084577743891-l4thqbo5qkbr1lo3mmple5vu0od5oktn.apps.googleusercontent.com'
+          buttonText='Login'
+          onSuccess={onSuccess}
+          onFailure={ () => {}}
+          prompt='select_account'
+          render={(renderProps: any) => (
+            <Button
+              onClick={renderProps.onClick}
+              type='button'
+              color='google plus'
+            >
+              <Icon name='google' />
+              Login with Google
+            </Button>
+          )}
+        ></GoogleLogin>
+
+        }
+        
+        <Divider hidden />
         <div>
           <Button
             size='huge'
@@ -78,13 +114,18 @@ const HomePage = () => {
           {visible && (
             <Transition animation='scale' duration={500}>
               <div>
-              <strong>This is a demo single page application</strong>
-              <br></br>
-              <strong>Please login with email:bob@test.com Password: Pa$$w0rd</strong>
-              <br></br>
-              <strong>Or feel free to register a new Account</strong>
-              <br></br>
-              <strong>You can login with any other user, the password is always : Pa$$w0rd</strong>
+                <strong>This is a demo single page application</strong>
+                <br></br>
+                <strong>
+                  Please login with email:bob@test.com Password: Pa$$w0rd
+                </strong>
+                <br></br>
+                <strong>Or feel free to register a new Account</strong>
+                <br></br>
+                <strong>
+                  You can login with any other user, the password is always :
+                  Pa$$w0rd
+                </strong>
               </div>
             </Transition>
           )}
