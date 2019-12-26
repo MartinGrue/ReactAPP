@@ -10,6 +10,13 @@ body {
     rgb(32, 167, 172) 89%
   ) !important;
 }
+.ui.inverted.menu{
+  background-image: linear-gradient(
+    to right,
+    rgb(24, 42, 115) 0%,
+    rgb(27, 78, 132) 69%
+  ) !important;
+}
 
 /*home page styles*/
 
@@ -68,6 +75,7 @@ body.dimmable > .dimmer {
 div.right.item.NavRightMenu {
   padding-right: 50px;
 }
+
 .ui.dropdown > .text {
   font-size: large;
 }
@@ -113,4 +121,9 @@ div.ui.basic.segment {
 }
 .imageWithpointer{
   cursor: pointer;
+}
+.autocomplete-dropdown-container{
+}
+.autocomplete-dropdown-container-active{
+  border:1px solid #2185d0
 }

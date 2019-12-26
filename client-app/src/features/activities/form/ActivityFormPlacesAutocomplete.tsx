@@ -1,18 +1,8 @@
-import React, {
-  SetStateAction,
-  Dispatch,
-  useContext  
-} from 'react';
+import React, { SetStateAction, Dispatch, useContext, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import PlacesAutocomplete from 'react-places-autocomplete';
-import {
-  Form,
-  Label
-} from 'semantic-ui-react';
-import {
-  FieldRenderProps,
-  FieldProps
-} from 'react-final-form';
+import { Form, Label } from 'semantic-ui-react';
+import { FieldRenderProps, FieldProps } from 'react-final-form';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 
 interface IProps
@@ -30,18 +20,21 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
   handleSelect,
   Options,
   input,
-  width,
-  type,
   placeholder,
-  meta: { touched, error },
+  meta: { touched, error, active, modified },
   name
 }) => {
   const rootStore = useContext(RootStoreContext);
   const { disableUpdateForm } = rootStore.profileStore;
 
+  const [cssClass, setCssClass] = useState();
   const FieldProps = {
     placeholder: placeholder,
     className: 'location-search-input'
+  };
+  let dropDownClass: string = 'autocomplete-dropdown-container';
+  const toggleactive = () => {
+    dropDownClass = 'autocomplete-dropdown-container-active';
   };
 
   return (
@@ -62,7 +55,6 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
               onChange={e => {
                 getInputProps().onChange(e);
                 input.onChange(e);
-                setaddress(e.currentTarget.value);
               }}
               value={address}
               placeholder={getInputProps(FieldProps).placeholder}
@@ -74,29 +66,39 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
               </Label>
             )}
 
-            <div className='autocomplete-dropdown-container'>
+            <div className={cssClass}>
               {loading && <div>Loading...</div>}
-              {suggestions.map(suggestion => {
-                const className = suggestion.active
-                  ? 'suggestion-item--active'
-                  : 'suggestion-item';
-                //inline style for demonstration purpose
-                const style = suggestion.active
-                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                return (
-                  <div
-                    {...getSuggestionItemProps(suggestion, {
-                      className,
-                      style
-                    })}
-                  >
-                    <span onClick={e => setaddress(suggestion.description)}>
-                      {suggestion.description}
-                    </span>
-                  </div>
-                );
-              })}
+              {active &&
+                suggestions.map(suggestion => {
+                  setCssClass('autocomplete-dropdown-container-active');
+                  const className = suggestion.active
+                    ? 'suggestion-item--active'
+                    : 'suggestion-item';
+
+                  const style = suggestion.active
+                    ? {
+                        backgroundColor: 'rgb(234, 234, 234)',
+                        cursor: 'pointer'
+                      }
+                    : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                  return (
+                    <div
+                      {...getSuggestionItemProps(suggestion, {
+                        className,
+                        style
+                      })}
+                    >
+                      <span
+                        onClick={() => {
+                          setaddress(suggestion.description);
+                          setCssClass('autocomplete-dropdown-container');
+                        }}
+                      >
+                        {suggestion.description}
+                      </span>
+                    </div>
+                  );
+                })}
             </div>
           </div>
         )}
@@ -104,6 +106,5 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
     </Form.Field>
   );
 };
-
 
 export default observer(ActivityFormPlacesAutocomplete);

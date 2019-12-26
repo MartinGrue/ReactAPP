@@ -72,7 +72,7 @@ namespace Application.User
                             DisplayName = user.DisplayName,
                             UserName = user.UserName,
                             Token = this.jwtGenerator.CreateToken(user),
-                            Image = user.Photos.FirstOrDefault(p => p.IsMain)?.Url
+                            Image=null
                         };
                     }
                     throw new Exception("Problem in registration handler");

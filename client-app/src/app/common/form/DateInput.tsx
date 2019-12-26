@@ -30,7 +30,7 @@ const DateInput: React.FC<IProps> = ({
         value={input.value || null}
         placeholder={placeholder}
         {...rest}
-      ></DateTimePicker>
+      />
       {touched && !!error && (
         <Label basic color='red'>
           {error}

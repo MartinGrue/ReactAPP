@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import {
   Tab,
   Header,
@@ -13,6 +13,25 @@ import { RootStoreContext } from '../../app/stores/rootStore';
 import { PhotoUploader } from '../../app/common/photoUploader/PhotoUploader';
 import { observer } from 'mobx-react-lite';
 
+const OutSideClickDetector = (
+  ref: React.MutableRefObject<any>,
+  setimgSelected: React.Dispatch<any>
+) => {
+  const handleClickOutside = (event: MouseEvent) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setimgSelected(false);
+    }
+  };
+
+  useEffect(() => {
+    // Bind the event listener
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  });
+};
 
 const ProfilePhotos = () => {
   const rootStore = useContext(RootStoreContext);
@@ -26,11 +45,22 @@ const ProfilePhotos = () => {
     setMainPhoto
   } = rootStore.profileStore;
 
+  const [windowsWidth, setwindowsWidth] = useState();
+  const handleWindowSizeChange = () => {
+    setwindowsWidth(window.innerWidth);
+  };
+
   const [addPhotoToggle, setaddPhotoToggle] = useState(false);
   const [target, settarget] = useState<string | undefined>(undefined);
 
   const [isbig, setisbig] = useState();
-  const isMobile = window.innerWidth < 480;
+
+  const wrapperRef = useRef(null);
+  OutSideClickDetector(wrapperRef, setisbig);
+
+  useEffect(() => {
+    window.addEventListener('resize', handleWindowSizeChange);
+  }, []);
 
   let className = 'isNotMainButton';
   return (
@@ -54,10 +84,12 @@ const ProfilePhotos = () => {
           <PhotoUploader loading={loadingPhoto}></PhotoUploader>
         ) : (
           <Segment>
-            {profile && isbig && !isMobile && (
+            {profile && isbig && !(windowsWidth < 600) && (
               <Card.Group itemsPerRow={2} centered>
                 <Card>
-                  <Image src={isbig.url} size='huge'></Image>
+                  <div ref={wrapperRef}>
+                    <Image src={isbig.url} size='huge'></Image>
+                  </div>
                 </Card>
               </Card.Group>
             )}
@@ -67,7 +99,9 @@ const ProfilePhotos = () => {
                   <Card key={photo.id}>
                     <Image
                       src={photo.url}
-                      onClick={() => setisbig(photo)}
+                      onClick={() => {
+                        setisbig(photo);
+                      }}
                       className='imageWithpointer'
                     ></Image>
                     {isLoggedIn && (
