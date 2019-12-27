@@ -21,20 +21,17 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
   Options,
   input,
   placeholder,
-  meta: { touched, error, active, modified },
+  meta: { touched, error, active  },
   name
 }) => {
   const rootStore = useContext(RootStoreContext);
   const { disableUpdateForm } = rootStore.profileStore;
 
   const [cssClass, setCssClass] = useState();
+  const [dropdownIsOpen, setdropdownIsOpen] = useState(false);
   const FieldProps = {
     placeholder: placeholder,
     className: 'location-search-input'
-  };
-  let dropDownClass: string = 'autocomplete-dropdown-container';
-  const toggleactive = () => {
-    dropDownClass = 'autocomplete-dropdown-container-active';
   };
 
   return (
@@ -44,7 +41,9 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
         onChange={value => {
           setaddress(value);
         }}
-        onSelect={handleSelect}
+        onSelect={value => {
+          handleSelect(value);
+        }}
         searchOptions={Options}
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
@@ -66,11 +65,14 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
               </Label>
             )}
 
-            <div className={cssClass}>
+            <div
+              className={`autocomplete-dropdown-container ${dropdownIsOpen &&!error &&
+                'active'}`}
+            >
               {loading && <div>Loading...</div>}
               {active &&
                 suggestions.map(suggestion => {
-                  setCssClass('autocomplete-dropdown-container-active');
+                  setdropdownIsOpen(true);
                   const className = suggestion.active
                     ? 'suggestion-item--active'
                     : 'suggestion-item';
@@ -91,7 +93,7 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
                       <span
                         onClick={() => {
                           setaddress(suggestion.description);
-                          setCssClass('autocomplete-dropdown-container');
+                          setdropdownIsOpen(false);
                         }}
                       >
                         {suggestion.description}

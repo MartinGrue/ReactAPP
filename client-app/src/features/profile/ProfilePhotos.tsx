@@ -60,7 +60,7 @@ const ProfilePhotos = () => {
 
   useEffect(() => {
     window.addEventListener('resize', handleWindowSizeChange);
-  }, []);
+  }, [window]);
 
   let className = 'isNotMainButton';
   return (
