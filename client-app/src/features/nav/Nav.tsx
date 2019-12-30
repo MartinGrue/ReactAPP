@@ -75,7 +75,6 @@ const Nav: React.FC = () => {
       </Responsive>
       <Responsive minWidth={Responsive.onlyTablet.minWidth}>
         <NavBarDesktop />
-        <Routes></Routes>
       </Responsive>
     </div>
   );

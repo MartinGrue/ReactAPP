@@ -8,7 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import { RootStoreContext } from '../stores/rootStore';
 import LoadingComponent from './LoadingComponent';
 import ModalContainer from '../common/modals/modalContainer';
-
+import Routes from './Routes';
 
 const App = () => {
   const rootStore = useContext(RootStoreContext);
@@ -41,6 +41,7 @@ const App = () => {
           </Fragment>
         )}
       />
+      <Routes></Routes>
     </Fragment>
   );
 };
