@@ -24,7 +24,6 @@ const ActivityListAttendee: React.FC<IProps> = ({ attendees }) => {
                 to={`/profiles/${attendee.userName}`}
                 bordered
                 className={attendee.following ? styles : undefined}
-
               />
             }
           ></Popup>

@@ -9,7 +9,6 @@ import ActivityDetailedChat from './ActivityDetailedChat';
 import ActivityDetailedSideBar from './ActivityDetailedSideBar';
 import NotFound from '../../../app/layout/NotFound';
 import { RootStoreContext } from '../../../app/stores/rootStore';
-import { SimpleMap } from '../../../app/common/maps/SimpleMap';
 
 interface DetailParams {
   id: string;
@@ -18,9 +17,12 @@ interface DetailParams {
 const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   match
 }) => {
-  
   const rootStore = useContext(RootStoreContext);
-  const { selectedActivity, loadActivity, loadingInitial } = rootStore.activityStore;
+  const {
+    selectedActivity,
+    loadActivity,
+    loadingInitial
+  } = rootStore.activityStore;
 
   useEffect(() => {
     loadActivity(match.params.id);
@@ -28,7 +30,6 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   }, [match.params.id, loadActivity]);
 
   // return <p>Details {match.params.id}</p>
-
 
   if (loadingInitial || !selectedActivity) {
     return <LoadingComponent content='Fetching Activity...'></LoadingComponent>;
@@ -42,17 +43,15 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
         <ActivityDetailedHeader
           activity={selectedActivity}
         ></ActivityDetailedHeader>
-        <SimpleMap 
-        lat={selectedActivity.latitute}
-        lng={selectedActivity.longitute}
-        opt={{ style: { width: '100%', height: 300 } }}></SimpleMap>
         <ActivityDetailedInfo
           activity={selectedActivity}
         ></ActivityDetailedInfo>
         <ActivityDetailedChat></ActivityDetailedChat>
       </GridColumn>
-      <GridColumn  mobile={16} tablet={14} computer={8} floated='left'>
-        <ActivityDetailedSideBar attendees={selectedActivity.userActivities}></ActivityDetailedSideBar>
+      <GridColumn mobile={16} tablet={14} computer={8} floated='left'>
+        <ActivityDetailedSideBar
+          attendees={selectedActivity.userActivities}
+        ></ActivityDetailedSideBar>
       </GridColumn>
     </Grid>
     // <Card fluid>

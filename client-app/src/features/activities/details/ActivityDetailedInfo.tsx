@@ -2,6 +2,7 @@ import React from 'react';
 import { Segment, Grid, Icon } from 'semantic-ui-react';
 import { IActivity } from '../../../app/models/IActivity';
 import format from 'date-fns/esm/format';
+import SimpleMap from '../../../app/common/maps/SimpleMap';
 
 const ActivityDetailedInfo: React.FC<{ activity: IActivity }> = ({
   activity
@@ -31,8 +32,14 @@ const ActivityDetailedInfo: React.FC<{ activity: IActivity }> = ({
           </Grid.Column>
         </Grid>
       </Segment>
+
       <Segment attached>
+        
         <Grid verticalAlign='middle'>
+        <SimpleMap 
+        lat={activity.latitute}
+        lng={activity.longitute}
+        opt={{ style: { width: '100%', height: 300 } }}></SimpleMap>
           <Grid.Column width={1}>
             <Icon name='marker' size='large' color='teal' />
           </Grid.Column>
