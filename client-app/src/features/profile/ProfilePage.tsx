@@ -15,23 +15,22 @@ const ProfilePage: React.FC<RouteComponentProps<ProfileParams>> = ({
   match
 }) => {
   const rootStore = useContext(RootStoreContext);
-  const { getProfile, profile, loadingProfile} = rootStore.profileStore;
-  const {setActiveTab} = rootStore.followersStore;
-  
+  const { getProfile, profile, loadingProfile } = rootStore.profileStore;
+  const { setActiveTab } = rootStore.followersStore;
+
   useEffect(() => {
     window.scrollTo(0, 0);
-    getProfile(match.params.userName);
+      getProfile(match.params.userName);
+
   }, [getProfile, match]);
 
-  if(loadingProfile){
-    return (
-      <LoadingComponent content='Loading Component'></LoadingComponent>
-    )
+  if (loadingProfile) {
+    return <LoadingComponent content='Loading Component'></LoadingComponent>;
   }
 
   return (
     <Grid>
-      <GridColumn width={16} stretched>
+      <GridColumn width={16} floated='left'>
         <ProfileHeader profile={profile!}></ProfileHeader>
         <ProfileContent setActiveTab={setActiveTab}></ProfileContent>
       </GridColumn>

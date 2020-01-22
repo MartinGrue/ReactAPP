@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { Menu, Responsive, Sidebar, Icon } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import Routes from '../../app/layout/Routes';
@@ -11,7 +11,7 @@ const NavBarMobile: React.FC<{
   visible: boolean;
 }> = ({ onPusherClick, handleToggle, visible }) => {
   const sidebarPusherStyle = {
-    minHeight : "100vh"
+    minHeight: '100vh'
   };
   return (
     <Sidebar.Pushable>
@@ -46,14 +46,19 @@ const NavBarMobile: React.FC<{
   );
 };
 
-const NavBarDesktop: React.FC = () => (
-  <Menu fixed='top' inverted>
-    <NavLeftMenuItems></NavLeftMenuItems>
-    <Menu.Menu position='right'>
-      <NavRightMenuItems></NavRightMenuItems>
-    </Menu.Menu>
-  </Menu>
-);
+const NavBarDesktop: React.FC = () => {
+  return (
+    <Fragment>
+      <Menu fixed='top' inverted>
+        <NavLeftMenuItems></NavLeftMenuItems>
+        <Menu.Menu position='right'>
+          <NavRightMenuItems></NavRightMenuItems>
+        </Menu.Menu>
+      </Menu>
+      <Routes></Routes>
+    </Fragment>
+  );
+};
 
 const Nav: React.FC = () => {
   const [visible, setvisible] = useState(false);

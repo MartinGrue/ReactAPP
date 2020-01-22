@@ -79,7 +79,7 @@ const ProfilePhotos = () => {
           )}
         </GridColumn>
       </Grid>
-      <GridColumn width={16}>
+      <GridColumn>
         {addPhotoToggle ? (
           <PhotoUploader loading={loadingPhoto}></PhotoUploader>
         ) : (
@@ -93,11 +93,12 @@ const ProfilePhotos = () => {
                 </Card>
               </Card.Group>
             )}
-            <Card.Group itemsPerRow={5} stackable doubling>
+            <Card.Group itemsPerRow={4} stackable doubling>
               {profile &&
                 profile.photos.map(photo => (
-                  <Card key={photo.id}>
+                  <Card key={photo.id} fluid>
                     <Image
+                    style={{marginLeft:'auto', marginRight:'auto', width:'100%'}}
                       src={photo.url}
                       onClick={() => {
                         setisbig(photo);
@@ -105,7 +106,7 @@ const ProfilePhotos = () => {
                       className='imageWithpointer'
                     ></Image>
                     {isLoggedIn && (
-                      <Button.Group fluid>
+                      <Button.Group >
                         <Button
                           color='red'
                           content='Trash'

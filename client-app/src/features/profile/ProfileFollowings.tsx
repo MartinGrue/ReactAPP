@@ -26,7 +26,6 @@ const ProfileFollowings = () => {
     );
   }
   return (
-    <Tab.Pane>
       <Grid>
         <Grid.Column width={16}>
           <Header
@@ -39,7 +38,7 @@ const ProfileFollowings = () => {
             }
           />{' '}
         </Grid.Column>
-        </Grid>
+
         <Grid.Column width={16}>
           <Card.Group itemsPerRow={5} stackable doubling>
             {followings &&
@@ -48,8 +47,7 @@ const ProfileFollowings = () => {
               ))}
           </Card.Group>
         </Grid.Column>
-
-    </Tab.Pane>
+        </Grid>
   );
 };
 

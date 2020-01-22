@@ -7,7 +7,6 @@ import { format } from 'date-fns';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 import { IUserActivity } from '../../../app/models/IActivity';
 
-
 const panes = [
   { menuItem: 'Future Events', pane: { key: 'futureEvents' } },
   { menuItem: 'Past Events', pane: { key: 'pastEvents' } },
@@ -31,7 +30,7 @@ const ProfileEvents = () => {
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     data: TabProps
   ) => {
-    let predicate:string;
+    let predicate: string;
     switch (data.activeIndex) {
       case 1:
         predicate = 'past';
@@ -48,7 +47,7 @@ const ProfileEvents = () => {
 
   return (
     <Tab.Pane loading={loadingUserActivities}>
-      <Grid >
+      <Grid>
         <Grid.Column width={16}>
           <Header floated='left' icon='calendar' content={'Activities'} />
         </Grid.Column>
@@ -59,7 +58,7 @@ const ProfileEvents = () => {
             onTabChange={(e, data) => handleTabChange(e, data)}
           />
           <br />
-          <Card.Group itemsPerRow={4}  stackable doubling>
+          <Card.Group itemsPerRow={4} stackable doubling>
             {userActivities.map((activity: IUserActivity) => (
               <Card
                 as={Link}

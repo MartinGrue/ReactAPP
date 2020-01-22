@@ -1,10 +1,6 @@
 import React, { useContext } from 'react';
 import { Container } from 'semantic-ui-react';
-import {
-  Switch,
-  Route,
-  Redirect
-} from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import ActivityDashboard from '../../features/activities/dashbord/ActivityDashboard';
 import ActivityForm from '../../features/activities/form/ActivityForm';
 import ActivityDetails from '../../features/activities/details/ActivityDetails';
@@ -13,7 +9,6 @@ import LoginForm from '../../features/User/LoginForm';
 import NotFound from './NotFound';
 import { observer } from 'mobx-react-lite';
 import { RootStoreContext } from '../stores/rootStore';
-
 
 const Routes: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
@@ -34,7 +29,11 @@ const Routes: React.FC = () => {
             path='/activities/:id'
             component={ActivityDetails}
           ></Route>
-          <Route path='/profiles/:userName' component={ProfilePage}></Route>
+          <Route
+            exact
+            path='/profiles/:userName'
+            component={ProfilePage}
+          ></Route>
           <Route path='/login' component={LoginForm}></Route>
           <Route component={NotFound}></Route>
         </Switch>
