@@ -38,7 +38,7 @@ const RegisterForm: React.FC = () => {
         <Form onSubmit={handleSubmit} error>
           <Header
             as='h2'
-            content='Sign up to Social Groups'
+            content='Sign up to Reactivities'
             color='teal'
             textAlign='center'
           ></Header>

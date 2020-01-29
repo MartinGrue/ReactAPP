@@ -47,7 +47,7 @@ const HomePage: React.FC = () => {
             alt='logo'
             style={{ marginBottom: 12 }}
           />
-          Social Groups
+          Reactivities
         </Header>
         {isLoggedIn && user ? (
           <Fragment>
@@ -62,7 +62,7 @@ const HomePage: React.FC = () => {
           </Fragment>
         ) : (
           <Fragment>
-            <Header as='h2' inverted content='Welcome to Social Groups' />
+            <Header as='h2' inverted content='Welcome to Reactivities' />
             <Button
               onClick={() => openModal(<LoginForm />)}
               size='huge'
