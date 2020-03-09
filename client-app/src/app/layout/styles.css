@@ -121,9 +121,9 @@ div.ui.basic.segment {
 .imageWithpointer {
   cursor: pointer;
 }
-.autocomplete-dropdown-container {
-}
-
 .autocomplete-dropdown-container.active {
   border: 1px solid #2185d0;
+}
+.dateTimePicker-Container > input {
+  vertical-align: baseline !important;
 }

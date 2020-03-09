@@ -17,6 +17,7 @@ import { GoogleLogin } from 'react-google-login';
 import { IExternalLoginInfo } from '../../app/models/user';
 
 const HomePage: React.FC = () => {
+  const token = window.localStorage.getItem('jwt');
   const rootStore = useContext(RootStoreContext);
   const { isLoggedIn, user, loginExternal } = rootStore.userStore;
   const { openModal } = rootStore.modalStore;
@@ -49,7 +50,7 @@ const HomePage: React.FC = () => {
           />
           Reactivities
         </Header>
-        {isLoggedIn && user ? (
+        {isLoggedIn && user && token ? (
           <Fragment>
             <Header
               as='h2'

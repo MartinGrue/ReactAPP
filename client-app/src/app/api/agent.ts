@@ -1,18 +1,19 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from "axios";
 import {
   IActivity,
   IActivityEnvelope,
   IUserActivity
-} from '../models/IActivity';
-import { history } from '../..';
-import { toast } from 'react-toastify';
-import { IUser, IUserFormValues, IExternalLoginInfo } from '../models/user';
-import { IProfile, IPhoto, IProfileFormValues } from '../models/IProfile';
+} from "../models/IActivity";
+import { history } from "../..";
+import { toast } from "react-toastify";
+import { IUser, IUserFormValues, IExternalLoginInfo } from "../models/user";
+import { IProfile, IPhoto, IProfileFormValues } from "../models/IProfile";
 
 axios.interceptors.request.use(
   config => {
-    const token = window.localStorage.getItem('jwt');
+    const token = window.localStorage.getItem("jwt");
     if (token) {
+      console.log(token);
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
@@ -25,24 +26,31 @@ axios.interceptors.request.use(
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 axios.interceptors.response.use(undefined, error => {
-  if (error.message === 'Network Error' && !error.response) {
-    toast.error('Connection Error');
+  if (error.message === "Network Error" && !error.response) {
+    toast.error("Connection Error");
   }
 
-  const { status, data, config } = error.response;
+  const { status, data, config, headers } = error.response;
+
   // console.log(data);
 
   if (error.response.status === 404) {
-    history.push('/notfound');
+    history.push("/notfound");
   }
-  if (status === 400 && config.method === 'get' && data.hasOwnProperty('id')) {
-    history.push('/NotFound');
+  if (status === 400 && config.method === "get" && data.hasOwnProperty("id")) {
+    history.push("/NotFound");
   }
   if (status === 500) {
-    toast.error('Server error');
+    toast.error("Server error");
   }
-  if (status === 401) {
-    toast.error('401 Unauthorized');
+  if (
+    status === 401 &&
+    headers["www-authenticate"] ===
+      'Bearer error="invalid_token", error_description="The token is expired"'
+  ) {
+    window.localStorage.removeItem("jwt");
+    history.push("/");
+    toast.info("Your session has expired, please login again");
   }
   // throw error.response;
 });
@@ -56,10 +64,10 @@ const requests = {
   delete: (url: string) => axios.delete(url).then(responseBody),
   postForm: (url: string, file: Blob) => {
     let data = new FormData();
-    data.append('File', file);
+    data.append("File", file);
     return axios
       .post(url, data, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { "Content-Type": "multipart/form-data" }
       })
       .then(responseBody);
   }
@@ -67,9 +75,9 @@ const requests = {
 
 const Activities = {
   list: (params: URLSearchParams): Promise<IActivityEnvelope> =>
-    requests.get('/activities', { params: params }),
+    requests.get("/activities", { params: params }),
   details: (id: string) => requests.get(`/activities/${id}`),
-  create: (activity: IActivity) => requests.post('/Activities', activity),
+  create: (activity: IActivity) => requests.post("/Activities", activity),
   update: (activity: IActivity) =>
     requests.put(`/activities/${activity.id}`, activity),
   delete: (id: string) => requests.delete(`/activities/${id}`),
@@ -78,7 +86,7 @@ const Activities = {
 };
 
 const User = {
-  current: (): Promise<IUser> => requests.get('/User'),
+  current: (): Promise<IUser> => requests.get("/User"),
   login: (user: IUserFormValues): Promise<IUser> =>
     requests.post(`/User/login`, user),
   register: (user: IUserFormValues): Promise<IUser> =>
@@ -93,7 +101,7 @@ const Profile = {
   get: (userName: string): Promise<IProfile> =>
     requests.get(`/Profiles/${userName}`),
   uploadImage: (file: Blob): Promise<IPhoto> =>
-    requests.postForm('/Photos', file),
+    requests.postForm("/Photos", file),
   deleteImage: (id: string) => requests.delete(`/Photos/${id}`),
   setMainPhoto: (id: string) => requests.post(`/Photos/${id}/setMain`, {}),
   followUser: (userName: string) =>

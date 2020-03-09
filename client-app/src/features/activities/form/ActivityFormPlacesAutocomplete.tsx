@@ -27,7 +27,6 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
   const rootStore = useContext(RootStoreContext);
   const { disableUpdateForm } = rootStore.profileStore;
 
-  const [cssClass, setCssClass] = useState();
   const [dropdownIsOpen, setdropdownIsOpen] = useState(false);
   const FieldProps = {
     placeholder: placeholder,

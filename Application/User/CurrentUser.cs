@@ -32,7 +32,6 @@ namespace Application.User
                 {
                     throw new RestException(HttpStatusCode.NotFound);
                 }
-                //TODO: generate token
                 return new User
                 {
                     DisplayName = user.DisplayName,
@@ -40,7 +39,6 @@ namespace Application.User
                     Image = user.Photos.FirstOrDefault(p => p.IsMain)?.Url,
                     Token = this.jwtGenerator.CreateToken(user)
                 };
-                //TODO throw with restexception error + statuscode
             }
         }
     }

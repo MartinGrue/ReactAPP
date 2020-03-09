@@ -7,9 +7,7 @@ COPY ReactApp.sln ./
 COPY Application ./Application
 COPY Domain ./Domain
 COPY Infrastructure ./Infrastructure
-
 COPY Persistence ./Persistence
-
 COPY API ./API
 
 RUN dotnet restore

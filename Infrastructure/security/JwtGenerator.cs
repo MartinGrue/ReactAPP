@@ -22,7 +22,7 @@ namespace Infrastructure.security
             var tokendiscriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(7),
+                Expires = DateTime.Now.AddYears(2),
                 SigningCredentials = creds
             };
             var tokenHandler = new JwtSecurityTokenHandler();
