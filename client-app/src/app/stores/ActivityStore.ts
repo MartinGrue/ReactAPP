@@ -186,7 +186,6 @@ export default class ActivityStore {
     try {
       const activitiesEnvelope = await agent.Activities.list(this.axiosParams);
       const { activities, activityCount } = activitiesEnvelope;
-      // console.log(Object.entries(activities));
       // Object.entries(
       //   activities.reduce(
       //     (multi, single) => {
@@ -210,13 +209,16 @@ export default class ActivityStore {
       runInAction('loadingActivities', () => {
 
         activities.forEach(activity => {
+          console.log(activity)
           FillActivityProps(activity, this.rootStore.userStore.user!);
-          // this.activities.push(activity);
+          //stored by reference
+          console.log(activity)
           this.activityRegistry.set(activity.id, activity);
         });
         this.loadingInitial = false;
         this.activityRegistryHasNotChanged = true;
         this.activityCount = activityCount;
+        console.log(this.activityRegistry)
       });
     } catch (error) {
       runInAction('loadingActivitiesError', () => {

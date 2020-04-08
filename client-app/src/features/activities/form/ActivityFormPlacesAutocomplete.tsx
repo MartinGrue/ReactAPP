@@ -49,7 +49,8 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
           <div>
             <input
               name={name}
-              {...input}
+              onBlur={input.onBlur}
+              onFocus={input.onFocus}
               onChange={e => {
                 getInputProps().onChange(e);
                 input.onChange(e);

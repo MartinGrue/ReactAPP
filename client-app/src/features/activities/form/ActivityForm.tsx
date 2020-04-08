@@ -52,7 +52,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   );
 
   const [loading, setloading] = useState(false);
-  const [latlng, setLatlng] = useState();
+  const [latlng, setLatlng] = useState<google.maps.LatLngLiteral>();
 
   const [address, setaddress] = useState('');
   const [city, setcity] = useState('');
@@ -238,13 +238,12 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
 
                   <Field
                     name='city'
-                    value={activity.city}
+                    // value={activity.city}
                     render={({ input, meta }) => (
                       <ActivityFormPlacesAutocomplete
                         key='city'
                         name='city'
                         placeholder='city'
-                        validate={validate}
                         input={input}
                         meta={meta}
                         address={city}
@@ -258,13 +257,12 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                   ></Field>
                   <Field
                     name='venue'
-                    value={activity.venue}
+                    // value={activity.venue}
                     render={({ input, meta }) => (
                       <ActivityFormPlacesAutocomplete
                         key='venue'
                         name='venue'
                         placeholder='venue'
-                        validate={validate}
                         input={input}
                         meta={meta}
                         address={address}
