@@ -44,9 +44,7 @@ namespace API
             Host.CreateDefaultBuilder(args).ConfigureWebHostDefaults(webbuilder =>
             {
                 webbuilder.UseStartup<Startup>()
-.UseUrls("http://*:5000");
-            })
-
-            ;
+                .UseUrls("http://*:5000");
+            });
     }
 }
