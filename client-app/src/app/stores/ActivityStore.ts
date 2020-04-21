@@ -4,7 +4,7 @@ import agent from '../api/agent';
 import { toast } from 'react-toastify';
 import { RootStore } from './rootStore';
 import { FillActivityProps } from '../common/util/util';
-import * as signalR from '@aspnet/signalr';
+import * as signalR from '@microsoft/signalr';
 
 
 const PagingLimit = 2;
