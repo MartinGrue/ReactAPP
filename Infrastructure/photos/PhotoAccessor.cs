@@ -44,6 +44,7 @@ namespace Infrastructure.photos
                     var uploadParams = new ImageUploadParams()
                     {
                         File = new FileDescription(file.Name, stream),
+                        Folder = "Reactivities",
                         Transformation = new Transformation().Height(500).Width(500).Crop("fill").Gravity("face")
                     };
                     uploadResult = cloudinary.Upload(uploadParams);
@@ -80,6 +81,7 @@ namespace Infrastructure.photos
                     var uploadParams = new ImageUploadParams()
                     {
                         File = new FileDescription("image", stream),
+                        Folder = "Reactivities",
                         Transformation = new Transformation().Height(500).Width(500).Crop("fill").Gravity("face")
                     };
                     uploadResult = cloudinary.Upload(uploadParams);

@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 using Application.Errors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-
+using System.Text.Json;
 namespace API.Middleware
 {
     public class ErrorHandlingMiddleware
@@ -50,9 +49,10 @@ namespace API.Middleware
 
             }
             context.Response.ContentType = "application/json";
+
             if (errors != null)
             {
-                var result = JsonConvert.SerializeObject(new
+                var result = JsonSerializer.Serialize(new
                 {
                     errors
                 });

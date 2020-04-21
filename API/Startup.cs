@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +27,7 @@ using API.SignalR;
 using System.Threading.Tasks;
 using Application.Profiles;
 using Infrastructure.security.soicalAccounts;
+using Microsoft.Extensions.Hosting;
 
 namespace API
 {
@@ -47,7 +48,7 @@ namespace API
               });
             ConfigureServices(services);
         }
-        
+
         public void ConfigureProductionServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(opt =>
@@ -71,13 +72,12 @@ namespace API
              });
             services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 
-            services.AddMvc(opt =>
+            services.AddControllers(opt =>
             {
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 opt.Filters.Add(new AuthorizeFilter(policy));
             })
-            .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Application.Activities.Create>())
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Application.Activities.Create>());
             services.AddCors(opt =>
             {
                 opt.AddPolicy("CorsPolicy", policy =>
@@ -140,7 +140,7 @@ namespace API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseMiddleware<ErrorHandlingMiddleware>();
 
@@ -156,17 +156,18 @@ namespace API
             // app.UseHttpsRedirection();
 
             // app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
-
-
-            app.UseAuthentication();
-            app.UseCors("CorsPolicy");
-            // app.UseMvc();
-
-            app.UseSignalR(configure => { configure.MapHub<ChatHub>("/chat"); });
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.UseMvc(routes => routes.MapSpaFallbackRoute(name: "spa-fallback",
-            defaults: new { controller = "Fallback", action = "Index" }));
+            app.UseRouting();
+            app.UseCors("CorsPolicy");
+            app.UseAuthentication();
+            app.UseAuthorization();
+            // app.UseMvc();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers(); endpoints.MapHub<ChatHub>("/chat"); endpoints.MapFallbackToController("Index", "Fallback");
+            });
+
         }
     }
 }

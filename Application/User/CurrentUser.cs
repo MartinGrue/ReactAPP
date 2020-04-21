@@ -12,9 +12,12 @@ namespace Application.User
 {
     public class CurrentUser
     {
-        public class Query : IRequest<User>{}
-         //Return a User object
+        public class Query : IRequest<User> { }
+        //Return a User object
         public class Handler : IRequestHandler<Query, User>
+
+
+
         {
             private readonly UserManager<AppUser> userManager;
             private readonly IUserAccessor userAccessor;
