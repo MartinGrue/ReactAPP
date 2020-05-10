@@ -21,8 +21,8 @@ export const PhotoUploaderCropper: React.FC<IProps> = ({
     }
     cropper &&
       cropper.current &&
-      cropper.current.getCroppedCanvas().toBlob((blob: any) => {
-        setimage(blob);
+      cropper.current.getCroppedCanvas().toBlob((blob: Blob | null) => {
+        setimage(blob!);
       }, 'image/jpeg');
   };
   return (

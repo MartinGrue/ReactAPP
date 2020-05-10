@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from 'react';
+import React, { useContext, useState, useEffect, useRef, RefObject } from 'react';
 import {
   Tab,
   Header,
@@ -12,13 +12,14 @@ import {
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { PhotoUploader } from '../../app/common/photoUploader/PhotoUploader';
 import { observer } from 'mobx-react-lite';
+import { IPhoto } from '../../app/models/IProfile';
 
 const OutSideClickDetector = (
-  ref: React.MutableRefObject<any>,
+  ref: RefObject<HTMLDivElement>,
   setimgSelected: React.Dispatch<any>
 ) => {
   const handleClickOutside = (event: MouseEvent) => {
-    if (ref.current && !ref.current.contains(event.target)) {
+    if (ref.current && !ref.current.contains(event.target as Node)) {
       setimgSelected(false);
     }
   };
@@ -45,7 +46,7 @@ const ProfilePhotos = () => {
     setMainPhoto
   } = rootStore.profileStore;
 
-  const [windowsWidth, setwindowsWidth] = useState();
+  const [windowsWidth, setwindowsWidth] = useState<number>();
   const handleWindowSizeChange = () => {
     setwindowsWidth(window.innerWidth);
   };
@@ -53,9 +54,9 @@ const ProfilePhotos = () => {
   const [addPhotoToggle, setaddPhotoToggle] = useState(false);
   const [target, settarget] = useState<string | undefined>(undefined);
 
-  const [isbig, setisbig] = useState();
+  const [isbig, setisbig] = useState<IPhoto>();
 
-  const wrapperRef = useRef(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   OutSideClickDetector(wrapperRef, setisbig);
 
   useEffect(() => {
@@ -84,7 +85,7 @@ const ProfilePhotos = () => {
           <PhotoUploader loading={loadingPhoto}></PhotoUploader>
         ) : (
           <Segment>
-            {profile && isbig && !(windowsWidth < 600) && (
+            {profile && isbig && !(windowsWidth! < 600) && (
               <Card.Group itemsPerRow={2} centered>
                 <Card>
                   <div ref={wrapperRef}>

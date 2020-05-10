@@ -1,24 +1,22 @@
-import React, { Fragment, useState, useEffect, useContext } from 'react';
-import {
-  Grid,
-  Header,
-  Button
-} from 'semantic-ui-react';
-import PhotoUploaderDropZone from './PhotoUploaderDropZone';
-import PhotoUploaderCropper from './PhotoUploaderCropper';
-import { RootStoreContext } from '../../stores/rootStore';
-import { observer } from 'mobx-react-lite';
+import React, { Fragment, useState, useEffect, useContext } from "react";
+import { Grid, Header, Button } from "semantic-ui-react";
+import PhotoUploaderDropZone from "./PhotoUploaderDropZone";
+import PhotoUploaderCropper from "./PhotoUploaderCropper";
+import { RootStoreContext } from "../../stores/rootStore";
+import { observer } from "mobx-react-lite";
 
 interface iProps {
   loading: boolean;
 }
+export interface FileWithPreview extends File {
+  preview: string;
+}
 export const PhotoUploader: React.FC<iProps> = ({ loading }) => {
-  const [files, setfiles] = useState<any[]>([]);
+  const [files, setfiles] = useState<FileWithPreview[]>([]);
   const [image, setimage] = useState<Blob | null>(null);
 
   const rootStore = useContext(RootStoreContext);
   const { uploadImage, setLoadingPhoto } = rootStore.profileStore;
-
 
   //Component will unmount
   //Remove image from memory
@@ -29,16 +27,14 @@ export const PhotoUploader: React.FC<iProps> = ({ loading }) => {
   });
   return (
     <Fragment>
-
-
       <Grid stackable>
         <Grid.Column width={4}>
-          <Header color='teal' sub content='Step 1 - Add Photo' />
+          <Header color="teal" sub content="Step 1 - Add Photo" />
           <PhotoUploaderDropZone setfiles={setfiles}></PhotoUploaderDropZone>
         </Grid.Column>
         <Grid.Column width={1} />
         <Grid.Column width={4}>
-          <Header sub color='teal' content='Step 2 - Resize image' />
+          <Header sub color="teal" content="Step 2 - Resize image" />
           {files.length > 0 && (
             <PhotoUploaderCropper
               setimage={setimage}
@@ -48,17 +44,17 @@ export const PhotoUploader: React.FC<iProps> = ({ loading }) => {
         </Grid.Column>
         <Grid.Column width={1} />
         <Grid.Column width={4} stretched>
-          <Header sub color='teal' content='Step 3 - Preview & Upload' />
+          <Header sub color="teal" content="Step 3 - Preview & Upload" />
           {files.length > 0 && (
             <Fragment>
               <div
-                className='img-preview center'
-                style={{ minHeight: '240px', overflow: 'hidden' }}
+                className="img-preview center"
+                style={{ minHeight: "240px", overflow: "hidden" }}
               ></div>
               <Button.Group fluid>
                 <Button
                   positive
-                  icon='check'
+                  icon="check"
                   disabled={loading}
                   loading={loading}
                   onClick={() => {
@@ -67,7 +63,7 @@ export const PhotoUploader: React.FC<iProps> = ({ loading }) => {
                   }}
                 ></Button>
                 <Button
-                  icon='close'
+                  icon="close"
                   disabled={loading}
                   onClick={() => setfiles([])}
                 ></Button>
