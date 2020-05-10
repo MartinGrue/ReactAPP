@@ -50,9 +50,9 @@ const ActivityDetailedSidebar: React.FC<IProps> = ({ attendees }) => {
 
               <Item.Content verticalAlign="middle">
                 <Item.Header as="h3">
-                  <Link to={`/profiles/${attendee.userName}`}>
+
                     {attendee.userName}
-                  </Link>
+
                 </Item.Header>
                 {attendee.following && (
                   <Item.Extra style={{ color: "orange" }}>Following</Item.Extra>

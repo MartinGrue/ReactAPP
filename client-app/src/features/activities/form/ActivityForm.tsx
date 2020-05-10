@@ -104,11 +104,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
         city: "",
       });
     }
-    return () => {
-      setloadinginitial();
-      setaddress("");
-      setcity("");
-    };
+
   }, [
     match.params.id,
     loadActivity,
