@@ -45,7 +45,7 @@ export interface IActivityFormValues extends Partial<IActivity> {
   time?: Date;
 }
 export class ActivityFormValues implements IActivityFormValues {
-  id?: string = undefined;
+  id: string = '';
   title: string = '';
   description: string = '';
   category: string = '';

@@ -1,32 +1,23 @@
-import { observable, action, computed, runInAction, reaction } from 'mobx';
-import { IActivity, IAttendee } from '../models/IActivity';
-import agent from '../api/agent';
-import { toast } from 'react-toastify';
-import { RootStore } from './rootStore';
-import { FillActivityProps } from '../common/util/util';
-import * as signalR from '@microsoft/signalr';
-
+import { observable, action, computed, runInAction, reaction } from "mobx";
+import { IActivity, IAttendee } from "../models/IActivity";
+import agent from "../api/agent";
+import { toast } from "react-toastify";
+import { RootStore } from "./rootStore";
+import { FillActivityProps } from "../common/util/util";
+import * as signalR from "@microsoft/signalr";
 
 const PagingLimit = 2;
 // class ActivityStore {
 export default class ActivityStore {
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
-    reaction(
-      () => this.predicate.keys(),
-      () => {
-        this.page = 0;
-        this.activityRegistry.clear();
-        this.loadActivities();
-      }
-    );
   }
   rootStore: RootStore;
 
   @observable selectedActivity: IActivity | undefined;
   @observable editMode = false;
   @observable submitting = false;
-  @observable target = '';
+  @observable target = "";
   @observable loading = false;
   /*
     get: /activities
@@ -49,10 +40,10 @@ export default class ActivityStore {
 
   @computed get axiosParams() {
     const params = new URLSearchParams();
-    params.append('limit', String(PagingLimit));
-    params.append('offset', `${this.page ? this.page * PagingLimit : 0}`);
+    params.append("limit", String(PagingLimit));
+    params.append("offset", `${this.page ? this.page * PagingLimit : 0}`);
     this.predicate.forEach((value, key) => {
-      if (key === 'startDate') {
+      if (key === "startDate") {
         params.append(key, value.toISOString());
       } else {
         params.append(key, value);
@@ -64,7 +55,7 @@ export default class ActivityStore {
   @computed get totalPages() {
     return Math.ceil(this.activityCount / PagingLimit);
   }
-  
+
   @action setPage = (page: number) => {
     this.page = page;
   };
@@ -73,14 +64,13 @@ export default class ActivityStore {
     this.loadingInitial = true;
   };
 
-
   @action connectToSignalRHub = () => {
     var hubConnectionBuilder = new signalR.HubConnectionBuilder();
     this.hubConnection = hubConnectionBuilder
       .withUrl(process.env.REACT_APP_CHAT_URL!, {
         accessTokenFactory: (): string => {
           return this.rootStore.commonStore.token!;
-        }
+        },
       })
       .configureLogging(signalR.LogLevel.Information)
       .build();
@@ -88,8 +78,8 @@ export default class ActivityStore {
       .start()
       .then(() => console.log(this.hubConnection!.state));
 
-    this.hubConnection.on('ReceiveComment', comment => {
-      runInAction('connectToSignalRHubAction', () => {
+    this.hubConnection.on("ReceiveComment", (comment) => {
+      runInAction("connectToSignalRHubAction", () => {
         this.selectedActivity!.comments.push(comment);
       });
     });
@@ -102,7 +92,7 @@ export default class ActivityStore {
   @action addComment = async (values: any) => {
     values.activityId = this.selectedActivity!.id;
     try {
-      await this.hubConnection!.invoke('SendComment', values);
+      await this.hubConnection!.invoke("SendComment", values);
     } catch (error) {
       console.log(error);
     }
@@ -128,7 +118,7 @@ export default class ActivityStore {
     return Object.entries(
       sorted.reduce((activities, activity) => {
         // console.log(activity.date!);
-        const key: string = activity.date!.toISOString().split('T')[0];
+        const key: string = activity.date!.toISOString().split("T")[0];
         // // console.log(activities);
         // activities[key] = activities[key]
         //   ? [...activities[key], activity]
@@ -163,16 +153,16 @@ export default class ActivityStore {
     this.submitting = true;
     try {
       await agent.Activities.update(activity);
-      runInAction('UpdateActivityAction', () => {
+      runInAction("UpdateActivityAction", () => {
         this.activityRegistry.set(activity.id, activity);
         this.selectedActivity = activity;
         this.submitting = false;
         this.editMode = false;
-        toast.success('Activity Updated');
+        toast.success("Activity Updated");
       });
     } catch (error) {
-      runInAction('UpdateActivityError', () => {
-        toast.error('Problem submitting data');
+      runInAction("UpdateActivityError", () => {
+        toast.error("Problem submitting data");
         console.log(error.response);
         this.submitting = false;
       });
@@ -206,22 +196,21 @@ export default class ActivityStore {
       //     {} as { [key: string]: IActivity[] }
       //   )
       // );
-      runInAction('loadingActivities', () => {
-
-        activities.forEach(activity => {
-          console.log(activity)
+      runInAction("loadingActivities", () => {
+        activities.forEach((activity) => {
+          console.log(activity);
           FillActivityProps(activity, this.rootStore.userStore.user!);
           //stored by reference
-          console.log(activity)
+          console.log(activity);
           this.activityRegistry.set(activity.id, activity);
         });
         this.loadingInitial = false;
         this.activityRegistryHasNotChanged = true;
         this.activityCount = activityCount;
-        console.log(this.activityRegistry)
+        console.log(this.activityRegistry);
       });
     } catch (error) {
-      runInAction('loadingActivitiesError', () => {
+      runInAction("loadingActivitiesError", () => {
         console.log(error);
         this.loadingInitial = false;
         this.activityRegistryHasNotChanged = true;
@@ -232,20 +221,21 @@ export default class ActivityStore {
   @action loadActivity = async (id: string) => {
     this.loadingInitial = true;
     let activity: IActivity = this.activityRegistry.get(id);
+
     if (activity) {
       this.selectedActivity = activity;
       this.loadingInitial = false;
     } else {
       try {
         activity = await agent.Activities.details(id);
-        runInAction('loadingActivities', () => {
+        runInAction("loadingActivity", () => {
           FillActivityProps(activity, this.rootStore.userStore.user!);
           this.activityRegistry.set(activity.id, activity);
           this.selectedActivity = activity;
           this.loadingInitial = false;
         });
       } catch (error) {
-        runInAction('loadingActivitiesError', () => {
+        runInAction("loadingActivityError", () => {
           console.log(error);
           this.loadingInitial = false;
         });
@@ -265,24 +255,24 @@ export default class ActivityStore {
         userName: this.rootStore.userStore.user!.userName,
         displayName: this.rootStore.userStore.user!.displayName,
         isHost: true,
-        image: null
+        image: null,
       };
       let attendees = [];
       attendees.push(NewAttendee);
       activity.userActivities = attendees;
       activity.comments = [];
-      runInAction('createActivity', () => {
+      runInAction("createActivity", () => {
         // this.activities.push(activity);
         this.activityRegistry.set(activity.id, activity);
         this.selectedActivity = activity;
         this.editMode = false;
         this.submitting = false;
-        toast.success('Activity Created');
+        toast.success("Activity Created");
       });
     } catch (error) {
-      runInAction('createActivityError', () => {
+      runInAction("createActivityError", () => {
         this.submitting = false;
-        toast.error('Problem submitting data');
+        toast.error("Problem submitting data");
         console.log(error.response);
       });
     }
@@ -296,20 +286,20 @@ export default class ActivityStore {
     // this.target = event.currentTarget.name;
     try {
       await agent.Activities.delete(id);
-      runInAction('DeleteActivity', () => {
+      runInAction("DeleteActivity", () => {
         this.activityRegistry.delete(id);
         this.selectedActivity = undefined;
         this.submitting = false;
       });
     } catch (error) {
-      runInAction('DeleteActivityError', () => {
+      runInAction("DeleteActivityError", () => {
         this.submitting = false;
         // this.target = '';
         console.log(error);
       });
     }
   };
-  
+
   @action openCreateForm = () => {
     this.editMode = true;
     this.selectedActivity = undefined;
@@ -326,12 +316,12 @@ export default class ActivityStore {
       userName: this.rootStore.userStore.user!.userName,
       displayName: this.rootStore.userStore.user!.displayName,
       isHost: false,
-      image:  this.rootStore.userStore.user!.image
+      image: this.rootStore.userStore.user!.image,
     };
     this.loading = true;
     try {
       await agent.Activities.join(this.selectedActivity!.id);
-      runInAction('JoinActivity', () => {
+      runInAction("JoinActivity", () => {
         this.selectedActivity!.userActivities.push(NewAttendee);
         this.activityRegistry.set(
           this.selectedActivity!.id,
@@ -341,7 +331,7 @@ export default class ActivityStore {
         this.loading = false;
       });
     } catch (error) {
-      runInAction('JoinActivityError', () => {
+      runInAction("JoinActivityError", () => {
         this.loading = false;
       });
     }
@@ -351,9 +341,9 @@ export default class ActivityStore {
     this.loading = true;
     try {
       await agent.Activities.unjoin(this.selectedActivity!.id);
-      runInAction('UnJoinActivity', () => {
+      runInAction("UnJoinActivity", () => {
         this.selectedActivity!.userActivities = this.selectedActivity!.userActivities.filter(
-          at => at.userName !== this.rootStore.userStore.user!.userName
+          (at) => at.userName !== this.rootStore.userStore.user!.userName
         );
         this.activityRegistry.set(
           this.selectedActivity!.id,
@@ -363,7 +353,7 @@ export default class ActivityStore {
         this.loading = false;
       });
     } catch (error) {
-      runInAction('JoinActivityError', () => {
+      runInAction("JoinActivityError", () => {
         this.loading = false;
         console.log(error);
       });
@@ -372,7 +362,7 @@ export default class ActivityStore {
 
   @action setPredicate = (predicate: string, value: string | Date) => {
     this.predicate.clear();
-    if (predicate !== 'all') {
+    if (predicate !== "all") {
       this.predicate.set(predicate, value);
     }
   };

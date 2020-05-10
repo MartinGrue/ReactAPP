@@ -25,7 +25,7 @@ export default class FollowersStore {
       );
     }
     rootStore: RootStore;
-    @observable activeTab: number = 0;
+    @observable activeTab:  string | number | undefined = 0;
     @observable loading = true;
     @observable followings: IProfile[] | undefined = undefined;
 
@@ -54,7 +54,7 @@ export default class FollowersStore {
           });
         }
       };
-      @action setActiveTab = (activeIndex: number) => {
+      @action setActiveTab = (activeIndex:  string | number | undefined) => {
         this.activeTab = activeIndex;
       };
 

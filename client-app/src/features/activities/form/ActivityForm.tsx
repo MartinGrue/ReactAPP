@@ -1,32 +1,33 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Segment, Form, Button, Grid, GridColumn } from 'semantic-ui-react';
+import React, { useState, useContext, useEffect } from "react";
+import { Segment, Form, Button, Grid, GridColumn } from "semantic-ui-react";
 import {
   IActivityFormValues,
   ActivityFormValues,
-  IActivity
-} from '../../../app/models/IActivity';
-import { v4 as uuid } from 'uuid';
-import { observer } from 'mobx-react-lite';
-import { RouteComponentProps } from 'react-router';
-import { Form as FinalForm, Field } from 'react-final-form';
-import TextInput from '../../../app/common/form/TextInput';
-import TextAreaInput from '../../../app/common/form/TextAreaInput';
-import SelectInput from '../../../app/common/form/SelectInput';
-import { category } from '../../../app/common/options/categoryOptions';
-import DateInput from '../../../app/common/form/DateInput';
-import { combineDateAndTime } from '../../../app/common/util/util';
+  IActivity,
+} from "../../../app/models/IActivity";
+import { v4 as uuid } from "uuid";
+import { observer } from "mobx-react-lite";
+import { RouteComponentProps } from "react-router";
+import { Form as FinalForm, Field } from "react-final-form";
+import TextInput from "../../../app/common/form/TextInput";
+import TextAreaInput from "../../../app/common/form/TextAreaInput";
+import SelectInput from "../../../app/common/form/SelectInput";
+import { category } from "../../../app/common/options/categoryOptions";
+import DateInput from "../../../app/common/form/DateInput";
+import { combineDateAndTime } from "../../../app/common/util/util";
 
 import {
   composeValidators,
   combineValidators,
   isRequired,
-  hasLengthGreaterThan
-} from 'revalidate';
-import { RootStoreContext } from '../../../app/stores/rootStore';
+  hasLengthGreaterThan,
+} from "revalidate";
+import { RootStoreContext } from "../../../app/stores/rootStore";
 
-import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
-import { SimpleMap } from '../../../app/common/maps/SimpleMap';
-import { ActivityFormPlacesAutocomplete } from './ActivityFormPlacesAutocomplete';
+import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
+import { SimpleMap } from "../../../app/common/maps/SimpleMap";
+import { ActivityFormPlacesAutocomplete } from "./ActivityFormPlacesAutocomplete";
+import { IUserFormValues } from "../../../app/models/user";
 
 interface DetailsParams {
   id: string;
@@ -34,7 +35,7 @@ interface DetailsParams {
 
 const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   match,
-  history
+  history,
 }) => {
   const rootStore = useContext(RootStoreContext);
   const {
@@ -44,7 +45,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     submitting,
     cancelFormOpen,
     loadActivity,
-    deleteActivity
+    deleteActivity,
+    selectedActivity,
   } = rootStore.activityStore;
 
   const [activity, setActivity] = useState<IActivityFormValues>(
@@ -54,143 +56,127 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   const [loading, setloading] = useState(false);
   const [latlng, setLatlng] = useState<google.maps.LatLngLiteral>();
 
-  const [address, setaddress] = useState('');
-  const [city, setcity] = useState('');
+  const [address, setaddress] = useState("");
+  const [city, setcity] = useState("");
 
   const handleSelect = (address: string) => {
     geocodeByAddress(address)
-      .then(results => getLatLng(results[0]))
-      .then(latLng => {
+      .then((results) => getLatLng(results[0]))
+      .then((latLng) => {
         setLatlng(latLng);
       })
-      .catch(error => console.error('Error', error));
+      .catch((error) => console.error("Error", error));
   };
   const handleSelectCity = (city: string) => {
     geocodeByAddress(city)
-      .then(results => getLatLng(results[0]))
-      .then(latLng => {
+      .then((results) => getLatLng(results[0]))
+      .then((latLng) => {
         setLatlng(latLng);
       })
-      .catch(error => console.error('Error', error));
+      .catch((error) => console.error("Error", error));
   };
 
   useEffect(() => {
     if (match.params.id) {
       setloading(true);
-      if (rootStore.activityStore.selectedActivity === undefined) {
-        loadActivity(match.params.id)
-          .then(() => {
-            rootStore.activityStore.selectedActivity &&
-              setActivity(
-                new ActivityFormValues(rootStore.activityStore.selectedActivity)
-              );
-            setcity(rootStore.activityStore.selectedActivity!.city);
-            setaddress(rootStore.activityStore.selectedActivity!.venue);
-            setLatlng({
-              lat: rootStore.activityStore.selectedActivity!.latitute,
-              lng: rootStore.activityStore.selectedActivity!.longitute
-            });
-          })
-          .finally(() => {
-            setloading(false);
+      loadActivity(match.params.id)
+        .then(() => {
+          selectedActivity &&
+            setActivity(new ActivityFormValues(selectedActivity));
+          setcity(rootStore.activityStore.selectedActivity!.city);
+          setaddress(rootStore.activityStore.selectedActivity!.venue);
+          setLatlng({
+            lat: rootStore.activityStore.selectedActivity!.latitute,
+            lng: rootStore.activityStore.selectedActivity!.longitute,
           });
-      } else {
-        rootStore.activityStore.selectedActivity &&
-          setActivity(
-            new ActivityFormValues(rootStore.activityStore.selectedActivity)
-          );
-        setcity(rootStore.activityStore.selectedActivity!.city);
-        setaddress(rootStore.activityStore.selectedActivity!.venue);
-        setLatlng({
-          lat: rootStore.activityStore.selectedActivity!.latitute,
-          lng: rootStore.activityStore.selectedActivity!.longitute
+          console.log(rootStore.activityStore.selectedActivity);
+        })
+        .finally(() => {
+          setloading(false);
         });
-        setloading(false);
-      }
     } else {
       setActivity({
-        id: '',
-        title: '',
-        description: '',
-        category: '',
+        id: "",
+        title: "",
+        description: "",
+        category: "",
         date: undefined,
-        venue: '',
-        city: ''
+        venue: "",
+        city: "",
       });
     }
     return () => {
       setloadinginitial();
-      setaddress('');
-      setcity('');
+      setaddress("");
+      setcity("");
     };
   }, [
     match.params.id,
     loadActivity,
     rootStore.activityStore.selectedActivity,
     setloadinginitial,
-    setActivity
+    setActivity,
   ]);
 
-  const handleFinalFormSubmit = (values: any) => {
+  const handleFinalFormSubmit = (values: IActivityFormValues) => {
     const dateAndTime = combineDateAndTime(values.date, values.time);
-    const { date, time, ...activity } = values;
     activity.date = dateAndTime;
     if (city) {
-      activity.city = city;
+      values.city = city;
     }
     if (address) {
-      activity.venue = address;
+      values.venue = address;
     }
     if (latlng) {
-      activity.longitute = latlng.lng;
-      activity.latitute = latlng.lat;
+      values.longitute = latlng.lng;
+      values.latitute = latlng.lat;
     }
-
-    if (rootStore.activityStore.selectedActivity && match.params.id) {
-      editActivity(activity).then(() =>
+    if (match.params.id) {
+      const editedActivity: IActivity = { ...selectedActivity!, ...values };
+      console.log(editedActivity);
+      editActivity(editedActivity).then(() =>
         history.push(`/activities/${activity.id}`)
       );
     } else {
-      if (!activity.id) {
-        let newActivity: IActivity = {
-          ...activity,
-          id: uuid(),
-          isHost: true,
-          isGoing: true
-        };
+      const newActivity: IActivity = {
+        ...selectedActivity!,
+        ...values,
+        id: uuid(),
+        isHost: true,
+        isGoing: true,
+      };
 
-        createActivity(newActivity).then(() =>
-          history.push(`/activities/${newActivity.id}`)
-        );
-      }
+      createActivity(newActivity).then(() =>
+        history.push(`/activities/${newActivity.id}`)
+      );
     }
   };
   const handleCancel = () => {
     if (match.params.id) {
       history.push(`/activities/${activity.id}`);
     } else {
-      history.push('/');
+      history.push("/");
     }
   };
   const validate = combineValidators({
-    title: isRequired({ message: 'The title is required' }),
-    category: isRequired('category'),
+    title: isRequired({ message: "The title is required" }),
+    category: isRequired("category"),
     description: composeValidators(
-      isRequired('Description'),
+      isRequired("Description"),
       hasLengthGreaterThan(4)({
-        message: 'Description needs to be at least 5 characters'
+        message: "Description needs to be at least 5 characters",
       })
     )(),
-    city: isRequired('City'),
-    venue: isRequired('Venue'),
-    date: isRequired('Date'),
-    time: isRequired('Time')
+    city: isRequired("City"),
+    venue: isRequired("Venue"),
+    date: isRequired("Date"),
+    time: isRequired("Time"),
   });
 
   return (
     <Segment>
       <Grid centered>
-        <GridColumn mobile={16} tablet={14} computer={8} floated='left'>
+        <GridColumn mobile={16} tablet={14} computer={8} floated="left">
           <Segment clearing>
             <FinalForm
               validate={validate}
@@ -199,77 +185,75 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
               render={({ handleSubmit, invalid, pristine }) => (
                 <Form loading={loading} onSubmit={handleSubmit}>
                   <Field
-                    name='title'
-                    placeholder='title'
+                    name="title"
+                    placeholder="title"
                     value={activity.title}
                     component={TextInput}
                   ></Field>
                   <Field
                     component={TextAreaInput}
-                    name='description'
+                    name="description"
                     rows={2}
-                    placeholder='description'
+                    placeholder="description"
                     value={activity.description}
                   ></Field>
                   <Field
                     component={SelectInput}
                     options={category}
-                    name='category'
-                    placeholder='category'
+                    name="category"
+                    placeholder="category"
                     value={activity.category}
                   ></Field>
-                  <Form.Group widths='equal'>
+                  <Form.Group widths="equal">
                     <Field
                       component={DateInput}
                       date={true}
-                      name='date'
-                      placeholder='date'
+                      name="date"
+                      placeholder="date"
                       value={activity.date}
                     ></Field>
                     <Field
                       component={DateInput}
                       time={true}
-                      name='time'
-                      placeholder='time'
+                      name="time"
+                      placeholder="time"
                       value={activity.time}
                       // format(activity.date!,'hh:mm')}
                     ></Field>
                   </Form.Group>
 
                   <Field
-                    name='city'
-                    // value={activity.city}
+                    name="city"
                     render={({ input, meta }) => (
                       <ActivityFormPlacesAutocomplete
-                        key='city'
-                        name='city'
-                        placeholder='city'
+                        key="city"
+                        name="city"
+                        placeholder="city"
                         input={input}
                         meta={meta}
                         address={city}
                         setaddress={setcity}
                         handleSelect={handleSelectCity}
                         Options={{
-                          types: ['(regions)']
+                          types: ["(regions)"],
                         }}
                       ></ActivityFormPlacesAutocomplete>
                     )}
                   ></Field>
                   <Field
-                    name='venue'
-                    // value={activity.venue}
+                    name="venue"
                     render={({ input, meta }) => (
                       <ActivityFormPlacesAutocomplete
-                        key='venue'
-                        name='venue'
-                        placeholder='venue'
+                        key="venue"
+                        name="venue"
+                        placeholder="venue"
                         input={input}
                         meta={meta}
                         address={address}
                         setaddress={setaddress}
                         handleSelect={handleSelect}
                         Options={{
-                          types: ['address']
+                          types: ["address"],
                         }}
                       ></ActivityFormPlacesAutocomplete>
                     )}
@@ -277,30 +261,28 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                   <Button
                     disabled={loading || invalid || pristine}
                     loading={submitting}
-                    floated='right'
+                    floated="right"
                     positive
-                    type='submit'
-                    content='submit'
+                    type="submit"
+                    content="submit"
                   ></Button>
                   {match.params.id && (
                     <Button
                       disabled={loading}
                       loading={submitting}
-                      floated='right'
+                      floated="right"
                       negative
-                      content='Delete'
+                      content="Delete"
                       onClick={() => {
                         history.push(`/activities`);
-                        deleteActivity(
-                          rootStore.activityStore.selectedActivity!.id
-                        );
+                        deleteActivity(selectedActivity!.id);
                       }}
                     ></Button>
                   )}
                   <Button
                     disabled={loading}
-                    floated='right'
-                    content='Cancel'
+                    floated="right"
+                    content="Cancel"
                     onClick={() => {
                       cancelFormOpen();
                       handleCancel();
@@ -311,16 +293,16 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
             />
           </Segment>
         </GridColumn>
-        <GridColumn mobile={16} tablet={14} computer={8} floated='left'>
+        <GridColumn mobile={16} tablet={14} computer={8} floated="left">
           {latlng ? (
             <SimpleMap
               lat={latlng.lat}
               lng={latlng.lng}
-              opt={{ style: { width: '100%', height: 400 } }}
+              opt={{ style: { width: "100%", height: 400 } }}
             ></SimpleMap>
           ) : (
             <SimpleMap
-              opt={{ style: { width: '100%', height: 400 } }}
+              opt={{ style: { width: "100%", height: 400 } }}
             ></SimpleMap>
           )}
         </GridColumn>

@@ -1,4 +1,10 @@
-import React, { useContext, useState, useEffect, useRef, RefObject } from 'react';
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+  RefObject,
+} from "react";
 import {
   Tab,
   Header,
@@ -7,29 +13,29 @@ import {
   Button,
   Grid,
   GridColumn,
-  Segment
-} from 'semantic-ui-react';
-import { RootStoreContext } from '../../app/stores/rootStore';
-import { PhotoUploader } from '../../app/common/photoUploader/PhotoUploader';
-import { observer } from 'mobx-react-lite';
-import { IPhoto } from '../../app/models/IProfile';
+  Segment,
+} from "semantic-ui-react";
+import { RootStoreContext } from "../../app/stores/rootStore";
+import { PhotoUploader } from "../../app/common/photoUploader/PhotoUploader";
+import { observer } from "mobx-react-lite";
+import { IPhoto } from "../../app/models/IProfile";
 
 const OutSideClickDetector = (
   ref: RefObject<HTMLDivElement>,
-  setimgSelected: React.Dispatch<any>
+  setimgSelected: React.Dispatch<React.SetStateAction<IPhoto | undefined>>
 ) => {
   const handleClickOutside = (event: MouseEvent) => {
     if (ref.current && !ref.current.contains(event.target as Node)) {
-      setimgSelected(false);
+      setimgSelected(undefined);
     }
   };
 
   useEffect(() => {
     // Bind the event listener
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
       // Unbind the event listener on clean up
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   });
 };
@@ -43,7 +49,7 @@ const ProfilePhotos = () => {
     loadingDeletePhoto,
     loadingPhoto,
     loadingSetMain,
-    setMainPhoto
+    setMainPhoto,
   } = rootStore.profileStore;
 
   const [windowsWidth, setwindowsWidth] = useState<number>();
@@ -60,21 +66,21 @@ const ProfilePhotos = () => {
   OutSideClickDetector(wrapperRef, setisbig);
 
   useEffect(() => {
-    window.addEventListener('resize', handleWindowSizeChange);
+    window.addEventListener("resize", handleWindowSizeChange);
   }, [window]);
 
-  let className = 'isNotMainButton';
+  let className = "isNotMainButton";
   return (
     <Tab.Pane>
       <Grid>
         <GridColumn width={16}>
-          <Header floated='left' icon='image' content='Photos'></Header>
+          <Header floated="left" icon="image" content="Photos"></Header>
           {isLoggedIn && (
             <Button
-              floated='right'
+              floated="right"
               basic
-              content={addPhotoToggle ? 'Cancel' : 'AddPhoto'}
-              color={addPhotoToggle ? 'red' : 'green'}
+              content={addPhotoToggle ? "Cancel" : "AddPhoto"}
+              color={addPhotoToggle ? "red" : "green"}
               onClick={() => setaddPhotoToggle(!addPhotoToggle)}
             ></Button>
           )}
@@ -89,44 +95,48 @@ const ProfilePhotos = () => {
               <Card.Group itemsPerRow={2} centered>
                 <Card>
                   <div ref={wrapperRef}>
-                    <Image src={isbig.url} size='huge'></Image>
+                    <Image src={isbig.url} size="huge"></Image>
                   </div>
                 </Card>
               </Card.Group>
             )}
             <Card.Group itemsPerRow={4} stackable doubling>
               {profile &&
-                profile.photos.map(photo => (
+                profile.photos.map((photo) => (
                   <Card key={photo.id} fluid>
                     <Image
-                    style={{marginLeft:'auto', marginRight:'auto', width:'100%'}}
+                      style={{
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        width: "100%",
+                      }}
                       src={photo.url}
                       onClick={() => {
                         setisbig(photo);
                       }}
-                      className='imageWithpointer'
+                      className="imageWithpointer"
                     ></Image>
                     {isLoggedIn && (
-                      <Button.Group >
+                      <Button.Group>
                         <Button
-                          color='red'
-                          content='Trash'
-                          icon='trash'
+                          color="red"
+                          content="Trash"
+                          icon="trash"
                           onClick={() => {
                             deleteImage(photo.id);
                           }}
                           loading={loadingDeletePhoto}
                         ></Button>
                         {photo.isMain
-                          ? (className = 'isMainButton')
-                          : (className = 'isNotMainButton')}
+                          ? (className = "isMainButton")
+                          : (className = "isNotMainButton")}
                         <Button
                           name={photo.id}
-                          color='teal'
-                          content='Main'
-                          icon='star'
+                          color="teal"
+                          content="Main"
+                          icon="star"
                           className={className}
-                          onClick={e => {
+                          onClick={(e) => {
                             setMainPhoto(photo.id);
                             settarget(e.currentTarget.name);
                           }}

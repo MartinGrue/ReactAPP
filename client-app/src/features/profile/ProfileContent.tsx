@@ -8,7 +8,7 @@ import ProfileActivities from '../activities/dashbord/ProfileActivities';
 
 
 export const ProfileContent: React.FC<{
-  setActiveTab: (activeIndex: any) => void;
+  setActiveTab: (activeIndex: string | number | undefined) => void;
 }> = ({ setActiveTab }) => {
 
   return (

@@ -1,9 +1,9 @@
-import React, { SetStateAction, Dispatch, useContext, useState } from 'react';
-import { observer } from 'mobx-react-lite';
-import PlacesAutocomplete from 'react-places-autocomplete';
-import { Form, Label } from 'semantic-ui-react';
-import { FieldRenderProps, FieldProps } from 'react-final-form';
-import { RootStoreContext } from '../../../app/stores/rootStore';
+import React, { SetStateAction, Dispatch, useContext, useState } from "react";
+import { observer } from "mobx-react-lite";
+import PlacesAutocomplete from "react-places-autocomplete";
+import { Form, Label } from "semantic-ui-react";
+import { FieldRenderProps, FieldProps } from "react-final-form";
+import { RootStoreContext } from "../../../app/stores/rootStore";
 
 interface IProps
   extends FieldRenderProps<string, HTMLInputElement>,
@@ -21,8 +21,8 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
   Options,
   input,
   placeholder,
-  meta: { touched, error, active  },
-  name
+  meta: { touched, error, active },
+  name,
 }) => {
   const rootStore = useContext(RootStoreContext);
   const { disableUpdateForm } = rootStore.profileStore;
@@ -30,17 +30,17 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
   const [dropdownIsOpen, setdropdownIsOpen] = useState(false);
   const FieldProps = {
     placeholder: placeholder,
-    className: 'location-search-input'
+    className: "location-search-input",
   };
 
   return (
     <Form.Field disabled={disableUpdateForm} error={touched && !!error}>
       <PlacesAutocomplete
         value={address}
-        onChange={value => {
+        onChange={(value) => {
           setaddress(value);
         }}
-        onSelect={value => {
+        onSelect={(value) => {
           handleSelect(value);
         }}
         searchOptions={Options}
@@ -51,7 +51,7 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
               name={name}
               onBlur={input.onBlur}
               onFocus={input.onFocus}
-              onChange={e => {
+              onChange={(e) => {
                 getInputProps().onChange(e);
                 input.onChange(e);
               }}
@@ -60,34 +60,35 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
               className={getInputProps(FieldProps).className}
             ></input>
             {touched && !!error && (
-              <Label basic color='red'>
+              <Label basic color="red">
                 {error}
               </Label>
             )}
 
             <div
-              className={`autocomplete-dropdown-container ${dropdownIsOpen &&!error &&
-                'active'}`}
+              className={`autocomplete-dropdown-container ${
+                dropdownIsOpen && !error && "active"
+              }`}
             >
               {loading && <div>Loading...</div>}
               {active &&
-                suggestions.map(suggestion => {
+                suggestions.map((suggestion) => {
                   setdropdownIsOpen(true);
                   const className = suggestion.active
-                    ? 'suggestion-item--active'
-                    : 'suggestion-item';
+                    ? "suggestion-item--active"
+                    : "suggestion-item";
 
                   const style = suggestion.active
                     ? {
-                        backgroundColor: 'rgb(234, 234, 234)',
-                        cursor: 'pointer'
+                        backgroundColor: "rgb(234, 234, 234)",
+                        cursor: "pointer",
                       }
-                    : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                    : { backgroundColor: "#ffffff", cursor: "pointer" };
                   return (
                     <div
                       {...getSuggestionItemProps(suggestion, {
                         className,
-                        style
+                        style,
                       })}
                     >
                       <span
