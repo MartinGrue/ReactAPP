@@ -19,7 +19,6 @@ import { RootStoreContext } from "../../app/stores/rootStore";
 import { PhotoUploader } from "../../app/common/photoUploader/PhotoUploader";
 import { observer } from "mobx-react-lite";
 import { IPhoto } from "../../app/models/IProfile";
-import { Link } from "react-router-dom";
 
 const OutSideClickDetector = (
   ref: RefObject<HTMLDivElement>,

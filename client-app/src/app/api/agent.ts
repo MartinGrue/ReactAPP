@@ -13,7 +13,6 @@ axios.interceptors.request.use(
   config => {
     const token = window.localStorage.getItem("jwt");
     if (token) {
-      console.log(token);
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
@@ -31,8 +30,6 @@ axios.interceptors.response.use(undefined, error => {
   }
 
   const { status, data, config, headers } = error.response;
-
-  // console.log(data);
 
   if (error.response.status === 404) {
     history.push("/notfound");

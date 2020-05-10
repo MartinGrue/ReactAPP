@@ -89,7 +89,6 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
             lat: rootStore.activityStore.selectedActivity!.latitute,
             lng: rootStore.activityStore.selectedActivity!.longitute,
           });
-          console.log(rootStore.activityStore.selectedActivity);
         })
         .finally(() => {
           setloading(false);
@@ -133,7 +132,6 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     }
     if (match.params.id) {
       const editedActivity: IActivity = { ...selectedActivity!, ...values };
-      console.log(editedActivity);
       editActivity(editedActivity).then(() =>
         history.push(`/activities/${activity.id}`)
       );

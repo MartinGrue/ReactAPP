@@ -84,7 +84,7 @@ export default class ActivityStore {
       .build();
     this.hubConnection
       .start()
-      .then(() => console.log(this.hubConnection!.state));
+      // .then(() => console.log(this.hubConnection!.state));
 
     this.hubConnection.on("ReceiveComment", (comment) => {
       runInAction("connectToSignalRHubAction", () => {
@@ -206,10 +206,7 @@ export default class ActivityStore {
       // );
       runInAction("loadingActivities", () => {
         activities.forEach((activity) => {
-          console.log(activity);
           FillActivityProps(activity, this.rootStore.userStore.user!);
-          //stored by reference
-          console.log(activity);
           this.activityRegistry.set(activity.id, activity);
         });
         this.loadingInitial = false;
