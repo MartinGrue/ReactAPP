@@ -19,6 +19,7 @@ import { RootStoreContext } from "../../app/stores/rootStore";
 import { PhotoUploader } from "../../app/common/photoUploader/PhotoUploader";
 import { observer } from "mobx-react-lite";
 import { IPhoto } from "../../app/models/IProfile";
+import { Link } from "react-router-dom";
 
 const OutSideClickDetector = (
   ref: RefObject<HTMLDivElement>,
@@ -103,7 +104,7 @@ const ProfilePhotos = () => {
             <Card.Group itemsPerRow={4} stackable doubling>
               {profile &&
                 profile.photos.map((photo) => (
-                  <Card key={photo.id} fluid>
+                  <Card key={photo.id} fluid className="imageWithHover">
                     <Image
                       style={{
                         marginLeft: "auto",
@@ -114,7 +115,6 @@ const ProfilePhotos = () => {
                       onClick={() => {
                         setisbig(photo);
                       }}
-                      className="imageWithpointer"
                     ></Image>
                     {isLoggedIn && (
                       <Button.Group>

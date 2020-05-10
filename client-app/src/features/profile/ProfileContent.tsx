@@ -4,7 +4,7 @@ import ProfilePhotos from './ProfilePhotos';
 import ProfileDescription from './ProfileDescription';
 import { observer } from 'mobx-react-lite';
 import ProfileFollowings from './ProfileFollowings';
-import ProfileActivities from '../activities/dashbord/ProfileActivities';
+import ProfileActivities from './ProfileActivities';
 
 
 export const ProfileContent: React.FC<{

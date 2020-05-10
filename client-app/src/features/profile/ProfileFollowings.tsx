@@ -36,7 +36,7 @@ const ProfileFollowings = () => {
                 ? `People following ${profile!.displayName}`
                 : `People ${profile!.displayName} is following`
             }
-          />{' '}
+          />
         </Grid.Column>
 
         <Grid.Column width={16}>
