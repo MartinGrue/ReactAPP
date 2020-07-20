@@ -13,3 +13,6 @@ coverage
 # production
 wwwroot
 build
+
+# development in docker container
+**/.devcontainer
