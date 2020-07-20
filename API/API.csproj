@@ -2,7 +2,7 @@
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UserSecretsId>3e9cedf7-f5ba-4b13-8fdf-f79ae1ace121</UserSecretsId>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <StartupObject>API.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>

@@ -9,6 +9,6 @@
     <PackageReference Include="Google.Apis.Auth" Version="1.42.0"/>
   </ItemGroup>
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 </Project>
