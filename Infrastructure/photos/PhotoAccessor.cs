@@ -63,7 +63,7 @@ namespace Infrastructure.photos
             }
             return new PhotoUploadResult
             {
-                PublicId = uploadResult.PublicId,
+                PublicId = uploadResult.PublicId.Split('/')[1],
                 Url = uploadResult.SecureUri.AbsoluteUri
             };
         }
@@ -100,7 +100,7 @@ namespace Infrastructure.photos
 
             return new Photo
             {
-                Id = uploadResult.PublicId,
+                Id = uploadResult.PublicId.Split('/')[1],
                 Url = uploadResult.SecureUri.AbsoluteUri,
                 IsMain = isMain
             };
