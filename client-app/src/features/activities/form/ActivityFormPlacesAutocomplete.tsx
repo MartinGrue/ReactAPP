@@ -1,23 +1,28 @@
-import React, { SetStateAction, Dispatch, useContext, useState } from "react";
+import React, {
+  SetStateAction,
+  Dispatch,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
 import { observer } from "mobx-react-lite";
 import PlacesAutocomplete from "react-places-autocomplete";
 import { Form, Label } from "semantic-ui-react";
 import { FieldRenderProps, FieldProps } from "react-final-form";
 import { RootStoreContext } from "../../../app/stores/rootStore";
+import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 
-interface IProps
-  extends FieldRenderProps<string, HTMLInputElement>,
-    FieldProps<string, HTMLInputElement> {
-  address: string;
-  setaddress: Dispatch<SetStateAction<string>>;
-  handleSelect: (address: string) => void;
+interface IProps extends FieldProps<string, HTMLInputElement> {
+  setaddress: Dispatch<SetStateAction<string | undefined>>;
+  setLatlng: React.Dispatch<
+    React.SetStateAction<google.maps.LatLngLiteral | undefined>
+  >;
   Options: {};
 }
 
 export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
-  address,
   setaddress,
-  handleSelect,
+  setLatlng,
   Options,
   input,
   placeholder,
@@ -28,17 +33,32 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
   const { disableUpdateForm } = rootStore.profileStore;
 
   const [dropdownIsOpen, setdropdownIsOpen] = useState(false);
+  const [currentValue, setcurrentValue] = useState<string>(input.value);
   const FieldProps = {
     placeholder: placeholder,
     className: "location-search-input",
+  };
+  useEffect(() => {
+    setcurrentValue(input.value);
+
+  }, [input.value]);
+
+  const handleSelect = (address: string) => {
+    geocodeByAddress(address)
+      .then((results) => getLatLng(results[0]))
+      .then((latLng) => {
+        setLatlng(latLng);
+      })
+      .catch((error) => console.error("Error", error));
   };
 
   return (
     <Form.Field disabled={disableUpdateForm} error={touched && !!error}>
       <PlacesAutocomplete
-        value={address}
+        value={currentValue}
         onChange={(value) => {
-          setaddress(value);
+          setcurrentValue(value);
+          console.log(value);
         }}
         onSelect={(value) => {
           handleSelect(value);
@@ -53,9 +73,9 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
               onFocus={input.onFocus}
               onChange={(e) => {
                 getInputProps().onChange(e);
-                input.onChange(e);
+                input.onChange(e); //for validation to work
               }}
-              value={address}
+              value={currentValue}
               placeholder={getInputProps(FieldProps).placeholder}
               className={getInputProps(FieldProps).className}
             ></input>
@@ -90,10 +110,12 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
                         className,
                         style,
                       })}
+                      key={suggestion.description}
                     >
                       <span
                         onClick={() => {
                           setaddress(suggestion.description);
+                          setcurrentValue(suggestion.description);
                           setdropdownIsOpen(false);
                         }}
                       >

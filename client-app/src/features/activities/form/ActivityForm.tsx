@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Segment, Form, Button, Grid, GridColumn } from "semantic-ui-react";
+import { Segment, Form, Button, Grid } from "semantic-ui-react";
 import {
   IActivityFormValues,
   ActivityFormValues,
@@ -24,10 +24,8 @@ import {
 } from "revalidate";
 import { RootStoreContext } from "../../../app/stores/rootStore";
 
-import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 import { SimpleMap } from "../../../app/common/maps/SimpleMap";
 import { ActivityFormPlacesAutocomplete } from "./ActivityFormPlacesAutocomplete";
-import { IUserFormValues } from "../../../app/models/user";
 
 interface DetailsParams {
   id: string;
@@ -39,7 +37,6 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
 }) => {
   const rootStore = useContext(RootStoreContext);
   const {
-    setloadinginitial,
     createActivity,
     editActivity,
     submitting,
@@ -56,78 +53,48 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   const [loading, setloading] = useState(false);
   const [latlng, setLatlng] = useState<google.maps.LatLngLiteral>();
 
-  const [address, setaddress] = useState("");
-  const [city, setcity] = useState("");
-
-  const handleSelect = (address: string) => {
-    geocodeByAddress(address)
-      .then((results) => getLatLng(results[0]))
-      .then((latLng) => {
-        setLatlng(latLng);
-      })
-      .catch((error) => console.error("Error", error));
-  };
-  const handleSelectCity = (city: string) => {
-    geocodeByAddress(city)
-      .then((results) => getLatLng(results[0]))
-      .then((latLng) => {
-        setLatlng(latLng);
-      })
-      .catch((error) => console.error("Error", error));
-  };
+  const [address, setaddress] = useState<string | undefined>("");
+  const [city, setcity] = useState<string | undefined>("");
 
   useEffect(() => {
     if (match.params.id) {
       setloading(true);
       loadActivity(match.params.id)
-        .then(() => {
-          selectedActivity &&
-            setActivity(new ActivityFormValues(selectedActivity));
-          setcity(rootStore.activityStore.selectedActivity!.city);
-          setaddress(rootStore.activityStore.selectedActivity!.venue);
+        .then((activity) => {
+          setActivity(new ActivityFormValues(activity));
+          setcity(activity!.city);
+          setaddress(activity!.venue);
           setLatlng({
-            lat: rootStore.activityStore.selectedActivity!.latitute,
-            lng: rootStore.activityStore.selectedActivity!.longitute,
+            lat: activity!.latitute,
+            lng: activity!.longitute,
           });
         })
-        .finally(() => {
-          setloading(false);
-        });
+        .finally(() => setloading(false));
     } else {
-      setActivity({
-        id: "",
-        title: "",
-        description: "",
-        category: "",
-        date: undefined,
-        venue: "",
-        city: "",
-      });
+      setActivity(new ActivityFormValues(undefined));
     }
-
-  }, [
-    match.params.id,
-    loadActivity,
-    rootStore.activityStore.selectedActivity,
-    setloadinginitial,
-    setActivity,
-  ]);
+  }, [loadActivity, match.params.id]);
 
   const handleFinalFormSubmit = (values: IActivityFormValues) => {
     const dateAndTime = combineDateAndTime(values.date, values.time);
     activity.date = dateAndTime;
-    if (city) {
-      values.city = city;
-    }
-    if (address) {
-      values.venue = address;
-    }
+
     if (latlng) {
       values.longitute = latlng.lng;
       values.latitute = latlng.lat;
     }
+    const addedInfo = {
+      city: city!,
+      venue: address!,
+      latitute: latlng!.lat,
+      longitute: latlng!.lng,
+    };
     if (match.params.id) {
-      const editedActivity: IActivity = { ...selectedActivity!, ...values };
+      const editedActivity: IActivity = {
+        ...selectedActivity!,
+        ...values,
+        ...addedInfo!,
+      };
       editActivity(editedActivity).then(() =>
         history.push(`/activities/${activity.id}`)
       );
@@ -139,7 +106,6 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
         isHost: true,
         isGoing: true,
       };
-
       createActivity(newActivity).then(() =>
         history.push(`/activities/${newActivity.id}`)
       );
@@ -169,8 +135,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
 
   return (
     <Segment>
-      <Grid centered>
-        <GridColumn mobile={16} tablet={14} computer={8} floated="left">
+      <Grid stackable>
+        <Grid.Column width={8}>
           <Segment clearing>
             <FinalForm
               validate={validate}
@@ -218,6 +184,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
 
                   <Field
                     name="city"
+                    value="banana"
                     render={({ input, meta }) => (
                       <ActivityFormPlacesAutocomplete
                         key="city"
@@ -225,9 +192,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                         placeholder="city"
                         input={input}
                         meta={meta}
-                        address={city}
                         setaddress={setcity}
-                        handleSelect={handleSelectCity}
+                        setLatlng={setLatlng}
                         Options={{
                           types: ["(regions)"],
                         }}
@@ -240,12 +206,11 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                       <ActivityFormPlacesAutocomplete
                         key="venue"
                         name="venue"
-                        placeholder="venue"
+                        placeholder={"venue"}
                         input={input}
                         meta={meta}
-                        address={address}
                         setaddress={setaddress}
-                        handleSelect={handleSelect}
+                        setLatlng={setLatlng}
                         Options={{
                           types: ["address"],
                         }}
@@ -286,8 +251,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
               )}
             />
           </Segment>
-        </GridColumn>
-        <GridColumn mobile={16} tablet={14} computer={8} floated="left">
+        </Grid.Column>
+        <Grid.Column width={8}>
           {latlng ? (
             <SimpleMap
               lat={latlng.lat}
@@ -299,7 +264,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
               opt={{ style: { width: "100%", height: 400 } }}
             ></SimpleMap>
           )}
-        </GridColumn>
+        </Grid.Column>
       </Grid>
     </Segment>
   );

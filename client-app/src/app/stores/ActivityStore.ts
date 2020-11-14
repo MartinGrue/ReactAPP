@@ -1,4 +1,11 @@
-import { observable, action, computed, runInAction, reaction } from "mobx";
+import {
+  observable,
+  action,
+  computed,
+  runInAction,
+  reaction,
+  toJS,
+} from "mobx";
 import { IActivity, IAttendee } from "../models/IActivity";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
@@ -82,9 +89,8 @@ export default class ActivityStore {
       })
       .configureLogging(signalR.LogLevel.Information)
       .build();
-    this.hubConnection
-      .start()
-      // .then(() => console.log(this.hubConnection!.state));
+    this.hubConnection.start();
+    // .then(() => console.log(this.hubConnection!.state));
 
     this.hubConnection.on("ReceiveComment", (comment) => {
       runInAction("connectToSignalRHubAction", () => {
@@ -223,13 +229,14 @@ export default class ActivityStore {
     }
   };
 
-  @action loadActivity = async (id: string) => {
+  @action loadActivity = async (id: string): Promise<IActivity | undefined> => {
     this.loadingInitial = true;
     let activity: IActivity = this.activityRegistry.get(id);
 
     if (activity) {
       this.selectedActivity = activity;
       this.loadingInitial = false;
+      return toJS(activity);
     } else {
       try {
         activity = await agent.Activities.details(id);
@@ -239,6 +246,7 @@ export default class ActivityStore {
           this.selectedActivity = activity;
           this.loadingInitial = false;
         });
+        return activity;
       } catch (error) {
         runInAction("loadingActivityError", () => {
           console.log(error);
