@@ -1,14 +1,8 @@
-import React, {
-  SetStateAction,
-  Dispatch,
-  useContext,
-  useState,
-  useEffect,
-} from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import PlacesAutocomplete from "react-places-autocomplete";
-import { Form, Label } from "semantic-ui-react";
-import { FieldRenderProps, FieldProps } from "react-final-form";
+import { Form, Label, List, Segment } from "semantic-ui-react";
+import { FieldProps } from "react-final-form";
 import { RootStoreContext } from "../../../app/stores/rootStore";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 
@@ -62,11 +56,17 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
           <div>
             <input
               name={name}
-              onBlur={input.onBlur}
+              onBlur={() => {
+                input.onBlur();
+                setdropdownIsOpen(false);
+              }}
               onFocus={input.onFocus}
               onChange={(e) => {
                 getInputProps().onChange(e); //trigger PlacesAutocomplete search
                 input.onChange(e); //trigger validation to work
+                e.currentTarget.value.length > 0
+                  ? setdropdownIsOpen(true)
+                  : setdropdownIsOpen(false);
               }}
               value={currentValue}
               placeholder={getInputProps(FieldProps).placeholder}
@@ -78,47 +78,48 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
               </Label>
             )}
 
-            <div
-              className={`autocomplete-dropdown-container ${
-                dropdownIsOpen && !error && "active"
-              }`}
-            >
-              {loading && <div>Loading...</div>}
-              {active &&
-                suggestions.map((suggestion) => {
-                  setdropdownIsOpen(true);
-                  const className = suggestion.active
-                    ? "suggestion-item--active"
-                    : "suggestion-item";
+            {loading && <Segment>Loading...</Segment>}
 
-                  const style = suggestion.active
-                    ? {
-                        backgroundColor: "rgb(234, 234, 234)",
-                        cursor: "pointer",
-                      }
-                    : { backgroundColor: "#ffffff", cursor: "pointer" };
-                  return (
-                    <div
-                      {...getSuggestionItemProps(suggestion, {
-                        className,
-                        style,
-                      })}
-                      key={suggestion.description}
-                    >
-                      <span
-                        onClick={() => {
-                          setdropdownIsOpen(false);
-                          input.onChange(suggestion.description);
-                          handleSelect(suggestion.description);
-                        }}
-                      >
-                        {suggestion.description}
-                      </span>
-                    </div>
-                  );
-                })}
-            </div>
+            {dropdownIsOpen && (
+              <Segment>
+                <List>
+                  {suggestions.map((suggestion) => {
+                    const className = suggestion.active
+                      ? "suggestion-item--active"
+                      : "suggestion-item";
+
+                    const style = suggestion.active
+                      ? {
+                          backgroundColor: "rgb(234, 234, 234)",
+                          cursor: "pointer",
+                        }
+                      : { backgroundColor: "#ffffff", cursor: "pointer" };
+                    return (
+                      <List.Item key={suggestion.description}>
+                        <div
+                          {...getSuggestionItemProps(suggestion, {
+                            className,
+                            style,
+                          })}
+                        >
+                          <span
+                            onClick={() => {
+                              setdropdownIsOpen(false);
+                              input.onChange(suggestion.description);
+                              handleSelect(suggestion.description);
+                            }}
+                          >
+                            {suggestion.description}
+                          </span>
+                        </div>
+                      </List.Item>
+                    );
+                  })}
+                </List>
+              </Segment>
+            )}
           </div>
+          // </div>
         )}
       </PlacesAutocomplete>
     </Form.Field>
