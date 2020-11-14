@@ -53,17 +53,12 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   const [loading, setloading] = useState(false);
   const [latlng, setLatlng] = useState<google.maps.LatLngLiteral>();
 
-  const [address, setaddress] = useState<string | undefined>("");
-  const [city, setcity] = useState<string | undefined>("");
-
   useEffect(() => {
     if (match.params.id) {
       setloading(true);
       loadActivity(match.params.id)
         .then((activity) => {
           setActivity(new ActivityFormValues(activity));
-          setcity(activity!.city);
-          setaddress(activity!.venue);
           setLatlng({
             lat: activity!.latitute,
             lng: activity!.longitute,
@@ -83,17 +78,11 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
       values.longitute = latlng.lng;
       values.latitute = latlng.lat;
     }
-    const addedInfo = {
-      city: city!,
-      venue: address!,
-      latitute: latlng!.lat,
-      longitute: latlng!.lng,
-    };
+    
     if (match.params.id) {
       const editedActivity: IActivity = {
         ...selectedActivity!,
         ...values,
-        ...addedInfo!,
       };
       editActivity(editedActivity).then(() =>
         history.push(`/activities/${activity.id}`)
@@ -192,7 +181,6 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                         placeholder="city"
                         input={input}
                         meta={meta}
-                        setaddress={setcity}
                         setLatlng={setLatlng}
                         Options={{
                           types: ["(regions)"],
@@ -209,7 +197,6 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                         placeholder={"venue"}
                         input={input}
                         meta={meta}
-                        setaddress={setaddress}
                         setLatlng={setLatlng}
                         Options={{
                           types: ["address"],

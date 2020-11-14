@@ -13,7 +13,6 @@ import { RootStoreContext } from "../../../app/stores/rootStore";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 
 interface IProps extends FieldProps<string, HTMLInputElement> {
-  setaddress: Dispatch<SetStateAction<string | undefined>>;
   setLatlng: React.Dispatch<
     React.SetStateAction<google.maps.LatLngLiteral | undefined>
   >;
@@ -21,7 +20,6 @@ interface IProps extends FieldProps<string, HTMLInputElement> {
 }
 
 export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
-  setaddress,
   setLatlng,
   Options,
   input,
@@ -40,7 +38,6 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
   };
   useEffect(() => {
     setcurrentValue(input.value);
-
   }, [input.value]);
 
   const handleSelect = (address: string) => {
@@ -58,10 +55,6 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
         value={currentValue}
         onChange={(value) => {
           setcurrentValue(value);
-          console.log(value);
-        }}
-        onSelect={(value) => {
-          handleSelect(value);
         }}
         searchOptions={Options}
       >
@@ -72,8 +65,8 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
               onBlur={input.onBlur}
               onFocus={input.onFocus}
               onChange={(e) => {
-                getInputProps().onChange(e);
-                input.onChange(e); //for validation to work
+                getInputProps().onChange(e); //trigger PlacesAutocomplete search
+                input.onChange(e); //trigger validation to work
               }}
               value={currentValue}
               placeholder={getInputProps(FieldProps).placeholder}
@@ -114,9 +107,9 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
                     >
                       <span
                         onClick={() => {
-                          setaddress(suggestion.description);
-                          setcurrentValue(suggestion.description);
                           setdropdownIsOpen(false);
+                          input.onChange(suggestion.description);
+                          handleSelect(suggestion.description);
                         }}
                       >
                         {suggestion.description}
