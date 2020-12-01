@@ -15,7 +15,7 @@ export default class ProfileStore {
 
   rootStore: RootStore;
 
-  @observable user = this.rootStore.userStore.user;
+  @observable user = this!.rootStore.userStore.user;
 
   @observable profile: IProfile | null = null;
 
