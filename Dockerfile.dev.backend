@@ -9,7 +9,9 @@ COPY Infrastructure ./Infrastructure
 COPY Persistence ./Persistence
 COPY API ./API
 
-# RUN dotnet restore
+RUN dotnet restore
+WORKDIR /app/API
+ENTRYPOINT ["dotnet", "watch", "run"]
 
 # # Copy everything else and build
 # RUN dotnet publish -c Debug -o /out
