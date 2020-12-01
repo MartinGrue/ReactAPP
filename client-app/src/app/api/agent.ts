@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import {
   IActivity,
   IActivityEnvelope,
-  IUserActivity
+  IUserActivity,
 } from "../models/IActivity";
 import { history } from "../..";
 import { toast } from "react-toastify";
@@ -10,21 +10,23 @@ import { IUser, IUserFormValues, IExternalLoginInfo } from "../models/user";
 import { IProfile, IPhoto, IProfileFormValues } from "../models/IProfile";
 
 axios.interceptors.request.use(
-  config => {
+  (config) => {
     const token = window.localStorage.getItem("jwt");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  error => {
+  (error) => {
     return Promise.reject(error);
   }
 );
 
-axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+var apiHost = process.env.API_HOST || process.env.REACT_APP_API_URL;
 
-axios.interceptors.response.use(undefined, error => {
+axios.defaults.baseURL = apiHost;
+
+axios.interceptors.response.use(undefined, (error) => {
   if (error.message === "Network Error" && !error.response) {
     toast.error("Connection Error");
   }
@@ -64,10 +66,10 @@ const requests = {
     data.append("File", file);
     return axios
       .post(url, data, {
-        headers: { "Content-Type": "multipart/form-data" }
+        headers: { "Content-Type": "multipart/form-data" },
       })
       .then(responseBody);
-  }
+  },
 };
 
 const Activities = {
@@ -79,7 +81,7 @@ const Activities = {
     requests.put(`/activities/${activity.id}`, activity),
   delete: (id: string) => requests.delete(`/activities/${id}`),
   join: (id: string) => requests.post(`/activities/${id}/attend`, {}),
-  unjoin: (id: string) => requests.delete(`/activities/${id}/attend`)
+  unjoin: (id: string) => requests.delete(`/activities/${id}/attend`),
 };
 
 const User = {
@@ -91,7 +93,7 @@ const User = {
   update: (values: IProfileFormValues): Promise<IUser> =>
     requests.put(`/User`, values),
   loginExternal: (ExternalLoginInfo: IExternalLoginInfo): Promise<IUser> =>
-    requests.post(`/User/ExternalLogin`, ExternalLoginInfo)
+    requests.post(`/User/ExternalLogin`, ExternalLoginInfo),
 };
 
 const Profile = {
@@ -114,11 +116,11 @@ const Profile = {
     userName: string,
     predicate: string
   ): Promise<IUserActivity[]> =>
-    requests.get(`/Profiles/${userName}/activities?predicate=${predicate}`)
+    requests.get(`/Profiles/${userName}/activities?predicate=${predicate}`),
 };
 
 export default {
   Activities,
   User,
-  Profile
+  Profile,
 };

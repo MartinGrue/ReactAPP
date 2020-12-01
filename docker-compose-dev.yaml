@@ -2,6 +2,35 @@ version: "3.2"
 networks:
   frontend:
 services:
+  frontendapp:
+    build:
+      context: ./client-app
+      dockerfile: Dockerfile.dev.client
+    volumes:
+      - type: bind
+        source: ./client-app/src
+        target: /app/src/
+    networks:
+      - frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - API_HOST=backend
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+  backendapp:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: Dockerfile.dev.backend
+    volumes:
+        - .:/app
+    networks:
+      - frontend
+    ports:
+      - "5000:5000"
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
   db:
     image: mysql
     container_name: activitydb
@@ -16,19 +45,3 @@ services:
       - ./database_dump.sql:/docker-entrypoint-initdb.d/database_dump.sql
     environment:
       MYSQL_ROOT_PASSWORD: example
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile-dev
-    image: reactapp_image
-    container_name: reactapp_container
-    volumes:
-      - type: bind
-        source: ./
-        target: /app
-    networks:
-      - frontend
-    ports: 
-      - "5000:5000"
-    stdin_open: true # docker run -i
-    tty: true        # docker run -t

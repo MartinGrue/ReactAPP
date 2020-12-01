@@ -17,10 +17,14 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: example
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: reactapp_image
     container_name: reactapp_container
     networks:
       - frontend
     ports: 
       - "5000:5000"
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
