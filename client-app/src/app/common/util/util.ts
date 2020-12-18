@@ -17,4 +17,5 @@ export const FillActivityProps = (activity: IActivity, user: IUser) => {
   activity.isHost = activity.userActivities.some(
     x => x.userName === user.userName && x.isHost
   );
+  
 };
