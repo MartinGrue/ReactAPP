@@ -41,7 +41,7 @@ export const ProfileContent: React.FC<{
       ]}
       menuPosition='right'
       menu={{ fluid: true, className: 'wrapped', tabular: false }}
-      defaultActiveIndex={1}
+      defaultActiveIndex={0}
       onTabChange={(e, data) => setActiveTab(data.activeIndex)}
     ></Tab>
   );

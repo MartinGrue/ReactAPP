@@ -21,7 +21,7 @@ export const ProfileDescription = () => {
     <Tab.Pane>
       <Grid>
         <GridColumn width={16}>
-          <Header floated='left' icon='address card' content='Photos'></Header>
+          <Header floated='left' icon='address card' content='About'></Header>
           {isLoggedIn && (
             <Button
               floated='right'

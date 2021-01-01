@@ -47,21 +47,6 @@ export const ProfileEditForm: React.FC = () => {
               component={TextInput}
               placeholder='bio'
             ></Field>
-            {/* {submitError && !dirtySinceLastSubmit && (
-                // <Label color='red' basic content={submitError.statusText}></Label>
-                <ErrorMessage
-                  error={submitError}
-                  text='Invalid email or password'
-                ></ErrorMessage>
-              )}
-              {/* <br></br> */}
-            {/* <Button
-                
-                positive
-                content='Login'
-                loading={submitting}
-                fluid
-              ></Button> */}
             {isLoggedIn && (
               <Button
                 disabled={(invalid && !dirtySinceLastSubmit) || pristine}
