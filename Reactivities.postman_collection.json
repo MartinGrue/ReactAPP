@@ -1,0 +1,817 @@
+{
+	"info": {
+		"_postman_id": "61fc121e-509c-47b9-899f-5e9e6cbc3764",
+		"name": "Reactivities",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Login user successful",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"bob@test.com\",\n\t\"password\": \"Pa$$w0rd\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/user/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register user successfull",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"sally@test.com\",\n\t\"username\": \"sally\",\n\t\"displayName\": \"Sally\",\n\t\"password\": \"Pa$$w0rd\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/user/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get current user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJib2IiLCJuYmYiOjE1NjA2ODI4MzksImV4cCI6MTU2MTI4NzYzOSwiaWF0IjoxNTYwNjgyODM5fQ.AJ-bd8R7JGbjDA59IcyrVq8S4CkDgpUlSURkK8DNEQv1zMu6ml81KqyoLAkgXm7psZyV2ltXUb8_iIYZ-aBCyQ"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Bio",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"displayName\": \"Bob\",\n\t\"bio\": \"Bobs biography\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/profiles",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"profiles"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Photos",
+			"item": [
+				{
+					"name": "Add Photo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "File",
+									"type": "file",
+									"src": "/Users/neil/Desktop/APIPhotos/bat3.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/api/photos",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"photos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set Main Photo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{url}}/api/photos/lquec1esthemixnsp7sl/setmain",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"photos",
+								"lquec1esthemixnsp7sl",
+								"setmain"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Photo",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/photos/ukkwqfgeesmcl7txkeyc",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"photos",
+								"ukkwqfgeesmcl7txkeyc"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Followers",
+			"item": [
+				{
+					"name": "Get Bob's Followings",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/profiles/bob/follow?predicate=following",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"profiles",
+								"bob",
+								"follow"
+							],
+							"query": [
+								{
+									"key": "predicate",
+									"value": "following"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Bob's Followers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/profiles/bob/follow?predicate=followers",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"profiles",
+								"bob",
+								"follow"
+							],
+							"query": [
+								{
+									"key": "predicate",
+									"value": "followers"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Follow bob as tom",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{tom_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/profiles/bob/follow",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"profiles",
+								"bob",
+								"follow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unfollow tom",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/profiles/tom/follow",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"profiles",
+								"tom",
+								"follow"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Activities",
+			"item": [
+				{
+					"name": "Get Activities",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/activities",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"activities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Activity",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/activities/199cccaf-bb4c-4b39-b3db-e76e244d9510",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"activities",
+								"199cccaf-bb4c-4b39-b3db-e76e244d9510"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Activity",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var moment = require(\"moment\");\r",
+									"\r",
+									"pm.environment.set('activityDate', moment().add(14, 'days').toISOString());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": \"{{$guid}}\",\n\t\"title\": \"Test Create Activity\",\n\t\"description\": \"Description of the test event\",\n\t\"category\": \"Culture\",\n\t\"date\": \"{{activityDate}}\",\n\t\"city\": \"London\",\n\t\"venue\": \"Tower of London\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/activities/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"activities",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Activity",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var moment = require(\"moment\");\r",
+									"\r",
+									"pm.environment.set('activityDate', moment().add(14, 'days').toISOString());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"Test Create Activity updated again\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/api/activities/7f6c4b9c-96be-499a-9115-7f789c0f8896",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"activities",
+								"7f6c4b9c-96be-499a-9115-7f789c0f8896"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Activity",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/activities/11",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"activities",
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add attendance as bob",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();",
+									"",
+									"// response to be 200",
+									"pm.test(\"response is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/activities/199cccaf-bb4c-4b39-b3db-e76e244d9510/attend",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"activities",
+								"199cccaf-bb4c-4b39-b3db-e76e244d9510",
+								"attend"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove attendance for user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();",
+									"",
+									"// response to be 200",
+									"pm.test(\"response is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/activities/199cccaf-bb4c-4b39-b3db-e76e244d9510/attend",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"activities",
+								"199cccaf-bb4c-4b39-b3db-e76e244d9510",
+								"attend"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Profiles",
+			"item": [
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/profiles/bob",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"profiles",
+								"bob"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Bob's Activities - all",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/profiles/bob/activities",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"profiles",
+								"bob",
+								"activities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Bob's Activities - past",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/profiles/bob/activities?predicate=past",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"profiles",
+								"bob",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "predicate",
+									"value": "past"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Bob's Activities - future",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/profiles/bob/activities?predicate=future",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"profiles",
+								"bob",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "predicate",
+									"value": "future"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Bob's Activities - hosting",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/api/profiles/bob/activities?predicate=hosting",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"profiles",
+								"bob",
+								"activities"
+							],
+							"query": [
+								{
+									"key": "predicate",
+									"value": "hosting"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:5000",
+			"type": "string"
+		}
+	]
+}
