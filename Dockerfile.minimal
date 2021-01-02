@@ -1,0 +1,38 @@
+FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
+WORKDIR /app
+# Copy csproj and restore as distinct layers
+COPY ReactApp.sln ./
+
+COPY Application ./Application
+COPY Domain ./Domain
+COPY Infrastructure ./Infrastructure
+COPY Persistence ./Persistence
+COPY API ./API
+
+RUN dotnet restore
+
+# Copy everything else and build
+RUN dotnet publish -c Debug -r alpine-x64 --self-contained true /p:PublishTrimmed=true -o /out
+
+FROM alpine:latest
+ARG USER=default
+ENV HOME /home/$USER
+RUN adduser -D $USER
+
+# Add some libs required by .NET runtime 
+# https://github.com/dotnet/core/blob/master/Documentation/build-and-install-rhel6-prerequisites.md#troubleshooting
+# RUN apk add --no-cache \ 
+#     openssh libunwind \
+#     nghttp2-libs libidn krb5-libs libuuid lttng-ust zlib \
+#     libstdc++ libintl \
+#     icu
+RUN apk add --no-cache libstdc++ libintl icu
+EXPOSE 80
+EXPOSE 443
+# RUN groupadd --gid 1000 aspnet \
+#     && useradd --uid 1000 --gid aspnet --shell /bin/bash --create-home aspnet
+# USER aspnet
+WORKDIR /app
+COPY --from=build /out ./
+USER $USER
+ENTRYPOINT ["./API"]
