@@ -20,19 +20,11 @@ ENV HOME /home/$USER
 RUN adduser -D $USER
 
 # Add some libs required by .NET runtime 
-# https://github.com/dotnet/core/blob/master/Documentation/build-and-install-rhel6-prerequisites.md#troubleshooting
-# RUN apk add --no-cache \ 
-#     openssh libunwind \
-#     nghttp2-libs libidn krb5-libs libuuid lttng-ust zlib \
-#     libstdc++ libintl \
-#     icu
 RUN apk add --no-cache libstdc++ libintl icu
 EXPOSE 80
 EXPOSE 443
-# RUN groupadd --gid 1000 aspnet \
-#     && useradd --uid 1000 --gid aspnet --shell /bin/bash --create-home aspnet
-# USER aspnet
 WORKDIR /app
 COPY --from=build /out ./
 USER $USER
+# Run .net as elf 64-bit binary
 ENTRYPOINT ["./API"]
