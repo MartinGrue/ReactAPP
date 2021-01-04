@@ -16,6 +16,7 @@ export default class ProfileStore {
   rootStore: RootStore;
 
   @observable user = this!.rootStore.userStore.user;
+  @observable timeStampForUpload: number = 0;
 
   @observable profile: IProfile | null = null;
 
@@ -80,6 +81,34 @@ export default class ProfileStore {
       //console.log(error);
     }
   };
+  @action uploadImageDirect = async (files: any) => {
+    this.timeStampForUpload = Math.round(new Date().getTime() / 1000);
+    const api_key = "716959181144487";
+    const formData = new FormData();
+    try {
+      for (let i = 0; i < files!.length; i++) {
+        let file = files![i];
+
+        formData.append("file", file);
+        formData.append("api_key", api_key);
+        formData.append("timestamp", this.timeStampForUpload.toString());
+
+        const signature = await agent.Profile.getSignature(formData);
+        console.log("signature: ", signature);
+
+        formData.append("signature", signature);
+        const response = await fetch(
+          "http://api.cloudinary.com/v1_1/dvzlb9xco/image/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const text = await response.text();
+        console.log(text);
+      }
+    } catch (error) {}
+  };
   @action deleteImage = async (id: string) => {
     this.loadingDeletePhoto = true;
     try {
@@ -117,6 +146,7 @@ export default class ProfileStore {
       //console.log(error);
     }
   };
+
   @action toggledisableUpdateForm = () => {
     this.disableUpdateForm = !this.disableUpdateForm;
   };

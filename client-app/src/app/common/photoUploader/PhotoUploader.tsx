@@ -1,5 +1,11 @@
-import React, { Fragment, useState, useEffect, useContext } from "react";
-import { Grid, Header, Button } from "semantic-ui-react";
+import React, {
+  Fragment,
+  useState,
+  useEffect,
+  useContext,
+  useRef,
+} from "react";
+import { Grid, Header, Button, Confirm } from "semantic-ui-react";
 import PhotoUploaderDropZone from "./PhotoUploaderDropZone";
 import PhotoUploaderCropper from "./PhotoUploaderCropper";
 import { RootStoreContext } from "../../stores/rootStore";
@@ -14,12 +20,24 @@ export interface FileWithPreview extends File {
 export const PhotoUploader: React.FC<iProps> = ({ loading }) => {
   const [files, setfiles] = useState<FileWithPreview[]>([]);
   const [image, setimage] = useState<Blob | null>(null);
-
+  // const inputEl = useRef<HTMLInputElement | null>(null);
+  const [refFiles, setrefFiles] = useState<FileList | null | undefined>(
+    undefined
+  );
   const rootStore = useContext(RootStoreContext);
-  const { uploadImage, setLoadingPhoto } = rootStore.profileStore;
+  const {
+    uploadImage,
+    setLoadingPhoto,
+    uploadImageDirect,
+  } = rootStore.profileStore;
 
   //Component will unmount
   //Remove image from memory
+
+  const submitForm = () => {
+    uploadImageDirect(refFiles);
+  };
+
   useEffect(() => {
     return () => {
       // files.forEach(file => URL.revokeObjectURL(file.preview));
@@ -30,7 +48,10 @@ export const PhotoUploader: React.FC<iProps> = ({ loading }) => {
       <Grid stackable>
         <Grid.Column width={4}>
           <Header color="teal" sub content="Step 1 - Add Photo" />
-          <PhotoUploaderDropZone setfiles={setfiles}></PhotoUploaderDropZone>
+          <PhotoUploaderDropZone
+            setfiles={setfiles}
+            setrefFiles={setrefFiles}
+          ></PhotoUploaderDropZone>
         </Grid.Column>
         <Grid.Column width={1} />
         <Grid.Column width={4}>
@@ -59,9 +80,11 @@ export const PhotoUploader: React.FC<iProps> = ({ loading }) => {
                   loading={loading}
                   onClick={() => {
                     setLoadingPhoto();
-                    uploadImage(image!);
+                    submitForm();
+                    // uploadImage(image!);
                   }}
                 ></Button>
+
                 <Button
                   icon="close"
                   disabled={loading}

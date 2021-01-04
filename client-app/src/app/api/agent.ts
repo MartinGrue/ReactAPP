@@ -117,6 +117,9 @@ const Profile = {
     predicate: string
   ): Promise<IUserActivity[]> =>
     requests.get(`/Profiles/${userName}/activities?predicate=${predicate}`),
+  getSignature: (formdata: FormData): Promise<string> =>
+    requests.post("/Photos/getSignature", formdata),
+
 };
 
 export default {
