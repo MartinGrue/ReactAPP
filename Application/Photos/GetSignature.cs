@@ -16,11 +16,14 @@ namespace Application.Photos
     {
         public class Command : IRequest<string>
         {
-            // public string file { get; set; }
+            public IFormFile file { get; set; }
+
+            public string folder { get; set; }
+            // public string eager { get; set; }
+            public string transformation { get; set; }
             public string api_key { get; set; }
             public string timestamp { get; set; }
             // public bool IsHost { get; set; }
-            public IFormFile file { get; set; }
 
         }
 
@@ -38,12 +41,11 @@ namespace Application.Photos
 
             public async Task<string> Handle(Command request, CancellationToken cancellationToken)
             {
-                // "transformation", "w_500,h_500,c_fill"  
                 var parameters = new Dictionary<string, object>() {
-                { "file", request.file },
+                {"folder", request.folder},
                 {"timestamp", request.timestamp},
-                { "api_key", request.api_key },};
-
+                {"transformation", request.transformation},
+                };
                 var signature = photoAccessor.GetSignature(parameters);
                 return signature;
 

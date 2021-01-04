@@ -6,13 +6,10 @@ import { fileURLToPath } from "url";
 
 interface IProps {
   setfiles: (files: FileWithPreview[]) => void;
-  setrefFiles: React.Dispatch<
-    React.SetStateAction<FileList | null | undefined>
-  >;
+
 }
 export const PhotoUploaderDropZone: React.FC<IProps> = ({
   setfiles,
-  setrefFiles,
 }) => {
   const dropZoneStyles = {
     border: "dashed 3px",
@@ -37,10 +34,9 @@ export const PhotoUploaderDropZone: React.FC<IProps> = ({
     },
     [setfiles]
   );
-  const { getRootProps, getInputProps, isDragActive, inputRef } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
   });
-  setrefFiles(inputRef.current?.files);
   return (
     <div
       {...getRootProps()}
@@ -50,7 +46,7 @@ export const PhotoUploaderDropZone: React.FC<IProps> = ({
           : dropZoneStyles
       }
     >
-      <input {...getInputProps()} ref={inputRef} />
+      <input {...getInputProps()} />
       <Icon name="upload" size="huge"></Icon>
       <Header content="Drop Image here"></Header>
     </div>

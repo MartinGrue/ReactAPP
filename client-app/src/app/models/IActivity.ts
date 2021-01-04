@@ -45,19 +45,23 @@ export interface IActivityFormValues extends Partial<IActivity> {
   time?: Date;
 }
 export class ActivityFormValues implements IActivityFormValues {
-  id: string = '';
-  title: string = '';
-  description: string = '';
-  category: string = '';
+  id: string = "";
+  title: string = "";
+  description: string = "";
+  category: string = "";
   date?: Date = undefined;
   // date: string
   time?: Date = undefined;
-  city: string = '';
-  venue: string = '';
+  city: string = "";
+  venue: string = "";
   constructor(init?: IActivityFormValues) {
     if (init && init.date) {
       this.time = init.date;
     }
     Object.assign(this, init);
   }
+}
+export interface PhotoUploadResult {
+  PublicId: string;
+  Url: string;
 }

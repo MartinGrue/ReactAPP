@@ -1,42 +1,29 @@
-import React, {
-  Fragment,
-  useState,
-  useEffect,
-  useContext,
-  useRef,
-} from "react";
-import { Grid, Header, Button, Confirm } from "semantic-ui-react";
+import React, { Fragment, useState, useEffect, useContext } from "react";
+import { Grid, Header, Button } from "semantic-ui-react";
 import PhotoUploaderDropZone from "./PhotoUploaderDropZone";
 import PhotoUploaderCropper from "./PhotoUploaderCropper";
 import { RootStoreContext } from "../../stores/rootStore";
 import { observer } from "mobx-react-lite";
+import { readSync } from "fs";
 
-interface iProps {
+interface Props {
   loading: boolean;
 }
 export interface FileWithPreview extends File {
   preview: string;
 }
-export const PhotoUploader: React.FC<iProps> = ({ loading }) => {
+export const PhotoUploader: React.FC<Props> = ({loading}) => {
   const [files, setfiles] = useState<FileWithPreview[]>([]);
   const [image, setimage] = useState<Blob | null>(null);
-  // const inputEl = useRef<HTMLInputElement | null>(null);
-  const [refFiles, setrefFiles] = useState<FileList | null | undefined>(
-    undefined
-  );
   const rootStore = useContext(RootStoreContext);
   const {
     uploadImage,
-    setLoadingPhoto,
     uploadImageDirect,
+    setLoadingPhoto,
   } = rootStore.profileStore;
 
   //Component will unmount
   //Remove image from memory
-
-  const submitForm = () => {
-    uploadImageDirect(refFiles);
-  };
 
   useEffect(() => {
     return () => {
@@ -48,10 +35,7 @@ export const PhotoUploader: React.FC<iProps> = ({ loading }) => {
       <Grid stackable>
         <Grid.Column width={4}>
           <Header color="teal" sub content="Step 1 - Add Photo" />
-          <PhotoUploaderDropZone
-            setfiles={setfiles}
-            setrefFiles={setrefFiles}
-          ></PhotoUploaderDropZone>
+          <PhotoUploaderDropZone setfiles={setfiles}></PhotoUploaderDropZone>
         </Grid.Column>
         <Grid.Column width={1} />
         <Grid.Column width={4}>
@@ -80,14 +64,13 @@ export const PhotoUploader: React.FC<iProps> = ({ loading }) => {
                   loading={loading}
                   onClick={() => {
                     setLoadingPhoto();
-                    submitForm();
+                    uploadImageDirect(image!);
                     // uploadImage(image!);
                   }}
                 ></Button>
-
                 <Button
                   icon="close"
-                  disabled={loading}
+                  disabled={!loading}
                   onClick={() => setfiles([])}
                 ></Button>
               </Button.Group>

@@ -47,9 +47,9 @@ const ProfilePhotos = () => {
     isLoggedIn,
     deleteImage,
     loadingDeletePhoto,
-    loadingPhoto,
     loadingSetMain,
     setMainPhoto,
+    loadingPhoto
   } = rootStore.profileStore;
 
   const [windowsWidth, setwindowsWidth] = useState<number>();

@@ -3,6 +3,7 @@ import {
   IActivity,
   IActivityEnvelope,
   IUserActivity,
+  PhotoUploadResult,
 } from "../models/IActivity";
 import { history } from "../..";
 import { toast } from "react-toastify";
@@ -119,7 +120,9 @@ const Profile = {
     requests.get(`/Profiles/${userName}/activities?predicate=${predicate}`),
   getSignature: (formdata: FormData): Promise<string> =>
     requests.post("/Photos/getSignature", formdata),
-
+  UploadResults: (photoUploadResult: PhotoUploadResult): Promise<IPhoto> => {
+    return requests.post("/Photos/postUploadResults", photoUploadResult);
+  },
 };
 
 export default {

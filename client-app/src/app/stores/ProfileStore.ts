@@ -60,7 +60,7 @@ export default class ProfileStore {
     //console.log(this.loadingPhoto + 'in set before');
     runInAction("UploadPhotoAction", () => {
       this.loadingPhoto = true;
-      //console.log(this.loadingPhoto + 'in set after');
+      console.log(this.loadingPhoto + 'in set after');
     });
   };
   @action uploadImage = async (file: Blob) => {
@@ -81,33 +81,51 @@ export default class ProfileStore {
       //console.log(error);
     }
   };
-  @action uploadImageDirect = async (files: any) => {
+  @action uploadImageDirect = async (image: any) => {
+    this.setLoadingPhoto();
+
     this.timeStampForUpload = Math.round(new Date().getTime() / 1000);
     const api_key = "716959181144487";
     const formData = new FormData();
     try {
-      for (let i = 0; i < files!.length; i++) {
-        let file = files![i];
+      // let file = files![i];
+      var reader = new FileReader();
+      reader.readAsDataURL(image!);
+      reader.onloadend = async () => {
+        let file = reader.result as string;
 
-        formData.append("file", file);
-        formData.append("api_key", api_key);
+        formData.append("folder", "Reactivities");
+        // formData.append("eager", "c_pad,h_100,w_100");
+
         formData.append("timestamp", this.timeStampForUpload.toString());
+        formData.append("transformation", "w_500,h_500,c_fill");
 
         const signature = await agent.Profile.getSignature(formData);
         console.log("signature: ", signature);
-
+        formData.append("file", file);
+        formData.append("api_key", api_key);
         formData.append("signature", signature);
         const response = await fetch(
           "http://api.cloudinary.com/v1_1/dvzlb9xco/image/upload",
-          {
-            method: "POST",
-            body: formData,
-          }
+          { method: "POST", body: formData }
         );
-        const text = await response.text();
-        console.log(text);
-      }
-    } catch (error) {}
+        const data = await response.json();
+        const photo = await agent.Profile.UploadResults({
+          PublicId: data.public_id,
+          Url: data.secure_url,
+        });
+        runInAction("DirectUploadPhotoAction", () => {
+          this.profile!.photos.push(photo);
+          this.loadingPhoto = false;
+          // console.log(photo);
+          history.push(`/Profiles/${this.user!.userName}`);
+        });
+      };
+    } catch (error) {
+      runInAction("UploadImageInProfileStoreActionError", () => {
+        this.loadingPhoto = false;
+      });
+    }
   };
   @action deleteImage = async (id: string) => {
     this.loadingDeletePhoto = true;
