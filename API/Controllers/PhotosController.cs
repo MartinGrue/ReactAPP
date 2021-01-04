@@ -28,7 +28,11 @@ namespace API.Controllers
         {
             return await Mediator.Send(command);
         }
-
+        [HttpPost("postUploadResults")]
+        public async Task<ActionResult<Photo>> postUploadResults(PhotoUploadResult result)
+        {
+            return await Mediator.Send(new postUploadResults.Command { Result = result });
+        }
 
     }
 }
