@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using Application.Errors;
@@ -67,6 +68,10 @@ namespace Infrastructure.photos
                 Url = uploadResult.SecureUri.AbsoluteUri
             };
         }
+        public string GetSignature(Dictionary<string, object> parameters)
+        {
+            return cloudinary.Api.SignParameters(parameters);
+        }
         public Photo GetPhotoFromUrl(string url, bool isMain)
         {
             var uploadResult = new ImageUploadResult();
@@ -86,7 +91,8 @@ namespace Infrastructure.photos
                     };
                     uploadResult = cloudinary.Upload(uploadParams);
                 }
-            } else
+            }
+            else
             {
                 throw new RestException(HttpStatusCode.BadRequest,
                  new { Activity = "Filelength is zero" });

@@ -23,5 +23,12 @@ namespace API.Controllers
         {
             return await Mediator.Send(new SetMain.Command { Id = id });
         }
+        [HttpPost("getSignature")]
+        public async Task<ActionResult<string>> GetSignature([FromForm] GetSignature.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
+
     }
 }
