@@ -28,21 +28,20 @@ namespace Application.Photos
                 this.userAccessor = userAccessor;
                 this.photoAccessor = photoAccessor;
                 _context = context;
-            }    
+            }
 
             public async Task<Photo> Handle(Command request, CancellationToken cancellationToken)
             {
                 var UploadPhotoResult = photoAccessor.UploadPhoto(request.File);
-                var user = await _context.Users
-
-                .SingleOrDefaultAsync(p => p.UserName == userAccessor.GetCurrentUsername());
+                var user = await _context.Users.SingleOrDefaultAsync(p => p.UserName == userAccessor.GetCurrentUsername());
 
                 var photo = new Photo
                 {
                     Id = UploadPhotoResult.PublicId,
                     Url = UploadPhotoResult.Url.ToString()
                 };
-                if(!user.Photos.Any(p => p.IsMain)){
+                if (!user.Photos.Any(p => p.IsMain))
+                {
                     photo.IsMain = true;
                 }
                 user.Photos.Add(photo);
