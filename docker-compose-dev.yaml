@@ -25,6 +25,16 @@ services:
       dockerfile: Dockerfile.dev.backend
     volumes:
         - .:/app
+        - /app/API/bin/
+        - /app/API/obj/
+        - /app/Application/bin/
+        - /app/Application/obj/
+        - /app/Domain/bin/
+        - /app/Domain/obj/
+        - /Infrastructure/bin/
+        - /Infrastructure/obj/
+        - /Persistence/bin/
+        - /Persistence/obj/
     networks:
       - frontend
     ports:
