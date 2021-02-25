@@ -87,7 +87,7 @@ const LoginForm: React.FC = () => {
             // prettier-ignore
             disabled={
                 (invalid && withInitValues
-                ? !dirtySinceLastSubmit || pristine
+                ? !dirtySinceLastSubmit 
                 : dirtySinceLastSubmit)
             }
             positive
