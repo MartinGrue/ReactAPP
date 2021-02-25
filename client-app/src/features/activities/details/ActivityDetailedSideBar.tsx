@@ -36,7 +36,7 @@ const ActivityDetailedSidebar: React.FC<IProps> = ({ attendees }) => {
                   <Label
                     ribbon="right"
                     color="orange"
-                    sytle={{ position: "absolute" }}
+                    style={{ position: "absolute" }}
                   >
                     Host
                   </Label>
