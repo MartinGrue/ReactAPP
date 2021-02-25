@@ -38,14 +38,16 @@ const NavBarMobile: React.FC<{
         style={sidebarPusherStyle}
       >
         {children}
-        <Menu fixed="top" inverted>
-          <Menu.Item onClick={() => handleToggle()}>
-            <Icon name="sidebar" size="large" />
-          </Menu.Item>
-          <Menu.Menu position="right">
-            <NavRightMenuItems></NavRightMenuItems>
-          </Menu.Menu>
-        </Menu>
+        <div style={{ height: "5rem" }}>
+          <Menu fixed="top" inverted>
+            <Menu.Item onClick={() => handleToggle()}>
+              <Icon name="sidebar" size="large" />
+            </Menu.Item>
+            <Menu.Item position="right">
+              <NavRightMenuItems></NavRightMenuItems>
+            </Menu.Item>
+          </Menu>
+        </div>
       </Sidebar.Pusher>
     </Sidebar.Pushable>
   );
@@ -56,9 +58,9 @@ const NavBarDesktop: React.FC<{ children: ReactNode }> = ({ children }) => {
     <Fragment>
       <Menu fixed="top" inverted>
         <NavLeftMenuItems></NavLeftMenuItems>
-        <Menu.Menu position="right">
+        <Menu.Item position="right">
           <NavRightMenuItems></NavRightMenuItems>
-        </Menu.Menu>
+        </Menu.Item>
       </Menu>
       {children}
     </Fragment>
@@ -67,7 +69,7 @@ const NavBarDesktop: React.FC<{ children: ReactNode }> = ({ children }) => {
 
 const Nav: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
-    <div>
+    <div className="content">
       <Responsive {...Responsive.onlyMobile}>
         <NavBarMobile>{children}</NavBarMobile>
       </Responsive>

@@ -16,7 +16,9 @@ const Routes: React.FC = () => {
 
   if (isLoggedIn) {
     return (
-      <Container style={{ marginTop: "7em" }}>
+      <Container
+        style={{ marginTop: "6rem"}}
+      >
         <Switch>
           <Route exact path="/activities" component={ActivityDashboard}></Route>
           <Route
