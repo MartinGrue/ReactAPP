@@ -15,7 +15,10 @@ export default class ProfileStore {
 
   rootStore: RootStore;
 
-  @observable user = this!.rootStore.userStore.user;
+  // @observable user = this!.rootStore.userStore.user;
+  @computed get user() {
+    return this!.rootStore.userStore.user
+  }
   @observable timeStampForUpload: number = 0;
 
   @observable profile: IProfile | null = null;
@@ -48,6 +51,9 @@ export default class ProfileStore {
         //console.log(profile);
         this.profile = profile;
         this.loadingProfile = false;
+        console.log("profile: ", this.profile);
+        console.log("user: ", this.user);
+        console.log("from store direct: ", this!.rootStore.userStore.user)
       });
     } catch (error) {
       runInAction("loadingProfileActionError", () => {
@@ -60,7 +66,7 @@ export default class ProfileStore {
     //console.log(this.loadingPhoto + 'in set before');
     runInAction("UploadPhotoAction", () => {
       this.loadingPhoto = true;
-      console.log(this.loadingPhoto + 'in set after');
+      console.log(this.loadingPhoto + "in set after");
     });
   };
   @action uploadImage = async (file: Blob) => {
@@ -94,7 +100,7 @@ export default class ProfileStore {
       reader.onloadend = async () => {
         let file = reader.result as string;
 
-        formData.append("folder", "Reactivities");
+        // formData.append("folder", "Reactivities");
         // formData.append("eager", "c_pad,h_100,w_100");
 
         formData.append("timestamp", this.timeStampForUpload.toString());
