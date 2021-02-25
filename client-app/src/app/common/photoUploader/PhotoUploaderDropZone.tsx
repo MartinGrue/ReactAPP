@@ -2,7 +2,6 @@ import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { Icon, Header } from "semantic-ui-react";
 import { FileWithPreview } from "./PhotoUploader";
-import { fileURLToPath } from "url";
 
 interface IProps {
   setfiles: (files: FileWithPreview[]) => void;

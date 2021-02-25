@@ -14,10 +14,20 @@ const validate = combineValidators({
 });
 
 const LoginForm: React.FC = () => {
+  const withInitValues: boolean = true;
   const rootStore = useContext(RootStoreContext);
   const { login } = rootStore.userStore;
+
+  const fieldstyle = {
+    backgroundColor: "rgb(32, 167, 172)",
+  };
   return (
     <FinalForm
+      initialValues={
+        withInitValues
+          ? { email: "bob@test.com", password: "Pa$$w0rd" }
+          : { email: "", password: "" }
+      }
       onSubmit={(values: IUserFormValues) =>
         login(values).catch((error) => ({
           [FORM_ERROR]: error,
@@ -40,20 +50,30 @@ const LoginForm: React.FC = () => {
             textAlign="center"
           ></Header>
           <Divider></Divider>
-          <Header
-            as="h3"
-            content="This is a demo app, use: "
-            color="black"
-            textAlign="center"
-          ></Header>
-          <p style={{ textAlign: "center" }}>email: bob@test.com</p>
-          <p style={{ textAlign: "center" }}> password: Pa$$w0rd</p>
-          <Field name="email" component={TextInput} placeholder="email"></Field>
+          <Field
+            name="email"
+            placeholder="email"
+            render={(props) => {
+              return (
+                <TextInput
+                  {...props}
+                  style={{ borderColor: "#2185d0" }}
+                ></TextInput>
+              );
+            }}
+          ></Field>
           <Field
             name="password"
-            component={TextInput}
             placeholder="Passord"
             type="password"
+            render={(props) => {
+              return (
+                <TextInput
+                  {...props}
+                  style={{ borderColor: "#2185d0" }}
+                ></TextInput>
+              );
+            }}
           ></Field>
           {submitError && !dirtySinceLastSubmit && (
             // <Label color='red' basic content={submitError.statusText}></Label>
@@ -64,7 +84,11 @@ const LoginForm: React.FC = () => {
           )}
           {/* <br></br> */}
           <Button
-            disabled={(invalid && !dirtySinceLastSubmit) || pristine}
+            disabled={
+              invalid && withInitValues
+                ? !dirtySinceLastSubmit || pristine
+                : dirtySinceLastSubmit
+            }
             positive
             content="Login"
             loading={submitting}

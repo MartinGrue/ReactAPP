@@ -4,7 +4,6 @@ import PhotoUploaderDropZone from "./PhotoUploaderDropZone";
 import PhotoUploaderCropper from "./PhotoUploaderCropper";
 import { RootStoreContext } from "../../stores/rootStore";
 import { observer } from "mobx-react-lite";
-import { readSync } from "fs";
 
 interface Props {
   loading: boolean;
@@ -12,15 +11,11 @@ interface Props {
 export interface FileWithPreview extends File {
   preview: string;
 }
-export const PhotoUploader: React.FC<Props> = ({loading}) => {
+export const PhotoUploader: React.FC<Props> = ({ loading }) => {
   const [files, setfiles] = useState<FileWithPreview[]>([]);
   const [image, setimage] = useState<Blob | null>(null);
   const rootStore = useContext(RootStoreContext);
-  const {
-    uploadImage,
-    uploadImageDirect,
-    setLoadingPhoto,
-  } = rootStore.profileStore;
+  const { uploadImageDirect, setLoadingPhoto } = rootStore.profileStore;
 
   //Component will unmount
   //Remove image from memory

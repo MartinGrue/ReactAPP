@@ -9,7 +9,6 @@ import {
   Grid,
   Header,
   Divider,
-  GridColumn,
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { IActivity } from "../../../app/models/IActivity";
@@ -28,7 +27,7 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
         </Header>
         <Divider></Divider>
         <Grid stackable>
-          <Grid.Column width={8}  verticalAlign="middle">
+          <Grid.Column width={8} verticalAlign="middle">
             <Grid>
               <Grid.Column width={8} verticalAlign="middle">
                 <Item.Group>

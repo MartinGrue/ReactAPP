@@ -1,24 +1,29 @@
-import React, { useState, Fragment } from 'react';
-import { Menu, Responsive, Sidebar, Icon } from 'semantic-ui-react';
-import { observer } from 'mobx-react-lite';
-import Routes from '../../app/layout/Routes';
-import NavLeftMenuItems from './NavLeftMenuItems';
-import NavRightMenuItems from './NavRightMenuItems';
+import React, { useState, Fragment, ReactNode } from "react";
+import { Menu, Responsive, Sidebar, Icon } from "semantic-ui-react";
+import { observer } from "mobx-react-lite";
+import NavLeftMenuItems from "./NavLeftMenuItems";
+import NavRightMenuItems from "./NavRightMenuItems";
 
 const NavBarMobile: React.FC<{
-  onPusherClick: () => void;
-  handleToggle: () => void;
-  visible: boolean;
-}> = ({ onPusherClick, handleToggle, visible }) => {
+  children: ReactNode;
+}> = ({ children }) => {
+  const [visible, setvisible] = useState(false);
+
+  const onPusherClick = () => {
+    if (visible) setvisible(false);
+  };
+
+  const handleToggle = () => setvisible(!visible);
+
   const sidebarPusherStyle = {
-    minHeight: '100vh'
+    minHeight: "100vh",
   };
   return (
     <Sidebar.Pushable>
       <Sidebar
         as={Menu}
-        animation='overlay'
-        icon='labeled'
+        animation="overlay"
+        icon="labeled"
         inverted
         vertical
         visible={visible}
@@ -32,12 +37,12 @@ const NavBarMobile: React.FC<{
         }}
         style={sidebarPusherStyle}
       >
-        <Routes></Routes>
-        <Menu fixed='top' inverted>
+        {children}
+        <Menu fixed="top" inverted>
           <Menu.Item onClick={() => handleToggle()}>
-            <Icon name='sidebar' size='large' />
+            <Icon name="sidebar" size="large" />
           </Menu.Item>
-          <Menu.Menu position='right'>
+          <Menu.Menu position="right">
             <NavRightMenuItems></NavRightMenuItems>
           </Menu.Menu>
         </Menu>
@@ -46,40 +51,28 @@ const NavBarMobile: React.FC<{
   );
 };
 
-const NavBarDesktop: React.FC = () => {
+const NavBarDesktop: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <Fragment>
-      <Menu fixed='top' inverted>
+      <Menu fixed="top" inverted>
         <NavLeftMenuItems></NavLeftMenuItems>
-        <Menu.Menu position='right'>
+        <Menu.Menu position="right">
           <NavRightMenuItems></NavRightMenuItems>
         </Menu.Menu>
       </Menu>
-      <Routes></Routes>
+      {children}
     </Fragment>
   );
 };
 
-const Nav: React.FC = () => {
-  const [visible, setvisible] = useState(false);
-
-  const handlePusher = () => {
-    if (visible) setvisible(false);
-  };
-
-  const handleToggle = () => setvisible(!visible);
-
+const Nav: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <div>
       <Responsive {...Responsive.onlyMobile}>
-        <NavBarMobile
-          handleToggle={handleToggle}
-          onPusherClick={handlePusher}
-          visible={visible}
-        ></NavBarMobile>
+        <NavBarMobile>{children}</NavBarMobile>
       </Responsive>
       <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-        <NavBarDesktop />
+        <NavBarDesktop>{children}</NavBarDesktop>
       </Responsive>
     </div>
   );

@@ -52,7 +52,6 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
 
   const [loading, setloading] = useState(false);
   const [latlng, setLatlng] = useState<google.maps.LatLngLiteral>();
-
   useEffect(() => {
     if (match.params.id) {
       setloading(true);
@@ -78,7 +77,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
       values.longitute = latlng.lng;
       values.latitute = latlng.lat;
     }
-    
+
     if (match.params.id) {
       const editedActivity: IActivity = {
         ...selectedActivity!,
@@ -121,7 +120,6 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     date: isRequired("Date"),
     time: isRequired("Time"),
   });
-
   return (
     <Segment>
       <Grid stackable>
