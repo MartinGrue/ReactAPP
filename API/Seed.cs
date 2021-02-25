@@ -68,7 +68,7 @@ namespace API
                     await userManager.CreateAsync(user, "Pa$$w0rd");
                 }
             }
-
+            Console.WriteLine(DateTime.Now);
             if (!context.Activities.Any())
             {
                 var activities = new List<Activity>
@@ -76,10 +76,10 @@ namespace API
                     new Activity
                     {
                         Title = "Past Activity 1",
-                        Date = DateTime.Now.AddMonths(-2),
-                        Description = "Activity 2 months ago",
+                        Date = DateTime.Now.AddDays(-2),
+                        Description = "Activity 2 days ago",
                         Category = "Drinks",
-                        City = "London",
+                        City = "London Downtown",
                         Latitute= 51.5073509,
                         Longitute= -0.12775829999998223,
                         Venue = "Pub",
@@ -89,14 +89,14 @@ namespace API
                             {
                                 AppUserId = "a",
                                 IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(-2)
+                                DateJoined = DateTime.Now.AddDays(-2)
                             }
                         }
                     },
                     new Activity
                     {
                         Title = "Past Activity 2",
-                        Date = DateTime.Now.AddMonths(-1),
+                        Date = DateTime.Now.AddDays(-1),
                         Description = "Activity 1 month ago",
                         Category = "Culture",
                         City = "Paris",
@@ -109,20 +109,20 @@ namespace API
                             {
                                 AppUserId = "b",
                                 IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(-1)
+                                DateJoined = DateTime.Now.AddDays(-1)
                             },
                             new UserActivity
                             {
                                 AppUserId = "a",
                                 IsHost = false,
-                                DateJoined = DateTime.Now.AddMonths(-1)
+                                DateJoined = DateTime.Now.AddDays(-1)
                             },
                         }
                     },
                     new Activity
                     {
                         Title = "Future Activity 1",
-                        Date = DateTime.Now.AddMonths(1),
+                        Date = DateTime.Now.AddDays(1),
                         Description = "Activity 1 month in future",
                         Category = "Music",
                         City = "Braunschweig",
@@ -135,21 +135,21 @@ namespace API
                             {
                                 AppUserId = "b",
                                 IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(1)
+                                DateJoined = DateTime.Now.AddDays(1)
                             },
                             new UserActivity
                             {
                                 AppUserId = "a",
                                 IsHost = false,
-                                DateJoined = DateTime.Now.AddMonths(1)
+                                DateJoined = DateTime.Now.AddDays(1)
                             },
                         }
                     },
                     new Activity
                     {
                         Title = "Future Activity 2",
-                        Date = DateTime.Now.AddMonths(2),
-                        Description = "Activity 2 months in future",
+                        Date = DateTime.Now.AddDays(2),
+                        Description = "Activity 2 days in future",
                         Category = "Food",
                         City = "Berlin",
                         Latitute= 52.52000659999999,
@@ -161,21 +161,21 @@ namespace API
                             {
                                 AppUserId = "c",
                                 IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(2)
+                                DateJoined = DateTime.Now.AddDays(2)
                             },
                             new UserActivity
                             {
                                 AppUserId = "a",
                                 IsHost = false,
-                                DateJoined = DateTime.Now.AddMonths(2)
+                                DateJoined = DateTime.Now.AddDays(2)
                             },
                         }
                     },
                     new Activity
                     {
                         Title = "Future Activity 3",
-                        Date = DateTime.Now.AddMonths(3),
-                        Description = "Activity 3 months in future",
+                        Date = DateTime.Now.AddDays(3),
+                        Description = "Activity 3 days in future",
                         Category = "Drinks",
                         City = "London",
                         Latitute= 51.5073509,
@@ -187,21 +187,21 @@ namespace API
                             {
                                 AppUserId = "b",
                                 IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(3)
+                                DateJoined = DateTime.Now.AddDays(3)
                             },
                             new UserActivity
                             {
                                 AppUserId = "c",
                                 IsHost = false,
-                                DateJoined = DateTime.Now.AddMonths(3)
+                                DateJoined = DateTime.Now.AddDays(3)
                             },
                         }
                     },
                     new Activity
                     {
                         Title = "Future Activity 4",
-                        Date = DateTime.Now.AddMonths(4),
-                        Description = "Activity 4 months in future",
+                        Date = DateTime.Now.AddDays(4),
+                        Description = "Activity 4 days in future",
                         Category = "Culture",
                         City = "Paris",
                         Latitute= 48.856614,
@@ -213,15 +213,15 @@ namespace API
                             {
                                 AppUserId = "a",
                                 IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(4)
+                                DateJoined = DateTime.Now.AddDays(4)
                             }
                         }
                     },
                     new Activity
                     {
                         Title = "Future Activity 5",
-                        Date = DateTime.Now.AddMonths(5),
-                        Description = "Activity 5 months in future",
+                        Date = DateTime.Now.AddDays(5),
+                        Description = "Activity 5 days in future",
                         Category = "Drinks",
                         City = "Brunswick",
                         Latitute=52.2688736,
@@ -233,21 +233,21 @@ namespace API
                             {
                                 AppUserId = "c",
                                 IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(5)
+                                DateJoined = DateTime.Now.AddDays(5)
                             },
                             new UserActivity
                             {
                                 AppUserId = "b",
                                 IsHost = false,
-                                DateJoined = DateTime.Now.AddMonths(5)
+                                DateJoined = DateTime.Now.AddDays(5)
                             },
                         }
                     },
                     new Activity
                     {
                         Title = "Future Activity 6",
-                        Date = DateTime.Now.AddMonths(6),
-                        Description = "Activity 6 months in future",
+                        Date = DateTime.Now.AddDays(6),
+                        Description = "Activity 6 days in future",
                         Category = "Music",
                         City = "Berlin",
                         Latitute= 52.52000659999999,
@@ -259,21 +259,21 @@ namespace API
                             {
                                 AppUserId = "a",
                                 IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(6)
+                                DateJoined = DateTime.Now.AddDays(6)
                             },
                             new UserActivity
                             {
                                 AppUserId = "b",
                                 IsHost = false,
-                                DateJoined = DateTime.Now.AddMonths(6)
+                                DateJoined = DateTime.Now.AddDays(6)
                             },
                         }
                     },
                     new Activity
                     {
                         Title = "Future Activity 7",
-                        Date = DateTime.Now.AddMonths(7),
-                        Description = "Activity 7 months in future",
+                        Date = DateTime.Now.AddDays(7),
+                        Description = "Activity 7 days in future",
                         Category = "Travel",
                         City = "Berlin",
                         Latitute= 52.52000659999999,
@@ -285,21 +285,21 @@ namespace API
                             {
                                 AppUserId = "a",
                                 IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(7)
+                                DateJoined = DateTime.Now.AddDays(7)
                             },
                             new UserActivity
                             {
                                 AppUserId = "c",
                                 IsHost = false,
-                                DateJoined = DateTime.Now.AddMonths(7)
+                                DateJoined = DateTime.Now.AddDays(7)
                             },
                         }
                     },
                     new Activity
                     {
                         Title = "Future Activity 8",
-                        Date = DateTime.Now.AddMonths(8),
-                        Description = "Activity 8 months in future",
+                        Date = DateTime.Now.AddDays(8),
+                        Description = "Activity 8 days in future",
                         Category = "Drinks",
                         City = "Berlin",
                         Latitute= 52.52000659999999,
@@ -311,21 +311,21 @@ namespace API
                             {
                                 AppUserId = "b",
                                 IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(8)
+                                DateJoined = DateTime.Now.AddDays(8)
                             },
                             new UserActivity
                             {
                                 AppUserId = "a",
                                 IsHost = false,
-                                DateJoined = DateTime.Now.AddMonths(8)
+                                DateJoined = DateTime.Now.AddDays(8)
                             },
                         }
                     },
                     new Activity
                     {
                         Title = "Future Activity 9",
-                        Date = DateTime.Now.AddMonths(8),
-                        Description = "Activity 8 months in future",
+                        Date = DateTime.Now.AddDays(8),
+                        Description = "Activity 8 days in future",
                         Category = "Drinks",
                         City = "Berlin",
                         Latitute= 52.52000659999999,
@@ -337,13 +337,13 @@ namespace API
                             {
                                 AppUserId = "b",
                                 IsHost = true,
-                                DateJoined = DateTime.Now.AddMonths(8)
+                                DateJoined = DateTime.Now.AddDays(8)
                             },
                             new UserActivity
                             {
                                 AppUserId = "c",
                                 IsHost = false,
-                                DateJoined = DateTime.Now.AddMonths(8)
+                                DateJoined = DateTime.Now.AddDays(8)
                             },
                         }
                     }
