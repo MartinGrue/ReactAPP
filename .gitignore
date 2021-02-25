@@ -16,3 +16,4 @@ build
 
 # development in docker container
 **/.devcontainer
+**/cypress
