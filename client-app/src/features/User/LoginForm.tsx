@@ -84,10 +84,11 @@ const LoginForm: React.FC = () => {
           )}
           {/* <br></br> */}
           <Button
+            // prettier-ignore
             disabled={
-              invalid && withInitValues
+                (invalid && withInitValues
                 ? !dirtySinceLastSubmit || pristine
-                : dirtySinceLastSubmit
+                : dirtySinceLastSubmit)
             }
             positive
             content="Login"
