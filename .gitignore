@@ -3,6 +3,7 @@ obj
 .vscode
 .DS_Store
 *.db
+.vs
 
 # dependencies
 node_modules

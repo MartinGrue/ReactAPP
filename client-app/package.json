@@ -44,6 +44,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "e2e": "cypress open",
     "postbuild": "mv build ../API/wwwroot"
   },
   "eslintConfig": {
