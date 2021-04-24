@@ -5,7 +5,7 @@ import { RootStoreContext } from "../../stores/rootStore";
 import { observer } from "mobx-react-lite";
 
 interface IProps
-  extends FieldRenderProps<string, HTMLInputElement>,
+  extends FieldRenderProps<string, HTMLElement>,
     FormFieldProps {
   style?: React.CSSProperties | undefined;
 }
