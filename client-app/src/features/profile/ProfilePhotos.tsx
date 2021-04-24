@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useState } from "react";
 import {
   Tab,
   Header,
@@ -12,7 +12,6 @@ import {
 import { RootStoreContext } from "../../app/stores/rootStore";
 import { PhotoUploader } from "../../app/common/photoUploader/PhotoUploader";
 import { observer } from "mobx-react-lite";
-import { IPhoto } from "../../app/models/IProfile";
 import PhotoModal from "./PhotoModal";
 
 const ProfilePhotos = () => {

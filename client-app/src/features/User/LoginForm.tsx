@@ -18,9 +18,9 @@ const LoginForm: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
   const { login } = rootStore.userStore;
 
-  const fieldstyle = {
-    backgroundColor: "rgb(32, 167, 172)",
-  };
+  // const fieldstyle = {
+  //   backgroundColor: "rgb(32, 167, 172)",
+  // };
   return (
     <FinalForm
       initialValues={

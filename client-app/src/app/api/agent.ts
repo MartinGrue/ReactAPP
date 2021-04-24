@@ -124,9 +124,9 @@ const Profile = {
     return requests.post("/Photos/postUploadResults", photoUploadResult);
   },
 };
-
-export default {
+const exportobj = {
   Activities,
   User,
   Profile,
 };
+export default exportobj;

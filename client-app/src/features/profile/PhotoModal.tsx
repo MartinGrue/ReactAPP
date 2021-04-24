@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Button, Image } from "semantic-ui-react";
+import { Modal, Image } from "semantic-ui-react";
 interface PhotoModalProps {
   modalOpen: boolean;
   setmodalOpen: React.Dispatch<React.SetStateAction<boolean>>;
