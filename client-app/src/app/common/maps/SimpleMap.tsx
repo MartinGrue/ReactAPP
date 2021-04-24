@@ -21,7 +21,6 @@ export const SimpleMap: React.FC<IProps> = ({ lat, lng, opt }) => {
     },
     key: 52.372513,
   };
-  console.log("render Map");
   return (
     <Segment attached="bottom" style={{ padding: 0 }}>
       <div>

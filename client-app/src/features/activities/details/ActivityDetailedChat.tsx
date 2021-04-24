@@ -1,17 +1,11 @@
-import React, { Fragment, useContext, useEffect } from 'react';
-import {
-  Segment,
-  Header,
-  Form,
-  Button,
-  Comment
-} from 'semantic-ui-react';
-import {Form as FinalForm, Field} from 'react-final-form';
-import { RootStoreContext } from '../../../app/stores/rootStore';
-import { Link } from 'react-router-dom';
-import TextAreaInput from '../../../app/common/form/TextAreaInput';
-import { observer } from 'mobx-react-lite';
-import {formatDistance} from 'date-fns'
+import React, { Fragment, useContext, useEffect } from "react";
+import { Segment, Header, Form, Button, Comment } from "semantic-ui-react";
+import { Form as FinalForm, Field } from "react-final-form";
+import { RootStoreContext } from "../../../app/stores/rootStore";
+import { Link } from "react-router-dom";
+import TextAreaInput from "../../../app/common/form/TextAreaInput";
+import { observer } from "mobx-react-lite";
+import { formatDistance, parseISO } from "date-fns";
 
 const ActivityDetailedChat = () => {
   const rootContext = useContext(RootStoreContext);
@@ -19,7 +13,7 @@ const ActivityDetailedChat = () => {
     connectToSignalRHub,
     stopSignalRHub,
     selectedActivity,
-    addComment
+    addComment,
   } = rootContext.activityStore;
 
   useEffect(() => {
@@ -31,11 +25,11 @@ const ActivityDetailedChat = () => {
   return (
     <Fragment>
       <Segment
-        textAlign='center'
-        attached='top'
+        textAlign="center"
+        attached="top"
         inverted
-        color='teal'
-        style={{ border: 'none' }}
+        color="teal"
+        style={{ border: "none" }}
       >
         <Header>Chat about this event</Header>
       </Segment>
@@ -43,36 +37,44 @@ const ActivityDetailedChat = () => {
         <Comment.Group>
           {selectedActivity &&
             selectedActivity.comments &&
-            selectedActivity.comments.map(comment => (
-              <Comment key={comment.createdAt}>
-                <Comment.Avatar src={comment.image || '/assets/user.png'} />
-                <Comment.Content>
-                  <Comment.Author
-                    as={Link}
-                    to={`/profile/${comment.userName}`}
-                  ></Comment.Author>
-                  <Comment.Metadata>
-                    <div>{formatDistance(comment.createdAt, new Date ())}</div>
-                  </Comment.Metadata>
-                  <Comment.Text>{comment.body}</Comment.Text>
-                </Comment.Content>
-              </Comment>
-            ))}
+            selectedActivity.comments.map((comment) => {
+              return (
+                <Comment key={comment.createdAt}>
+                  <Comment.Avatar src={comment.image || "/assets/user.png"} />
+                  <Comment.Content>
+                    <Comment.Author
+                      as={Link}
+                      to={`/profile/${comment.userName}`}
+                    ></Comment.Author>
+                    <Comment.Metadata>
+                      <div>
+                        {formatDistance(
+                          parseISO(comment.createdAt),
+                          new Date()
+                        )}
+                      </div>
+                    </Comment.Metadata>
+                    <Comment.Text>{comment.body}</Comment.Text>
+                  </Comment.Content>
+                </Comment>
+              );
+            })}
           <FinalForm
             onSubmit={addComment}
-            render={({ handleSubmit, submitting, form }) => (
+            render={({ handleSubmit, submitting, form, pristine, invalid }) => (
               <Form onSubmit={() => handleSubmit()!.then(() => form.reset())}>
                 <Field
-                  name='body'
+                  name="body"
                   component={TextAreaInput}
                   rows={2}
-                  placeholder='Add your comment'
+                  placeholder="Add your comment"
                 />
                 <Button
+                  disabled={invalid || pristine}
                   loading={submitting}
-                  content='Add Reply'
-                  labelPosition='left'
-                  icon='edit'
+                  content="Add Reply"
+                  labelPosition="left"
+                  icon="edit"
                   primary
                 />
               </Form>
