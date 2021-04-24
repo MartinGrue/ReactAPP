@@ -1,5 +1,4 @@
-name: deploy-auth
-
+name: push-database-image
 # on:
 #   push:
 #     branches:
@@ -20,8 +19,8 @@ jobs:
       - name: Build container image
         run: |
           docker image build \
-          -f Dockerfile.minimal \
-          -t registry.digitalocean.com/imagerepo/reactapp:$(echo $GITHUB_SHA | head -c7) .
+          -f Dockerfile.database \
+          -t registry.digitalocean.com/imagerepo/activitydb:$(echo $GITHUB_SHA | head -c7) .
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
@@ -32,4 +31,4 @@ jobs:
         run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Push image to DigitalOcean Container Registry
-        run: docker push registry.digitalocean.com/imagerepo/reactapp:$(echo $GITHUB_SHA | head -c7)
+        run: docker push registry.digitalocean.com/imagerepo/activitydb:$(echo $GITHUB_SHA | head -c7)
