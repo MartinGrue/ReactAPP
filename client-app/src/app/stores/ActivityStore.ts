@@ -123,9 +123,8 @@ export default class ActivityStore {
   }
   groupActivitiesByDate(activities: IActivity[]) {
     const sorted = activities.sort(
-      (a, b) => a.date!.getTime() - b.date!.getTime()
+      (a, b) => b.date!.getTime() - a.date!.getTime()
     );
-
     // console.log(Object.entries(sorted));
 
     // console.log(Object.entries(sorted.reduce((a,b)=>{return a}, {})));
