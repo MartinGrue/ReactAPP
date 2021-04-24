@@ -132,7 +132,7 @@ export default class ActivityStore {
     return Object.entries(
       sorted.reduce((activities, activity) => {
         // console.log(activity.date!);
-        const key: string = activity.date!.toISOString().split("T")[0];
+        const key: string = activity.date!.toISOString();
         // // console.log(activities);
         // activities[key] = activities[key]
         //   ? [...activities[key], activity]

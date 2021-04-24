@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import ActivityListItem from './ActivityListItem';
 import { IActivity } from '../../../app/models/IActivity';
 import { RootStoreContext } from '../../../app/stores/rootStore';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 const ActivityList: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
@@ -14,7 +14,7 @@ const ActivityList: React.FC = () => {
       {activitiesByDate.map(([group, activities]) => (
         <Fragment key={group}>
           <Label size='large' color='blue'>
-            {format(group, 'dd.MM.yyyy')}
+            {format(parseISO(group), 'dd.MM.yyyy')}
           </Label>
           <Segment>
             <Item.Group>
