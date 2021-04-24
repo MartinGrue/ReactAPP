@@ -3,24 +3,18 @@ networks:
   frontend:
 services:
   db:
-    image: mysql
+    build:
+      context: .
+      dockerfile: Dockerfile.database
     container_name: activitydb
     networks:
       - frontend
     ports:
       - "3306:3306"
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
-    volumes:
-      - ./database_setup.sql:/docker-entrypoint-initdb.d/database_setup.sql
-      - ./database_dump.sql:/docker-entrypoint-initdb.d/database_dump.sql
-    environment:
-      MYSQL_ROOT_PASSWORD: example
   app:
     build:
       context: .
-      dockerfile: Dockerfile
-    image: reactapp_image
+      dockerfile: Dockerfile.minimal
     container_name: reactapp_container
     networks:
       - frontend
