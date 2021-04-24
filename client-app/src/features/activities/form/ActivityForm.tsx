@@ -71,8 +71,6 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
 
   const handleFinalFormSubmit = (values: IActivityFormValues) => {
     const dateAndTime = combineDateAndTime(values.date, values.time);
-    activity.date = dateAndTime;
-
     if (latlng) {
       values.longitute = latlng.lng;
       values.latitute = latlng.lat;
@@ -82,6 +80,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
       const editedActivity: IActivity = {
         ...selectedActivity!,
         ...values,
+        date: dateAndTime,
       };
       editActivity(editedActivity).then(() =>
         history.push(`/activities/${activity.id}`)
@@ -93,10 +92,11 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
         id: uuid(),
         isHost: true,
         isGoing: true,
+        date: dateAndTime,
       };
-      createActivity(newActivity).then(() =>
-        history.push(`/activities/${newActivity.id}`)
-      );
+      createActivity(newActivity).then(() => {
+        history.push(`/activities/${newActivity.id}`);
+      });
     }
   };
   const handleCancel = () => {
