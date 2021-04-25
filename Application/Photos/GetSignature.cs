@@ -46,7 +46,7 @@ namespace Application.Photos
                 {"timestamp", request.timestamp},
                 {"transformation", request.transformation},
                 };
-                var signature = photoAccessor.GetSignature(parameters);
+                var signature = await photoAccessor.GetSignature(parameters);
                 return signature;
 
                 throw new Exception("Problem in get signature Photo handler");

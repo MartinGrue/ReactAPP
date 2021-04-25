@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using Application.Errors;
 using Application.interfaces;
 using Application.Photos;
@@ -68,9 +69,11 @@ namespace Infrastructure.photos
                 Url = uploadResult.SecureUri.AbsoluteUri
             };
         }
-        public string GetSignature(Dictionary<string, object> parameters)
+        public async Task<string> GetSignature(Dictionary<string, object> parameters)
         {
-            return cloudinary.Api.SignParameters(parameters);
+            var Signature = await Task.Run(() => cloudinary.Api.SignParameters(parameters));
+            Console.WriteLine("THis is Signature" + Signature);
+            return Signature;
         }
         public Photo GetPhotoFromUrl(string url, bool isMain)
         {

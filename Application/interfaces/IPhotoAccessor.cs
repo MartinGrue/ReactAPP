@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Application.Photos;
 using Domain;
 using Microsoft.AspNetCore.Http;
@@ -9,7 +10,7 @@ namespace Application.interfaces
     {
         PhotoUploadResult UploadPhoto(IFormFile file);
         string DeletePhoto(string publicPhotoId);
-        string GetSignature(Dictionary<string, object> parameters);
+        Task<string> GetSignature(Dictionary<string, object> parameters);
         Photo GetPhotoFromUrl(string url, bool isMain);
     }
 }
