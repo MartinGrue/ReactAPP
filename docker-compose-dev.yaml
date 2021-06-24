@@ -8,8 +8,8 @@ services:
       dockerfile: Dockerfile.dev.client
     volumes:
       - type: bind
-        source: ./client-app/src
-        target: /app/src/
+        source: ./client-app
+        target: /app/
     networks:
       - frontend
     ports:
