@@ -1,9 +1,9 @@
-import React, { useState, Fragment, ReactNode } from "react";
-import { Menu, Responsive, Sidebar, Icon } from "semantic-ui-react";
+import { useState, Fragment, ReactNode } from "react";
+import * as React from "react";
+import { Menu, Segment, Sidebar, Icon } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
 import NavLeftMenuItems from "./NavLeftMenuItems";
 import NavRightMenuItems from "./NavRightMenuItems";
-
 const NavBarMobile: React.FC<{
   children: ReactNode;
 }> = ({ children }) => {
@@ -70,12 +70,12 @@ const NavBarDesktop: React.FC<{ children: ReactNode }> = ({ children }) => {
 const Nav: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <div className="content">
-      <Responsive {...Responsive.onlyMobile}>
-        <NavBarMobile>{children}</NavBarMobile>
-      </Responsive>
-      <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-        <NavBarDesktop>{children}</NavBarDesktop>
-      </Responsive>
+      {/* <Responsive {...Responsive.onlyMobile}> */}
+      {/* <NavBarMobile>{children}</NavBarMobile> */}
+      {/* </Responsive> */}
+      {/* <Responsive minWidth={Responsive.onlyTablet.minWidth}> */}
+      <NavBarDesktop>{children}</NavBarDesktop>
+      {/* </Responsive> */}
     </div>
   );
 };

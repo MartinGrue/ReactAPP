@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Card, Image, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { IProfileForFollowerOrFollowing } from '../../app/models/IProfile';

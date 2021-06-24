@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import { Fragment, useContext } from "react";
 import { Menu, Header } from "semantic-ui-react";
 import { Calendar } from "react-widgets";
 import { observer } from "mobx-react-lite";

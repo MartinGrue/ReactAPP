@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { Modal, Image } from "semantic-ui-react";
 interface PhotoModalProps {
   modalOpen: boolean;

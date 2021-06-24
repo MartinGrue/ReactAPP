@@ -1,12 +1,13 @@
-import React, { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
+import * as React from "react";
 import { observer } from "mobx-react-lite";
 import PlacesAutocomplete from "react-places-autocomplete";
 import { Form, Label, List, Segment } from "semantic-ui-react";
-import { FieldProps } from "react-final-form";
+import { FieldProps, FieldRenderProps } from "react-final-form";
 import { RootStoreContext } from "../../../app/stores/rootStore";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 
-interface IProps extends FieldProps<string, HTMLInputElement> {
+interface IProps extends FieldRenderProps<string, HTMLInputElement> {
   setLatlng: React.Dispatch<
     React.SetStateAction<google.maps.LatLngLiteral | undefined>
   >;

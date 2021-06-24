@@ -1,4 +1,10 @@
-import { observable, computed, action, runInAction } from "mobx";
+import {
+  observable,
+  computed,
+  action,
+  runInAction,
+  makeObservable,
+} from "mobx";
 import { IUser, IUserFormValues, IExternalLoginInfo } from "../models/user";
 import agent from "../api/agent";
 import { RootStore } from "./rootStore";
@@ -7,10 +13,8 @@ import { IProfileFormValues } from "../models/IProfile";
 import { toast } from "react-toastify";
 
 export default class UserStore {
-  /**
-   *
-   */
   constructor(rootStore: RootStore) {
+    makeObservable(this);
     this.rootStore = rootStore;
   }
   rootStore: RootStore;
@@ -23,7 +27,7 @@ export default class UserStore {
   @action login = async (values: IUserFormValues) => {
     try {
       const user = await agent.User.login(values);
-      runInAction("loginAction", () => {
+      runInAction(() => {
         this.user = user;
         //console.log(user);
         history.push("/activities");
@@ -39,7 +43,7 @@ export default class UserStore {
   @action loginExternal = async (info: IExternalLoginInfo) => {
     try {
       const user = await agent.User.loginExternal(info);
-      runInAction("loginAction", () => {
+      runInAction(() => {
         this.user = user;
         //console.log(user);
         history.push("/activities");
@@ -68,7 +72,7 @@ export default class UserStore {
   @action register = async (values: IUserFormValues) => {
     try {
       const user = await agent.User.register(values);
-      runInAction("RegisterUserAction", () => {
+      runInAction(() => {
         this.user = user;
         history.push("/activities");
         this.rootStore.commonStore.setToken(user.token);
@@ -84,7 +88,7 @@ export default class UserStore {
   @action updateUser = async (values: IProfileFormValues) => {
     try {
       const user = await agent.User.update(values);
-      runInAction("UpdateUserAction", () => {
+      runInAction(() => {
         this.user = user;
         //console.log(user);
         history.push(`/profiles/${user.userName}`);

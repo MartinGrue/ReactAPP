@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Segment, Grid, Icon } from 'semantic-ui-react';
 import { IActivity } from '../../../app/models/IActivity';
 import format from 'date-fns/esm/format';

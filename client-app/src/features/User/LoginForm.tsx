@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
+import * as React from "react";
 import { Form as FinalForm, Field } from "react-final-form";
 import { Form, Button, Header, Divider } from "semantic-ui-react";
 import TextInput from "../../app/common/form/TextInput";

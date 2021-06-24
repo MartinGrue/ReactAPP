@@ -1,4 +1,5 @@
-import React, { Fragment, useState, useEffect, useContext } from "react";
+import { Fragment, useState, useEffect, useContext } from "react";
+import * as React from "react";
 import { Grid, Header, Button } from "semantic-ui-react";
 import PhotoUploaderDropZone from "./PhotoUploaderDropZone";
 import PhotoUploaderCropper from "./PhotoUploaderCropper";

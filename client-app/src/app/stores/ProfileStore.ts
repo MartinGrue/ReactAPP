@@ -1,15 +1,19 @@
 import { RootStore } from "./rootStore";
-import { observable, action, runInAction, computed } from "mobx";
+import {
+  observable,
+  action,
+  runInAction,
+  computed,
+  makeObservable,
+} from "mobx";
 import { IProfile } from "../models/IProfile";
 import agent from "../api/agent";
 import { history } from "../..";
 import { IUserActivity } from "../models/IActivity";
 
 export default class ProfileStore {
-  /**
-   *
-   */
   constructor(rootStore: RootStore) {
+    makeObservable(this);
     this.rootStore = rootStore;
   }
 
@@ -17,7 +21,7 @@ export default class ProfileStore {
 
   // @observable user = this!.rootStore.userStore.user;
   @computed get user() {
-    return this!.rootStore.userStore.user
+    return this!.rootStore.userStore.user;
   }
   @observable timeStampForUpload: number = 0;
 
@@ -47,16 +51,16 @@ export default class ProfileStore {
     try {
       const profile = await agent.Profile.get(userName);
 
-      runInAction("loginAction", () => {
+      runInAction(() => {
         //console.log(profile);
         this.profile = profile;
         this.loadingProfile = false;
         console.log("profile: ", this.profile);
         console.log("user: ", this.user);
-        console.log("from store direct: ", this!.rootStore.userStore.user)
+        console.log("from store direct: ", this!.rootStore.userStore.user);
       });
     } catch (error) {
-      runInAction("loadingProfileActionError", () => {
+      runInAction(() => {
         this.loadingProfile = false;
         //console.log(error);
       });
@@ -64,7 +68,7 @@ export default class ProfileStore {
   };
   @action setLoadingPhoto = () => {
     //console.log(this.loadingPhoto + 'in set before');
-    runInAction("UploadPhotoAction", () => {
+    runInAction(() => {
       this.loadingPhoto = true;
       console.log(this.loadingPhoto + "in set after");
     });
@@ -74,14 +78,14 @@ export default class ProfileStore {
     try {
       const photo = await agent.Profile.uploadImage(file);
 
-      runInAction("UploadPhotoAction", () => {
+      runInAction(() => {
         this.profile!.photos.push(photo);
         this.loadingPhoto = false;
 
         history.push(`/Profiles/${this.user!.userName}`);
       });
     } catch (error) {
-      runInAction("UploadImageInProfileStoreActionError", () => {
+      runInAction(() => {
         this.loadingPhoto = false;
       });
       //console.log(error);
@@ -120,7 +124,7 @@ export default class ProfileStore {
           PublicId: data.public_id,
           Url: data.secure_url,
         });
-        runInAction("DirectUploadPhotoAction", () => {
+        runInAction(() => {
           this.profile!.photos.push(photo);
           this.loadingPhoto = false;
           // console.log(photo);
@@ -128,7 +132,7 @@ export default class ProfileStore {
         });
       };
     } catch (error) {
-      runInAction("UploadImageInProfileStoreActionError", () => {
+      runInAction(() => {
         this.loadingPhoto = false;
       });
     }
@@ -137,12 +141,12 @@ export default class ProfileStore {
     this.loadingDeletePhoto = true;
     try {
       await agent.Profile.deleteImage(id);
-      runInAction("deletePhotoAction", () => {
+      runInAction(() => {
         this.profile!.photos = this.profile!.photos.filter((p) => p.id !== id);
         this.loadingDeletePhoto = false;
       });
     } catch (error) {
-      runInAction("DeleteImageInProfileStoreActionError", () => {
+      runInAction(() => {
         this.loadingDeletePhoto = false;
       });
       //console.log(error);
@@ -152,7 +156,7 @@ export default class ProfileStore {
     this.loadingSetMain = true;
     try {
       await agent.Profile.setMainPhoto(id);
-      runInAction("deletePhotoAction", () => {
+      runInAction(() => {
         this.profile!.photos.find((p) => p.isMain)!.isMain = false;
         this.profile!.photos.find((p) => p.id === id)!.isMain = true;
 
@@ -164,7 +168,7 @@ export default class ProfileStore {
         this.rootStore.activityStore.activityRegistryHasNotChanged = false;
       });
     } catch (error) {
-      runInAction("DeleteImageInProfileStoreActionError", () => {
+      runInAction(() => {
         this.loadingSetMain = false;
       });
       //console.log(error);
@@ -181,13 +185,13 @@ export default class ProfileStore {
     this.loadingFollow = true;
     try {
       await agent.Profile.followUser(this.profile!.userName);
-      runInAction("followUserAction", () => {
+      runInAction(() => {
         this.profile!.followersCount += 1;
         this.profile!.isFollowed = true;
         this.loadingFollow = false;
       });
     } catch (error) {
-      runInAction("followUserActionError", () => {
+      runInAction(() => {
         this.loadingFollow = false;
       });
     }
@@ -196,13 +200,13 @@ export default class ProfileStore {
     this.loadingFollow = true;
     try {
       await agent.Profile.unfollowUser(this.profile!.userName);
-      runInAction("unfollowUserAction", () => {
+      runInAction(() => {
         this.profile!.followersCount -= 1;
         this.profile!.isFollowed = false;
         this.loadingFollow = false;
       });
     } catch (error) {
-      runInAction("unfollowUserActionError", () => {
+      runInAction(() => {
         this.loadingFollow = false;
       });
     }
@@ -214,12 +218,12 @@ export default class ProfileStore {
         this.profile!.userName,
         predicate!
       );
-      runInAction("ListUserActivitiesAction", () => {
+      runInAction(() => {
         this.userActivities = userActivities;
         this.loadingUserActivities = false;
       });
     } catch (error) {
-      runInAction("ListUserActivitiesActionError", () => {
+      runInAction(() => {
         this.loadingUserActivities = false;
       });
     }

@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { Container, Menu, Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 

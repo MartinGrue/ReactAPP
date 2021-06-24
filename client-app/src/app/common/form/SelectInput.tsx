@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { FieldRenderProps } from 'react-final-form';
 import { FormFieldProps, Form, Label, Select } from 'semantic-ui-react';
 

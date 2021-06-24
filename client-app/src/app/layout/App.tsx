@@ -1,5 +1,5 @@
 // import React, { Component } from 'react';
-import React, { Fragment, useContext, useEffect } from "react";
+import { Fragment, useContext, useEffect } from "react";
 import Nav from "../../features/nav/Nav";
 import { observer } from "mobx-react-lite";
 import { Route } from "react-router-dom";
@@ -16,8 +16,9 @@ const App = () => {
   const { getUser } = rootStore.userStore;
 
   useEffect(() => {
+    console.log("token: ", token);
     if (token) {
-      getUser().finally(() => {
+      getUser().then(() => {
         setApploaded();
       });
     } else {
@@ -25,9 +26,9 @@ const App = () => {
     }
   }, [getUser, setApploaded, token]);
 
-  if (!appLoaded) {
-    return <LoadingComponent content="Loading app"></LoadingComponent>;
-  }
+  // if (!appLoaded) {
+  //   return <LoadingComponent content="Loading app"></LoadingComponent>;
+  // }
   return (
     <Fragment>
       <ModalContainer></ModalContainer>

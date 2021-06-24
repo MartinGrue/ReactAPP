@@ -1,4 +1,5 @@
-import React, { useEffect, useContext } from 'react';
+import { useEffect, useContext } from 'react';
+import * as React from 'react';
 import ProfileHeader from './ProfileHeader';
 import { ProfileContent } from './ProfileContent';
 import { Grid, GridColumn } from 'semantic-ui-react';

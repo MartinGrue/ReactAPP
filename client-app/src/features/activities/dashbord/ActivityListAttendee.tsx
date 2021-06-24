@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { List, Popup, Image } from 'semantic-ui-react';
 import { IAttendee } from '../../../app/models/IActivity';
 import { Link } from 'react-router-dom';

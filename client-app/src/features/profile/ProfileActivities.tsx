@@ -1,4 +1,5 @@
-import React, { useEffect, useContext } from 'react';
+import { useEffect, useContext } from 'react';
+import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 import { Tab, Grid, Header, Card, Image, TabProps } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';

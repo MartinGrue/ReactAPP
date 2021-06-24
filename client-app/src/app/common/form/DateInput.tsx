@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { FieldRenderProps } from "react-final-form";
 import { FormFieldProps, Form, Label } from "semantic-ui-react";
 import { DateTimePicker } from "react-widgets";
@@ -18,21 +18,21 @@ const DateInput: React.FC<IProps> = ({
 }) => {
   return (
     <Form.Field error={touched && !!error} width={width}>
-      <DateTimePicker
+      {/* <DateTimePicker
         containerClassName={"dateTimePicker-Container"}
         onKeyDown={(e) => e.preventDefault()}
         onBlur={input.onBlur}
-        time={time}
-        timeFormat="HH:mm"
+        // time={time}
+        // timeFormat="HH:mm"
         step={15}
-        date={date}
-        format={date ? "dd.MM.yyyy" : "HH:mm"}
+        // date={date}
+        // format={date ? "dd.MM.yyyy" : "HH:mm"}
         onChange={input.onChange}
         value={input.value || null}
         placeholder={placeholder}
         {...rest}
         id="id"
-      />
+      /> */}
       {touched && !!error && (
         <Label basic color="red">
           {error}

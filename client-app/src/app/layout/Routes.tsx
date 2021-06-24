@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
+import * as React from "react";
 import { Container } from "semantic-ui-react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import ActivityDashboard from "../../features/activities/dashbord/ActivityDashboard";

@@ -1,4 +1,5 @@
-import React, { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
+import * as React from "react";
 import { Segment, Form, Button, Grid } from "semantic-ui-react";
 import {
   IActivityFormValues,
