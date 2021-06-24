@@ -3,25 +3,21 @@ import { Grid, Loader } from "semantic-ui-react";
 import ActivityList from "./ActivityList";
 import { observer } from "mobx-react-lite";
 import { RootStoreContext } from "../../../app/stores/rootStore";
-import InfiniteScroll from "react-infinite-scroller";
+// import InfiniteScroll from "react-infinite-scroller";
 import ActivityFilters from "./ActivityFilters";
 import ActivityListItemPlaceholder from "./ActivityListItemPlaceholder";
-
+import InfiniteScroll from "react-infinite-scroll-component";
 const ActivityDashboard: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
-  const {
-    loadActivities,
-    loadingInitial,
-    setPage,
-    page,
-    totalPages,
-  } = rootStore.activityStore;
+  const { loadActivities, loadingInitial, setPage, page, totalPages } =
+    rootStore.activityStore;
   const [loadingnext, setLoadingnext] = useState(false);
 
   const handleGetNext = () => {
     setLoadingnext(true);
     setPage(page + 1);
     loadActivities().then(() => setLoadingnext(false));
+    console.log("loadingnext: ", loadingnext);
   };
   useEffect(() => {
     loadActivities();
@@ -36,10 +32,10 @@ const ActivityDashboard: React.FC = () => {
           <ActivityListItemPlaceholder></ActivityListItemPlaceholder>
         ) : (
           <InfiniteScroll
-            pageStart={0}
-            loadMore={handleGetNext}
+            dataLength={0}
+            next={handleGetNext}
             hasMore={!loadingnext && page + 1 < totalPages}
-            initialLoad={false}
+            loader={loadingnext && <h4>Loading...</h4>}
           >
             <ActivityList></ActivityList>
           </InfiniteScroll>
