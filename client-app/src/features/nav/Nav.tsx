@@ -4,6 +4,8 @@ import { Menu, Segment, Sidebar, Icon } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
 import NavLeftMenuItems from "./NavLeftMenuItems";
 import NavRightMenuItems from "./NavRightMenuItems";
+import { useMediaQuery } from "react-responsive";
+
 const NavBarMobile: React.FC<{
   children: ReactNode;
 }> = ({ children }) => {
@@ -68,14 +70,17 @@ const NavBarDesktop: React.FC<{ children: ReactNode }> = ({ children }) => {
 };
 
 const Nav: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const isDesktopOrtablet = useMediaQuery({
+    query: "(min-device-width: 600px)",
+  });
+  const isMobileDevice = useMediaQuery({
+    query: "(max-device-width: 600px)",
+  });
+
   return (
     <div className="content">
-      {/* <Responsive {...Responsive.onlyMobile}> */}
-      {/* <NavBarMobile>{children}</NavBarMobile> */}
-      {/* </Responsive> */}
-      {/* <Responsive minWidth={Responsive.onlyTablet.minWidth}> */}
-      <NavBarDesktop>{children}</NavBarDesktop>
-      {/* </Responsive> */}
+      {isDesktopOrtablet && <NavBarDesktop>{children}</NavBarDesktop>}
+      {isMobileDevice && <NavBarMobile>{children}</NavBarMobile>}
     </div>
   );
 };
