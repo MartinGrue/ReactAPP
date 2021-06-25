@@ -5,13 +5,13 @@ import {
   DateTimePicker,
   DropdownList,
   FormatterOverrides,
-  TimeInput,
+  TimeInput as TimeInputWidget,
 } from "react-widgets";
 import { Localization } from "react-widgets";
 import { DateLocalizer, NumberLocalizer } from "react-widgets/IntlLocalizer";
 interface IProps extends FieldRenderProps<Date, HTMLElement>, FormFieldProps {}
 
-const DateInput: React.FC<IProps> = ({
+const TimeInput: React.FC<IProps> = ({
   input,
   width,
   date = false,
@@ -21,28 +21,23 @@ const DateInput: React.FC<IProps> = ({
   ...rest
 }) => {
   return (
-    <Localization
-      date={new DateLocalizer({ culture: "de-de", firstOfWeek: 1 })}
-    >
+    <>
       <Form.Field error={touched && !!error} width={width}>
-        <DateTimePicker
-          // containerClassName={"dateTimePicker-Container"}
-          onKeyDown={(e) => e.preventDefault()}
+        <TimeInputWidget
           onBlur={input.onBlur}
           onChange={input.onChange}
           value={input.value || null}
-          placeholder={placeholder}
-          {...rest}
-          id="id"
-        />
+          id="timePicker"
+        ></TimeInputWidget>
+
         {touched && !!error && (
           <Label basic color="red">
             {error}
           </Label>
         )}
       </Form.Field>
-    </Localization>
+    </>
   );
 };
 
-export default DateInput;
+export default TimeInput;

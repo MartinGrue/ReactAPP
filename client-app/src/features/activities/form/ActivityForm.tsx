@@ -27,6 +27,7 @@ import { RootStoreContext } from "../../../app/stores/rootStore";
 
 import { SimpleMap } from "../../../app/common/maps/SimpleMap";
 import { ActivityFormPlacesAutocomplete } from "./ActivityFormPlacesAutocomplete";
+import TimeInput from "../../../app/common/form/TimeInput";
 
 interface DetailsParams {
   id: string;
@@ -161,7 +162,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                       value={activity.date}
                     ></Field>
                     <Field
-                      component={DateInput}
+                      component={TimeInput}
                       time={true}
                       name="time"
                       placeholder="time"
