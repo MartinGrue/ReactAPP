@@ -1,6 +1,6 @@
-import { useState, Fragment, ReactNode } from "react";
+import { useState, ReactNode } from "react";
 import * as React from "react";
-import { Menu, Segment, Sidebar, Icon } from "semantic-ui-react";
+import { Menu, Sidebar, Icon } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
 import NavLeftMenuItems from "./NavLeftMenuItems";
 import NavRightMenuItems from "./NavRightMenuItems";
@@ -57,7 +57,7 @@ const NavBarMobile: React.FC<{
 
 const NavBarDesktop: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
-    <Fragment>
+    <>
       <Menu fixed="top" inverted>
         <NavLeftMenuItems></NavLeftMenuItems>
         <Menu.Item position="right">
@@ -65,7 +65,7 @@ const NavBarDesktop: React.FC<{ children: ReactNode }> = ({ children }) => {
         </Menu.Item>
       </Menu>
       {children}
-    </Fragment>
+    </>
   );
 };
 

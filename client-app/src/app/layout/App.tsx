@@ -16,7 +16,6 @@ const App = () => {
   const { getUser } = rootStore.userStore;
 
   useEffect(() => {
-    console.log("token: ", token);
     if (token) {
       getUser().then(() => {
         setApploaded();
@@ -26,9 +25,9 @@ const App = () => {
     }
   }, [getUser, setApploaded, token]);
 
-  // if (!appLoaded) {
-  //   return <LoadingComponent content="Loading app"></LoadingComponent>;
-  // }
+  if (!appLoaded) {
+    return <LoadingComponent content="Loading app"></LoadingComponent>;
+  }
   return (
     <Fragment>
       <ModalContainer></ModalContainer>

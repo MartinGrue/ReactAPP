@@ -13,7 +13,6 @@ export const NavLeftMenuItems: React.FC<IProps> = ({ onPusherClick }) => {
         exact
         as={NavLink}
         to="/"
-        // onClick={() => (onPusherClick ? handleRedirect() : () => {})}
       >
         <img
           src="/assets/logo.png"
