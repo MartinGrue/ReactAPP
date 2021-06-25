@@ -11,7 +11,7 @@ import { IActivity, IAttendee } from "../models/IActivity";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
 import { RootStore } from "./rootStore";
-import { FillActivityProps } from "../common/util/util";
+import { FillActivityProps, transformateTimeZone } from "../common/util/util";
 import * as signalR from "@microsoft/signalr";
 
 const PagingLimit = 2;
@@ -263,7 +263,9 @@ export default class ActivityStore {
       activity.date = new Date();
     }
     try {
-      await agent.Activities.create(activity);
+      console.log("in store: ", activity);
+
+      await agent.Activities.create(transformateTimeZone(activity));
 
       const NewAttendee: IAttendee = {
         userName: this.rootStore.userStore.user!.userName,
