@@ -1,14 +1,9 @@
 import * as React from "react";
 import { FieldRenderProps } from "react-final-form";
 import { FormFieldProps, Form, Label } from "semantic-ui-react";
-import {
-  DateTimePicker,
-  DropdownList,
-  FormatterOverrides,
-  TimeInput,
-} from "react-widgets";
+import { DateTimePicker } from "react-widgets";
 import { Localization } from "react-widgets";
-import { DateLocalizer, NumberLocalizer } from "react-widgets/IntlLocalizer";
+import { DateLocalizer } from "react-widgets/IntlLocalizer";
 interface IProps extends FieldRenderProps<Date, HTMLElement>, FormFieldProps {}
 
 const DateInput: React.FC<IProps> = ({

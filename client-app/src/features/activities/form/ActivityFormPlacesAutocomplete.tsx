@@ -3,7 +3,7 @@ import * as React from "react";
 import { observer } from "mobx-react-lite";
 import PlacesAutocomplete from "react-places-autocomplete";
 import { Form, Label, List, Segment } from "semantic-ui-react";
-import { FieldProps, FieldRenderProps } from "react-final-form";
+import { FieldRenderProps } from "react-final-form";
 import { RootStoreContext } from "../../../app/stores/rootStore";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 

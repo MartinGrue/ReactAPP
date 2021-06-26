@@ -8,7 +8,6 @@
     "@types/node": "15.12.4",
     "@types/react": "17.0.11",
     "@types/react-dom": "17.0.8",
-    "@types/react-infinite-scroller": "^1.2.1",
     "@types/react-places-autocomplete": "^7.2.7",
     "@types/react-router-dom": "^5.1.7",
     "@types/react-widgets": "^4.4.4",
@@ -36,7 +35,6 @@
     "revalidate": "^1.2.0",
     "semantic-ui-react": "^2.0.3",
     "source-map-explorer": "^2.5.2",
-    "stats-webpack-plugin": "^0.7.0",
     "typescript": "4.3.4",
     "uuid": "^8.3.2"
   },
@@ -44,10 +42,11 @@
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:nosourcemap": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "e2e": "cypress open",
-    "postbuild": "cp build ../API/wwwroot"
+    "postbuild": "rm -rf ../API/wwwroot && mv build ../API/wwwroot"
   },
   "eslintConfig": {
     "extends": "react-app"
