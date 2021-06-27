@@ -1,8 +1,8 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import * as React from "react";
 import { observer } from "mobx-react-lite";
 import PlacesAutocomplete from "react-places-autocomplete";
-import { Form, Label, List, Segment } from "semantic-ui-react";
+import { Form, Input, Label, List, Segment } from "semantic-ui-react";
 import { FieldRenderProps } from "react-final-form";
 import { RootStoreContext } from "../../../app/stores/rootStore";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
@@ -43,7 +43,15 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
       })
       .catch((error) => console.error("Error", error));
   };
+  const ref = useRef<HTMLInputElement | null>(null);
 
+  const handleKeyUp = () => {
+    let timeout: any = null;
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      handleSelect(ref.current?.value!);
+    }, 2000);
+  };
   return (
     <Form.Field disabled={disableUpdateForm} error={touched && !!error}>
       <PlacesAutocomplete
@@ -56,15 +64,18 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
             <input
+              ref={ref}
               name={name}
               onBlur={() => {
                 input.onBlur();
                 setdropdownIsOpen(false);
               }}
               onFocus={input.onFocus}
+              onKeyUp={handleKeyUp}
               onChange={(e) => {
                 getInputProps().onChange(e); //trigger PlacesAutocomplete search
                 input.onChange(e); //trigger validation to work
+
                 e.currentTarget.value.length > 0
                   ? setdropdownIsOpen(true)
                   : setdropdownIsOpen(false);
