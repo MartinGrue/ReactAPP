@@ -6,14 +6,52 @@ import TextInput from "../../app/common/form/TextInput";
 import { RootStoreContext } from "../../app/stores/rootStore";
 import { IUserFormValues } from "../../app/models/user";
 import { FORM_ERROR } from "final-form";
-import { combineValidators, isRequired } from "revalidate";
+import {
+  combineValidators,
+  isAlphabetic,
+  isRequired,
+  composeValidators,
+  hasLengthBetween,
+  createValidator,
+} from "revalidate";
 import ErrorMessage from "../../app/common/form/ErrorMessage";
 
+const isValidEmail = createValidator(
+  (message) => (value) => {
+    if (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+      return message;
+    }
+  },
+  "Invalid email address"
+);
+
+const isValidPassword = createValidator(
+  (message) => (value) => {
+    if (value && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&{}[)'""\\["`~,;:.<>]{8,}$/i.test(value)) {
+      return message;
+    }
+  },
+  "Password must be at least 2 characters, at least one letter and one number"
+);
+
 const validate = combineValidators({
-  username: isRequired("username"),
-  displayname: isRequired("displayname"),
-  email: isRequired("email"),
-  password: isRequired("password"),
+  username: composeValidators(
+    isRequired({ message: "Name is required" }),
+    hasLengthBetween(
+      3,
+      10
+    )({ message: "Length must be between 3 and 10 character" })
+  )(),
+
+  displayname: composeValidators(
+    isRequired({ message: "Displayname is required" }),
+    hasLengthBetween(
+      3,
+      10
+    )({ message: "Length must be between 3 and 10 character" })
+  )(),
+  email: composeValidators(isValidEmail, isRequired("email"))(),
+  password: composeValidators(isValidPassword, isRequired("password"))(),
 });
 
 const RegisterForm: React.FC = () => {
