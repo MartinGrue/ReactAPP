@@ -19,6 +19,9 @@ jobs:
         working-directory: ./client-app
         run: "npm i && npm run build"
 
+      - name: link .dockerignore
+        run: ln -fs .dockerignore.frontend .dockerignore
+
       - name: Build container image
         run: |
           ln -fs .dockerignore.frontend .dockerignore \
