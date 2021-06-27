@@ -1,0 +1,4 @@
+FROM nginx
+EXPOSE 3000
+COPY ./nginx.conf /etc/nginx/conf.d/nginx.conf
+COPY ./client-app/build/ /var/www/html
