@@ -1,6 +1,5 @@
 FROM nginx
 EXPOSE 3000
 EXPOSE 4000
-COPY ./nginx.conf /etc/nginx/conf.d/nginx.conf
 COPY ./client-app/build/ /var/www/html
 RUN rm -rf /etc/nginx/conf.d/default.conf
