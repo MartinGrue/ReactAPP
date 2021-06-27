@@ -16,9 +16,7 @@ jobs:
         uses: actions/checkout@master
       # - name: Update SHA
       #   run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/site/_meta
-      - name: install gzipper
-        run: "npm i gzipper -g"
-        
+
       - name: build client-app
         working-directory: ./client-app
         run: "npm i && npm run build"

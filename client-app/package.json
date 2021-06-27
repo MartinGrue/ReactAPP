@@ -17,6 +17,7 @@
     "date-fns": "^2.22.1",
     "final-form": "^4.20.2",
     "google-map-react": "^2.1.10",
+    "gzipper": "^5.0.0",
     "mobx": "^6.3.2",
     "mobx-react-lite": "^3.2.0",
     "react": "^17.0.2",
@@ -41,12 +42,12 @@
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
-    "build": "react-scripts build && gzipper compress ./build",
+    "build": "react-scripts build && npx gzipper compress ./build",
     "build:nosourcemap": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "e2e": "cypress open"
-    },
+  },
   "eslintConfig": {
     "extends": "react-app"
   },
