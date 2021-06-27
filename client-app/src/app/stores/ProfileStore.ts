@@ -181,6 +181,9 @@ export default class ProfileStore {
   @action setdisableUpdateForm = () => {
     this.disableUpdateForm = true;
   };
+  @action unsetdisableUpdateForm = () => {
+    this.disableUpdateForm = false;
+  };
   @action followUser = async () => {
     this.loadingFollow = true;
     try {

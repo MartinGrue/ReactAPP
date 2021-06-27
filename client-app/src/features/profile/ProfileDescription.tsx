@@ -1,33 +1,35 @@
-import { useContext, useState, useEffect } from 'react';
-import { Tab, Header, Grid, GridColumn, Button } from 'semantic-ui-react';
-import ProfileEditForm from './ProfileEditForm';
-import { RootStoreContext } from '../../app/stores/rootStore';
-import { observer } from 'mobx-react-lite';
+import { useContext, useState, useEffect } from "react";
+import { Tab, Header, Grid, GridColumn, Button } from "semantic-ui-react";
+import ProfileEditForm from "./ProfileEditForm";
+import { RootStoreContext } from "../../app/stores/rootStore";
+import { observer } from "mobx-react-lite";
 
 export const ProfileDescription = () => {
   const rootStore = useContext(RootStoreContext);
   const {
     isLoggedIn,
     setdisableUpdateForm,
-    toggledisableUpdateForm
+    toggledisableUpdateForm,
+    unsetdisableUpdateForm,
   } = rootStore.profileStore;
 
   const [editProfileToggle, seteditProfileToggle] = useState(false);
 
   useEffect(() => {
     setdisableUpdateForm();
+    return () => unsetdisableUpdateForm();
   }, [setdisableUpdateForm]);
   return (
     <Tab.Pane>
       <Grid>
         <GridColumn width={16}>
-          <Header floated='left' icon='address card' content='About'></Header>
+          <Header floated="left" icon="address card" content="About"></Header>
           {isLoggedIn && (
             <Button
-              floated='right'
+              floated="right"
               basic
-              content={editProfileToggle ? 'Cancel' : 'Edit Profile'}
-              color={editProfileToggle ? 'red' : 'green'}
+              content={editProfileToggle ? "Cancel" : "Edit Profile"}
+              color={editProfileToggle ? "red" : "green"}
               onClick={() => {
                 seteditProfileToggle(!editProfileToggle);
                 toggledisableUpdateForm();
