@@ -1,15 +1,15 @@
-name: push-app-image
-# on:
-#   push:
-#     branches:
-#       - master
+name: push-frontend-image
 on:
-  pull_request:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
     name: Build, push, and deploy
     runs-on: ubuntu-20.04
+    env:
+      IMAGE_NAME: activityfrontend
     steps:
       - name: Checkout master
         uses: actions/checkout@master
@@ -19,11 +19,12 @@ jobs:
         working-directory: ./client-app
         run: "npm i && npm run build"
 
-      - name: Build frontend image
+      - name: Build container image
         run: |
+          ln -fs .dockerignore.frontend .dockerignore \
           docker image build \
-          -f Dockerfile.minimal \
-          -t registry.digitalocean.com/imagerepo/activityapp:$(echo $GITHUB_SHA | head -c7) .
+          -f Dockerfile.prod.frontend \
+          -t registry.digitalocean.com/imagerepo/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7) .
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
@@ -34,4 +35,4 @@ jobs:
         run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Push image to DigitalOcean Container Registry
-        run: docker push registry.digitalocean.com/imagerepo/activityapp:$(echo $GITHUB_SHA | head -c7)
+        run: docker push registry.digitalocean.com/imagerepo/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)

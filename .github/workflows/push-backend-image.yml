@@ -21,6 +21,7 @@ jobs:
 
       - name: Build container image
         run: |
+          ln -fs .dockerignore.backend .dockerignore \
           docker image build \
           -f Dockerfile.prod.backend \
           -t registry.digitalocean.com/imagerepo/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7) .
