@@ -18,7 +18,7 @@ export const ProfileDescription = () => {
   useEffect(() => {
     setdisableUpdateForm();
     return () => unsetdisableUpdateForm();
-  }, [setdisableUpdateForm]);
+  }, [setdisableUpdateForm, unsetdisableUpdateForm]);
   return (
     <Tab.Pane>
       <Grid>
