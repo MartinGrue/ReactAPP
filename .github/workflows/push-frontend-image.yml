@@ -9,6 +9,7 @@ jobs:
     name: Build, push, and deploy
     runs-on: ubuntu-20.04
     env:
+      REPO_NAME: activity
       IMAGE_NAME: activityfrontend
     steps:
       - name: Checkout master
@@ -26,7 +27,7 @@ jobs:
         run: |
           docker image build \
           -f Dockerfile.prod.frontend \
-          -t registry.digitalocean.com/imagerepo/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7) .
+          -t registry.digitalocean.com/imagerepo/$(REPO_NAME):$(echo $IMAGE_NAME)-$(echo $GITHUB_SHA | head -c7) .
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
@@ -37,4 +38,4 @@ jobs:
         run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Push image to DigitalOcean Container Registry
-        run: docker push registry.digitalocean.com/imagerepo/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
+        run: docker push registry.digitalocean.com/$(REPO_NAME):$(echo $IMAGE_NAME)-$(echo $GITHUB_SHA | head -c7)
