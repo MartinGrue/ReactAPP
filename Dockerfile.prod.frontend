@@ -2,6 +2,8 @@ FROM nginx
 EXPOSE 3000
 EXPOSE 4000
 COPY ./client-app/build/ /var/www/html
-RUN find /var/www/html/static/js -type f -name "main.*.js" -delete
-RUN find /var/www/html/static/js -type f -name "2.*.js" -delete
+RUN gzip /var/www/html/static/js/2.*.js
+RUN gzip /var/www/html/static/js/main.*.js
+# RUN find /var/www/html/static/js -type f -name "main.*.js" -delete
+# RUN find /var/www/html/static/js -type f -name "2.*.js" -delete
 RUN rm -rf /etc/nginx/conf.d/default.conf
