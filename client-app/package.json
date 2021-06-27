@@ -45,9 +45,8 @@
     "build:nosourcemap": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "e2e": "cypress open",
-    "postbuild": "rm -rf ../API/wwwroot && mv build ../API/wwwroot"
-  },
+    "e2e": "cypress open"
+    },
   "eslintConfig": {
     "extends": "react-app"
   },
