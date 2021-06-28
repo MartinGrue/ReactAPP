@@ -1,0 +1,5 @@
+FROM nginx
+COPY ./client-app/build/ /var/www/html
+COPY ./deployment/prod/nginx.conf /etc/nginx/conf.d/default.conf
+RUN find /var/www/html/static/js -type f -name "main.*.js" -delete
+RUN find /var/www/html/static/js -type f -name "2.*.js" -delete

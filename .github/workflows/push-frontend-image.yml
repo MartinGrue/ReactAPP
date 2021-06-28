@@ -22,12 +22,12 @@ jobs:
         run: "npm i && npm run build"
 
       - name: link .dockerignore
-        run: ln -fs .dockerignore.frontend .dockerignore
+        run: ln -fs ./deployment/prod/Dockerfile.prod.frontend.dockerignore .dockerignore
 
       - name: Build container image
         run: |
           docker image build \
-          -f Dockerfile.prod.frontend \
+          -f ./deployment/prod/Dockerfile.prod.frontend \
           -t registry.digitalocean.com/imagerepo/$(echo $REPO_NAME):$(echo $IMAGE_NAME)-$(echo $GITHUB_SHA | head -c7) .
 
       - name: Install doctl
