@@ -42,7 +42,7 @@
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && npx gzipper compress ./build",
     "build:nosourcemap": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
