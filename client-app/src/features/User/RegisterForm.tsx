@@ -8,7 +8,6 @@ import { IUserFormValues } from "../../app/models/user";
 import { FORM_ERROR } from "final-form";
 import {
   combineValidators,
-  isAlphabetic,
   isRequired,
   composeValidators,
   hasLengthBetween,

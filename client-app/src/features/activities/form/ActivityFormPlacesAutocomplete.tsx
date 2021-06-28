@@ -2,7 +2,7 @@ import { useContext, useState, useEffect, useRef } from "react";
 import * as React from "react";
 import { observer } from "mobx-react-lite";
 import PlacesAutocomplete from "react-places-autocomplete";
-import { Form, Input, Label, List, Segment } from "semantic-ui-react";
+import { Form, Label, List, Segment } from "semantic-ui-react";
 import { FieldRenderProps } from "react-final-form";
 import { RootStoreContext } from "../../../app/stores/rootStore";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";

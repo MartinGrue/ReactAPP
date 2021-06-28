@@ -20,7 +20,7 @@ jobs:
       - name: Build container image
         run: |
           docker image build \
-          -f Dockerfile.database \
+          -f ./deployment/prod/Dockerfile.prod.database \
           -t registry.digitalocean.com/imagerepo/$(echo $REPO_NAME):$(echo $IMAGE_NAME)-$(echo $GITHUB_SHA | head -c7) .
 
       - name: Install doctl
