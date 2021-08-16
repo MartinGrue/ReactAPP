@@ -55,9 +55,9 @@ export default class ProfileStore {
         //console.log(profile);
         this.profile = profile;
         this.loadingProfile = false;
-        console.log("profile: ", this.profile);
-        console.log("user: ", this.user);
-        console.log("from store direct: ", this!.rootStore.userStore.user);
+        // console.log("profile: ", this.profile);
+        // console.log("user: ", this.user);
+        // console.log("from store direct: ", this!.rootStore.userStore.user);
       });
     } catch (error) {
       runInAction(() => {
