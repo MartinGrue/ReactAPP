@@ -167,7 +167,7 @@ export default class ActivityStore {
   @action editActivity = async (activity: IActivity) => {
     this.submitting = true;
     try {
-      await agent.Activities.update(activity);
+      await agent.Activities.update(transformateTimeZone(activity));
       runInAction(() => {
         this.activityRegistry.set(activity.id, activity);
         this.selectedActivity = activity;
@@ -219,7 +219,7 @@ export default class ActivityStore {
         this.loadingInitial = false;
         this.activityRegistryHasNotChanged = true;
         this.activityCount = activityCount;
-        console.log(this.activityRegistry);
+        // console.log(this.activityRegistry);
       });
     } catch (error) {
       runInAction(() => {
@@ -263,8 +263,6 @@ export default class ActivityStore {
       activity.date = new Date();
     }
     try {
-      console.log("in store: ", activity);
-
       await agent.Activities.create(transformateTimeZone(activity));
 
       const NewAttendee: IAttendee = {

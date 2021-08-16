@@ -14,7 +14,9 @@ export const combineDateAndTime = (
 };
 export const transformateTimeZone = (activity: IActivity) => {
   const newDate = new Date(activity.date);
-  newDate.setHours(activity.date.getHours() + 2);
+  newDate.setHours(
+    activity.date.getHours() + Math.abs(activity.date.getTimezoneOffset()) / 60
+  );
 
   return { ...activity, date: newDate };
 };
