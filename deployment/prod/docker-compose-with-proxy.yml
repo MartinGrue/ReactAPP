@@ -6,7 +6,7 @@ services:
     build:
       context: ./../..
       dockerfile: ./deployment/prod/Dockerfile.prod.database
-    container_name: activitydb
+    container_name: activitydb_container
     ports:
       - "3306:3306"
     networks:

@@ -1,3 +1,5 @@
+#BUILD THIS IMAGE WITH DOCKERBUILDKIT OR INGORE FILES WILL BE IGNORED
+
 FROM nginx
 COPY ./client-app/build/ /var/www/html
 COPY ./deployment/prod/nginx.conf /etc/nginx/conf.d/default.conf
