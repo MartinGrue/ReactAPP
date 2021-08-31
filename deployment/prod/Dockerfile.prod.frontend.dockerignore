@@ -12,6 +12,6 @@
 **/Domain
 **/Infrastructure
 **/Persistence
-**/src
+
 **/docker-compose*
 **/Dockerfile*
