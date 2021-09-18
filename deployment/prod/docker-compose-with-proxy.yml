@@ -7,8 +7,6 @@ services:
       context: ./../..
       dockerfile: ./deployment/prod/Dockerfile.prod.database
     container_name: activitydb_container
-    ports:
-      - "3306:3306"
     networks:
       - frontend
 
@@ -17,12 +15,8 @@ services:
       context: ./../..
       dockerfile: ./deployment/prod/Dockerfile.prod.backend
     container_name: activitybackend_container
-    # ports:
-    #   - "5000:5000"
     networks:
       - frontend
-    stdin_open: true # docker run -i
-    tty: true # docker run -t
 
   frontend:
     build:

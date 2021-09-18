@@ -178,7 +178,7 @@ export default class ActivityStore {
     } catch (error) {
       runInAction(() => {
         toast.error("Problem submitting data");
-        console.log(error.response);
+        console.log(error);
         this.submitting = false;
       });
     }
@@ -287,7 +287,7 @@ export default class ActivityStore {
       runInAction(() => {
         this.submitting = false;
         toast.error("Problem submitting data");
-        console.log(error.response);
+        console.log(error);
       });
     }
   };
