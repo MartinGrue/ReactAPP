@@ -1,0 +1,329 @@
+{
+  "users": [
+    {
+      "Id": "a",
+      "DisplayName": "Bob",
+      "UserName": "bob",
+      "Email": "bob@test.com",
+      "Photos": [
+        {
+          "Url": "https://randomuser.me/api/portraits/men/69.jpg",
+          "IsMain": true
+        },
+        {
+          "Url": "https://picsum.photos/id/896/300/300.jpg",
+          "IsMain": false
+        },
+        {
+          "Url": "https://picsum.photos/id/603/300/300.jpg",
+          "IsMain": false
+        },
+        {
+          "Url": "https://picsum.photos/id/2/300/300.jpg",
+          "IsMain": false
+        },
+        {
+          "Url": "https://picsum.photos/id/183/300/300.jpg",
+          "IsMain": false
+        }
+      ]
+    },
+    {
+      "Id": "b",
+      "DisplayName": "Jane",
+      "UserName": "jane",
+      "Email": "jane@test.com",
+      "Photos": [
+        {
+          "Url": "https://randomuser.me/api/portraits/women/42.jpg",
+          "IsMain": true
+        },
+        {
+          "Url": "https://picsum.photos/id/814/300/300.jpg",
+          "IsMain": false
+        },
+        {
+          "Url": "https://picsum.photos/id/811/300/300.jpg",
+          "IsMain": false
+        },
+        {
+          "Url": "https://picsum.photos/id/659/300/300.jpg",
+          "IsMain": false
+        },
+        {
+          "Url": "https://picsum.photos/id/615/300/300.jpg",
+          "IsMain": false
+        }
+      ]
+    },
+    {
+      "Id": "c",
+      "DisplayName": "Tom",
+      "UserName": "tom",
+      "Email": "tom@test.com",
+      "Photos": [
+        {
+          "Url": "https://randomuser.me/api/portraits/men/36.jpg",
+          "IsMain": true
+        },
+        {
+          "Url": "https://picsum.photos/id/877/300/300.jpg",
+          "IsMain": false
+        },
+        {
+          "Url": "https://picsum.photos/id/87/300/300.jpg",
+          "IsMain": false
+        },
+        {
+          "Url": "https://picsum.photos/id/52/300/300.jpg",
+          "IsMain": false
+        },
+        {
+          "Url": "https://picsum.photos/id/848/300/300.jpg",
+          "IsMain": false
+        }
+      ]
+    }
+  ],
+  "activities": [
+    {
+      "Title": "Past Activity 1",
+      "Date": "2021-09-22T15:48:36.392Z",
+      "Description": "Activity 2 days ago",
+      "Category": "Drinks",
+      "City": "London Downtown",
+      "Latitute": 51.5073509,
+      "Longitute": -0.12775829999998223,
+      "Venue": "Pub",
+      "UserActivities": [
+        {
+          "AppUserId": "a",
+          "IsHost": true,
+          "DateJoined": "2021-09-22T15:48:36.392Z"
+        }
+      ]
+    },
+    {
+      "Title": "Past Activity 2",
+      "Date": "2021-09-21T15:48:36.392Z",
+      "Description": "Activity 1 month ago",
+      "Category": "Culture",
+      "City": "Paris",
+      "Latitute": 48.856614,
+      "Longitute": 2.3522219000000177,
+      "Venue": "The Louvre",
+      "UserActivities": [
+        {
+          "AppUserId": "b",
+          "IsHost": true,
+          "DateJoined": "2021-09-21T15:48:36.392Z"
+        },
+        {
+          "AppUserId": "a",
+          "IsHost": false,
+          "DateJoined": "2021-09-20T15:48:36.392Z"
+        }
+      ]
+    },
+    {
+      "Title": "Future Activity 1",
+      "Date": "2021-09-23T15:48:36.392Z",
+      "Description": "Activity 1 Day in future",
+      "Category": "Music",
+      "City": "Braunschweig",
+      "Latitute": 52.2688736,
+      "Longitute": 10.526769599999966,
+      "Venue": "Eintracht-Stadion",
+      "UserActivities": [
+        {
+          "AppUserId": "b",
+          "IsHost": true,
+          "DateJoined": "2021-09-23T15:48:36.392Z"
+        },
+        {
+          "AppUserId": "a",
+          "IsHost": false,
+          "DateJoined": "2021-09-23T15:48:36.392Z"
+        }
+      ]
+    },
+    {
+      "Title": "Future Activity 2",
+      "Date": "2021-09-24T15:48:36.392Z",
+      "Description": "Activity 2 days in future",
+      "Category": "Food",
+      "City": "Berlin",
+      "Latitute": 52.52000659999999,
+      "Longitute": 13.404953999999975,
+      "Venue": "Italian Food",
+      "UserActivities": [
+        {
+          "AppUserId": "c",
+          "IsHost": true,
+          "DateJoined": "2021-09-24T15:48:36.392Z"
+        },
+        {
+          "AppUserId": "a",
+          "IsHost": false,
+          "DateJoined": "2021-09-24T15:48:36.392Z"
+        }
+      ]
+    },
+    {
+      "Title": "Future Activity 3",
+      "Date": "2021-09-25T15:48:36.392Z",
+      "Description": "Activity 3 days in future",
+      "Category": "Drinks",
+      "City": "London",
+      "Latitute": 51.5073509,
+      "Longitute": -0.12775829999998223,
+      "Venue": "Pub",
+      "UserActivities": [
+        {
+          "AppUserId": "b",
+          "IsHost": true,
+          "DateJoined": "2021-09-25T15:48:36.392Z"
+        },
+        {
+          "AppUserId": "c",
+          "IsHost": false,
+          "DateJoined": "2021-09-25T15:48:36.392Z"
+        }
+      ]
+    },
+    {
+      "Title": "Future Activity 4",
+      "Date": "2021-09-26T15:48:36.392Z",
+      "Description": "Activity 4 days in future",
+      "Category": "Culture",
+      "City": "Paris",
+      "Latitute": 48.856614,
+      "Longitute": 2.3522219000000177,
+      "Venue": "Eiffel Tower",
+      "UserActivities": [
+        {
+          "AppUserId": "a",
+          "IsHost": true,
+          "DateJoined": "2021-09-26T15:48:36.392Z"
+        }
+      ]
+    },
+    {
+      "Title": "Future Activity 5",
+      "Date": "2021-09-27T15:48:36.392Z",
+      "Description": "Activity 5 days in future",
+      "Category": "Drinks",
+      "City": "Brunswick",
+      "Latitute": 52.2688736,
+      "Longitute": 10.526769599999966,
+      "Venue": "Brunswick castle",
+      "UserActivities": [
+        {
+          "AppUserId": "c",
+          "IsHost": true,
+          "DateJoined": "2021-09-27T15:48:36.392Z"
+        },
+        {
+          "AppUserId": "b",
+          "IsHost": false,
+          "DateJoined": "2021-09-27T15:48:36.392Z"
+        }
+      ]
+    },
+    {
+      "Title": "Future Activity 6",
+      "Date": "2021-09-28T15:48:36.392Z",
+      "Description": "Activity 6 days in future",
+      "Category": "Music",
+      "City": "Berlin",
+      "Latitute": 52.52000659999999,
+      "Longitute": 13.404953999999975,
+      "Venue": "Brandenburg Gate",
+      "UserActivities": [
+        {
+          "AppUserId": "a",
+          "IsHost": true,
+          "DateJoined": "2021-09-28T15:48:36.392Z"
+        },
+        {
+          "AppUserId": "b",
+          "IsHost": false,
+          "DateJoined": "2021-09-28T15:48:36.392Z"
+        }
+      ]
+    },
+    {
+      "Title": "Future Activity 7",
+      "Date": "2021-09-29T15:48:36.392Z",
+      "Description": "Activity 7 days in future",
+      "Category": "Travel",
+      "City": "Berlin",
+      "Latitute": 52.52000659999999,
+      "Longitute": 13.404953999999975,
+      "Venue": "Berlin Television Tower",
+      "UserActivities": [
+        {
+          "AppUserId": "a",
+          "IsHost": true,
+          "DateJoined": "2021-09-29T15:48:36.392Z"
+        },
+        {
+          "AppUserId": "c",
+          "IsHost": false,
+          "DateJoined": "2021-09-29T15:48:36.392Z"
+        }
+      ]
+    },
+    {
+      "Title": "Future Activity 8",
+      "Date": "2021-09-30T15:48:36.392Z",
+      "Description": "Activity 8 days in future",
+      "Category": "Drinks",
+      "City": "Berlin",
+      "Latitute": 52.52000659999999,
+      "Longitute": 13.404953999999975,
+      "Venue": "Berlin Cathedral",
+      "UserActivities": [
+        {
+          "AppUserId": "b",
+          "IsHost": true,
+          "DateJoined": "2021-09-30T15:48:36.392Z"
+        },
+        {
+          "AppUserId": "a",
+          "IsHost": false,
+          "DateJoined": "2021-09-30T15:48:36.392Z"
+        }
+      ]
+    },
+    {
+      "Title": "Future Activity 9",
+      "Date": "2021-09-30T15:48:36.392Z",
+      "Description": "Activity 8 days in future",
+      "Category": "Drinks",
+      "City": "Berlin",
+      "Latitute": 52.52000659999999,
+      "Longitute": 13.404953999999975,
+      "Venue": "Kurfürstendamm",
+      "UserActivities": [
+        {
+          "AppUserId": "b",
+          "IsHost": true,
+          "DateJoined": "2021-09-30T15:48:36.392Z"
+        },
+        {
+          "AppUserId": "c",
+          "IsHost": false,
+          "DateJoined": "2021-09-30T15:48:36.392Z"
+        }
+      ]
+    }
+  ],
+  "followerFollowings": [
+    { "UserAId": "a", "UserBId": "b" },
+    { "UserAId": "b", "UserBId": "c" },
+    { "UserAId": "a", "UserBId": "c" },
+    { "UserAId": "c", "UserBId": "a" },
+    { "UserAId": "c", "UserBId": "b" }
+  ]
+}
