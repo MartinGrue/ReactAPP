@@ -83,6 +83,7 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
               value={currentValue}
               placeholder={getInputProps(FieldProps).placeholder}
               className={getInputProps(FieldProps).className}
+              autoComplete="off"
             ></input>
             {touched && !!error && (
               <Label basic color="red">
