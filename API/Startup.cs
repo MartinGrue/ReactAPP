@@ -39,37 +39,23 @@ namespace API
         }
 
         public IConfiguration Configuration { get; }
-        public void ConfigureDevelopmentServices(IServiceCollection services)
-        {
-            services.AddDbContext<DataContext>(opt =>
-              {
-                  opt.UseLazyLoadingProxies();
-                  opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
-              });
-            ConfigureServices(services);
-        }
-
-        public void ConfigureProductionServices(IServiceCollection services)
-        {
-            services.AddDbContext<DataContext>(opt =>
-              {
-                  opt.UseLazyLoadingProxies();
-                  opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
-                  mySqlOptions =>
-                  {
-                      mySqlOptions.EnableRetryOnFailure(
-                      maxRetryCount: 10,
-                      maxRetryDelay: TimeSpan.FromSeconds(10),
-                      errorNumbersToAdd: null);
-                  });
-              });
-            ConfigureServices(services);
-        }
-
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<DataContext>(opt =>
+  {
+      opt.UseLazyLoadingProxies();
+      opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
+      mySqlOptions =>
+      {
+          mySqlOptions.EnableRetryOnFailure(
+          maxRetryCount: 10,
+          maxRetryDelay: TimeSpan.FromSeconds(10),
+          errorNumbersToAdd: null);
+      });
+  });
+
             services.AddAuthorization(authopt =>
              {
                  authopt.AddPolicy("IsActivityHost", authpolbuilder =>
@@ -150,7 +136,6 @@ namespace API
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseMiddleware<ErrorHandlingMiddleware>();
-
             if (env.IsDevelopment())
             {
                 //  app.UseDeveloperExceptionPage();
