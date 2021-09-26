@@ -173,15 +173,11 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
 
                   <Field
                     name="city"
-                    value="banana"
+                    key="city"
                     render={({ input, meta }) => (
                       <ActivityFormPlacesAutocomplete
-                        key="city"
-                        name="city"
+                        {...{ input, meta, setLatlng }}
                         placeholder="city"
-                        input={input}
-                        meta={meta}
-                        setLatlng={setLatlng}
                         Options={{
                           types: ["(regions)"],
                         }}
@@ -189,15 +185,12 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                     )}
                   ></Field>
                   <Field
+                    key="venue"
                     name="venue"
                     render={({ input, meta }) => (
                       <ActivityFormPlacesAutocomplete
-                        key="venue"
-                        name="venue"
+                        {...{ input, meta, setLatlng }}
                         placeholder={"venue"}
-                        input={input}
-                        meta={meta}
-                        setLatlng={setLatlng}
                         Options={{
                           types: ["address"],
                         }}
