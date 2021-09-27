@@ -17,6 +17,5 @@ build
 
 # development in docker container
 **/.devcontainer
-**/cypress
 
 .dockerignore
