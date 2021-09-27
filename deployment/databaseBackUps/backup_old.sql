@@ -1,3 +1,8 @@
+-- MySQL dump 10.13  Distrib 8.0.22, for Linux (x86_64)
+--
+-- Host: localhost    Database: react
+-- ------------------------------------------------------
+-- Server version	8.0.22
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -9,12 +14,13 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 -- Exportiere Datenbank Struktur für react
-CREATE DATABASE IF NOT EXISTS `react` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `react`
+/*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */
+/*!80016 DEFAULT ENCRYPTION='N' */;
 USE `react`;
 --
 -- Table structure for table `Activities`
 --
-
 DROP TABLE IF EXISTS `Activities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -31,125 +37,131 @@ CREATE TABLE `Activities` (
   PRIMARY KEY (`Id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+--
+-- Dumping data for table `Activities`
+--
 LOCK TABLES `Activities` WRITE;
 /*!40000 ALTER TABLE `Activities` DISABLE KEYS */;
 INSERT INTO
   `Activities`
 VALUES
   (
-    '08d98118-a38a-6d66-4257-cdbfc3e1fb57',
+    '08d8d8c8-d9f7-ce85-3efe-793dc8008b00',
     'Past Activity 1',
     'Activity 2 days ago',
     'Drinks',
-    '2021-09-22 15:48:36.392000',
+    '2021-02-22 13:34:03.471540',
     'London Downtown',
     'Pub',
-    51.5073509,
-    51.5073509
+    52.3758916,
+    9.732010400000002
   ),(
-    '08d98118-a38b-5dba-ae65-2199b0d791bc',
+    '08d8d8c8-d9fc-cc78-0823-009e36e734fa',
     'Past Activity 2',
     'Activity 1 month ago',
     'Culture',
-    '2021-09-21 15:48:36.392000',
+    '2021-02-23 13:34:03.471835',
     'Paris',
     'The Louvre',
     48.856614,
-    48.856614
+    2.3522219000000177
   ),(
-    '08d98118-a38b-683e-a1a3-5aa66a333831',
+    '08d8d8c8-d9fc-f5be-0648-6059a9d20c9a',
     'Future Activity 1',
-    'Activity 1 Day in future',
+    'Activity 1 month in future',
     'Music',
-    '2021-09-23 15:48:36.392000',
+    '2021-02-25 13:34:03.471844',
     'Braunschweig',
     'Eintracht-Stadion',
     52.2688736,
-    52.2688736
+    10.526769599999966
   ),(
-    '08d98118-a38b-6e20-5800-4e95f6cf4a32',
+    '08d8d8c8-d9fc-fb00-5983-64579f1a11f9',
     'Future Activity 2',
     'Activity 2 days in future',
     'Food',
-    '2021-09-24 15:48:36.392000',
+    '2021-02-26 13:34:03.471845',
     'Berlin',
     'Italian Food',
     52.52000659999999,
-    52.52000659999999
+    13.404953999999975
   ),(
-    '08d98118-a38b-7486-ce5b-073ea7aeaf83',
+    '08d8d8c8-d9fd-00bb-e6c0-abdc245d8b12',
     'Future Activity 3',
     'Activity 3 days in future',
     'Drinks',
-    '2021-09-25 15:48:36.392000',
+    '2021-02-27 13:34:03.471846',
     'London',
     'Pub',
     51.5073509,
-    51.5073509
+    -0.12775829999998223
   ),(
-    '08d98118-a38b-7a13-0714-105fbb1828fc',
+    '08d8d8c8-d9fd-0537-3734-cd41da34f6a0',
     'Future Activity 4',
     'Activity 4 days in future',
     'Culture',
-    '2021-09-26 15:48:36.392000',
+    '2021-02-28 13:34:03.471846',
     'Paris',
     'Eiffel Tower',
     48.856614,
-    48.856614
+    2.3522219000000177
   ),(
-    '08d98118-a38b-7da8-1893-2208bcbad559',
+    '08d8d8c8-d9fd-0807-a205-e8b706854a69',
     'Future Activity 5',
     'Activity 5 days in future',
     'Drinks',
-    '2021-09-27 15:48:36.392000',
+    '2021-03-01 13:34:03.471847',
     'Brunswick',
     'Brunswick castle',
     52.2688736,
-    52.2688736
+    10.526769599999966
   ),(
-    '08d98118-a38b-832e-9b3a-ec4cdcad28e2',
+    '08d8d8c8-d9fd-0c8e-6662-16bb538bd497',
     'Future Activity 6',
     'Activity 6 days in future',
     'Music',
-    '2021-09-28 15:48:36.392000',
+    '2021-03-02 13:34:03.471847',
     'Berlin',
     'Brandenburg Gate',
     52.52000659999999,
-    52.52000659999999
+    13.404953999999975
   ),(
-    '08d98118-a38b-88b8-8e1d-07e8a458c48d',
+    '08d8d8c8-d9fd-10d1-8b7c-c4623f413017',
     'Future Activity 7',
     'Activity 7 days in future',
     'Travel',
-    '2021-09-29 15:48:36.392000',
+    '2021-03-03 13:34:03.471848',
     'Berlin',
     'Berlin Television Tower',
     52.52000659999999,
-    52.52000659999999
+    13.404953999999975
   ),(
-    '08d98118-a38b-8e88-1718-6dde4d80118f',
+    '08d8d8c8-d9fd-154e-2049-8dd74a25471e',
     'Future Activity 8',
     'Activity 8 days in future',
     'Drinks',
-    '2021-09-30 15:48:36.392000',
+    '2021-03-04 13:34:03.471848',
     'Berlin',
     'Berlin Cathedral',
     52.52000659999999,
-    52.52000659999999
+    13.404953999999975
   ),(
-    '08d98118-a38b-944f-0b58-ef62d6079348',
+    '08d8d8c8-d9fd-1a24-ce27-3bfcb00ae025',
     'Future Activity 9',
     'Activity 8 days in future',
     'Drinks',
-    '2021-09-30 15:48:36.392000',
+    '2021-03-04 13:34:03.471855',
     'Berlin',
     'Kurfürstendamm',
     52.52000659999999,
-    52.52000659999999
+    13.404953999999975
   );
   /*!40000 ALTER TABLE `Activities` ENABLE KEYS */;
 UNLOCK TABLES;
-DROP TABLE IF EXISTS `AspNetRoleClaims`;
+--
+  -- Table structure for table `AspNetRoleClaims`
+  --
+  DROP TABLE IF EXISTS `AspNetRoleClaims`;
   /*!40101 SET @saved_cs_client     = @@character_set_client */;
   /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `AspNetRoleClaims` (
@@ -162,11 +174,17 @@ CREATE TABLE `AspNetRoleClaims` (
     CONSTRAINT `FK_AspNetRoleClaims_AspNetRoles_RoleId` FOREIGN KEY (`RoleId`) REFERENCES `AspNetRoles` (`Id`) ON DELETE CASCADE
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
   /*!40101 SET character_set_client = @saved_cs_client */;
-LOCK TABLES `AspNetRoleClaims` WRITE;
+--
+  -- Dumping data for table `AspNetRoleClaims`
+  --
+  LOCK TABLES `AspNetRoleClaims` WRITE;
   /*!40000 ALTER TABLE `AspNetRoleClaims` DISABLE KEYS */;
   /*!40000 ALTER TABLE `AspNetRoleClaims` ENABLE KEYS */;
 UNLOCK TABLES;
-DROP TABLE IF EXISTS `AspNetRoles`;
+--
+  -- Table structure for table `AspNetRoles`
+  --
+  DROP TABLE IF EXISTS `AspNetRoles`;
   /*!40101 SET @saved_cs_client     = @@character_set_client */;
   /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `AspNetRoles` (
@@ -178,11 +196,17 @@ CREATE TABLE `AspNetRoles` (
     UNIQUE KEY `RoleNameIndex` (`NormalizedName`)
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
   /*!40101 SET character_set_client = @saved_cs_client */;
-LOCK TABLES `AspNetRoles` WRITE;
+--
+  -- Dumping data for table `AspNetRoles`
+  --
+  LOCK TABLES `AspNetRoles` WRITE;
   /*!40000 ALTER TABLE `AspNetRoles` DISABLE KEYS */;
   /*!40000 ALTER TABLE `AspNetRoles` ENABLE KEYS */;
 UNLOCK TABLES;
-DROP TABLE IF EXISTS `AspNetUserClaims`;
+--
+  -- Table structure for table `AspNetUserClaims`
+  --
+  DROP TABLE IF EXISTS `AspNetUserClaims`;
   /*!40101 SET @saved_cs_client     = @@character_set_client */;
   /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `AspNetUserClaims` (
@@ -195,11 +219,17 @@ CREATE TABLE `AspNetUserClaims` (
     CONSTRAINT `FK_AspNetUserClaims_AspNetUsers_UserId` FOREIGN KEY (`UserId`) REFERENCES `AspNetUsers` (`Id`) ON DELETE CASCADE
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
   /*!40101 SET character_set_client = @saved_cs_client */;
-LOCK TABLES `AspNetUserClaims` WRITE;
+--
+  -- Dumping data for table `AspNetUserClaims`
+  --
+  LOCK TABLES `AspNetUserClaims` WRITE;
   /*!40000 ALTER TABLE `AspNetUserClaims` DISABLE KEYS */;
   /*!40000 ALTER TABLE `AspNetUserClaims` ENABLE KEYS */;
 UNLOCK TABLES;
-DROP TABLE IF EXISTS `AspNetUserLogins`;
+--
+  -- Table structure for table `AspNetUserLogins`
+  --
+  DROP TABLE IF EXISTS `AspNetUserLogins`;
   /*!40101 SET @saved_cs_client     = @@character_set_client */;
   /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `AspNetUserLogins` (
@@ -212,11 +242,17 @@ CREATE TABLE `AspNetUserLogins` (
     CONSTRAINT `FK_AspNetUserLogins_AspNetUsers_UserId` FOREIGN KEY (`UserId`) REFERENCES `AspNetUsers` (`Id`) ON DELETE CASCADE
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
   /*!40101 SET character_set_client = @saved_cs_client */;
-LOCK TABLES `AspNetUserLogins` WRITE;
+--
+  -- Dumping data for table `AspNetUserLogins`
+  --
+  LOCK TABLES `AspNetUserLogins` WRITE;
   /*!40000 ALTER TABLE `AspNetUserLogins` DISABLE KEYS */;
   /*!40000 ALTER TABLE `AspNetUserLogins` ENABLE KEYS */;
 UNLOCK TABLES;
-DROP TABLE IF EXISTS `AspNetUserRoles`;
+--
+  -- Table structure for table `AspNetUserRoles`
+  --
+  DROP TABLE IF EXISTS `AspNetUserRoles`;
   /*!40101 SET @saved_cs_client     = @@character_set_client */;
   /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `AspNetUserRoles` (
@@ -228,11 +264,17 @@ CREATE TABLE `AspNetUserRoles` (
     CONSTRAINT `FK_AspNetUserRoles_AspNetUsers_UserId` FOREIGN KEY (`UserId`) REFERENCES `AspNetUsers` (`Id`) ON DELETE CASCADE
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
   /*!40101 SET character_set_client = @saved_cs_client */;
-LOCK TABLES `AspNetUserRoles` WRITE;
+--
+  -- Dumping data for table `AspNetUserRoles`
+  --
+  LOCK TABLES `AspNetUserRoles` WRITE;
   /*!40000 ALTER TABLE `AspNetUserRoles` DISABLE KEYS */;
   /*!40000 ALTER TABLE `AspNetUserRoles` ENABLE KEYS */;
 UNLOCK TABLES;
-DROP TABLE IF EXISTS `AspNetUserTokens`;
+--
+  -- Table structure for table `AspNetUserTokens`
+  --
+  DROP TABLE IF EXISTS `AspNetUserTokens`;
   /*!40101 SET @saved_cs_client     = @@character_set_client */;
   /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `AspNetUserTokens` (
@@ -244,11 +286,17 @@ CREATE TABLE `AspNetUserTokens` (
     CONSTRAINT `FK_AspNetUserTokens_AspNetUsers_UserId` FOREIGN KEY (`UserId`) REFERENCES `AspNetUsers` (`Id`) ON DELETE CASCADE
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
   /*!40101 SET character_set_client = @saved_cs_client */;
-LOCK TABLES `AspNetUserTokens` WRITE;
+--
+  -- Dumping data for table `AspNetUserTokens`
+  --
+  LOCK TABLES `AspNetUserTokens` WRITE;
   /*!40000 ALTER TABLE `AspNetUserTokens` DISABLE KEYS */;
   /*!40000 ALTER TABLE `AspNetUserTokens` ENABLE KEYS */;
 UNLOCK TABLES;
-DROP TABLE IF EXISTS `AspNetUsers`;
+--
+  -- Table structure for table `AspNetUsers`
+  --
+  DROP TABLE IF EXISTS `AspNetUsers`;
   /*!40101 SET @saved_cs_client     = @@character_set_client */;
   /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `AspNetUsers` (
@@ -274,7 +322,10 @@ CREATE TABLE `AspNetUsers` (
     KEY `EmailIndex` (`NormalizedEmail`)
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
   /*!40101 SET character_set_client = @saved_cs_client */;
-LOCK TABLES `AspNetUsers` WRITE;
+--
+  -- Dumping data for table `AspNetUsers`
+  --
+  LOCK TABLES `AspNetUsers` WRITE;
   /*!40000 ALTER TABLE `AspNetUsers` DISABLE KEYS */;
 INSERT INTO
   `AspNetUsers`
@@ -286,9 +337,9 @@ VALUES
     'bob@test.com',
     'BOB@TEST.COM',
     0,
-    'AQAAAAEAACcQAAAAEMSImBxvQNVDNekQh5ekdo6y44zEnl6ecwO/3/Vz/JqatdK/7I/mntajAJRGsZFBCg==',
-    'VNAWUWS3KL5XG4Q5MUNWZWGVRAO653GT',
-    '2ce45860-e08e-4fd2-abc8-26d6de8747bf',
+    'AQAAAAEAACcQAAAAEI+y896+yhrZhQxJC7XlMDjChC+MYbuLoedT7nA/x2Ap2WsbfiNECpIxEEqLmBpLsQ==',
+    'CK74GICRQ535RMZCY7H5YYF7EOC6JX6D',
+    'a111d380-2db1-4652-b932-1c31fc1b6699',
     NULL,
     0,
     0,
@@ -304,9 +355,9 @@ VALUES
     'jane@test.com',
     'JANE@TEST.COM',
     0,
-    'AQAAAAEAACcQAAAAEGgnHjAn7qURktHX47iS1/0vzPIVA4wZ56fMWpj1Y+c0PPsVDOaOFKaD0LWUIfNdmA==',
-    'XMEUADV5GJNVDQQ4B2MJ7YPRMJFY4DXO',
-    '68e3225d-65a4-427d-a8fb-ad9ccd7b7bbc',
+    'AQAAAAEAACcQAAAAEAImD6Sa1lsvnvrAxWsoiTg5YGsz3bSoI2cNl84qfHU8I028oMSyH9VIkarXnyCMjA==',
+    'GFIOYQ3YCB35QPYOXZVID3CVQDY6IQ43',
+    '1c8d544d-68c3-4b3c-8e74-02349f5c4bc7',
     NULL,
     0,
     0,
@@ -322,9 +373,9 @@ VALUES
     'tom@test.com',
     'TOM@TEST.COM',
     0,
-    'AQAAAAEAACcQAAAAEGdVcfAa6wUVXcEshhUFLJeimWBxhElgF6SLxfqjRRzSxFceHAgVpwZouoAMvtXz/w==',
-    'UN7MZ3HNG6SO4DJ3RZIVV3B5AF7HROQC',
-    '5d4613fa-2ef9-45aa-b176-b26603f8c140',
+    'AQAAAAEAACcQAAAAEL5NxtWmqit8tKge9Y0YEZWPW4Gm/le6WBfaNlKfAjO5SdfghXn10Yq72jl8eGpNDA==',
+    'YAVBN4FLZ5JOBFVHI4RWXOQ7ISBEBUSB',
+    '56e3dd69-c091-4943-a2c4-e22e7227d6fc',
     NULL,
     0,
     0,
@@ -336,7 +387,10 @@ VALUES
   );
   /*!40000 ALTER TABLE `AspNetUsers` ENABLE KEYS */;
 UNLOCK TABLES;
-DROP TABLE IF EXISTS `Comments`;
+--
+  -- Table structure for table `Comments`
+  --
+  DROP TABLE IF EXISTS `Comments`;
   /*!40101 SET @saved_cs_client     = @@character_set_client */;
   /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Comments` (
@@ -352,11 +406,17 @@ CREATE TABLE `Comments` (
     CONSTRAINT `FK_Comments_AspNetUsers_AuthorId` FOREIGN KEY (`AuthorId`) REFERENCES `AspNetUsers` (`Id`) ON DELETE RESTRICT
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
   /*!40101 SET character_set_client = @saved_cs_client */;
-LOCK TABLES `Comments` WRITE;
+--
+  -- Dumping data for table `Comments`
+  --
+  LOCK TABLES `Comments` WRITE;
   /*!40000 ALTER TABLE `Comments` DISABLE KEYS */;
   /*!40000 ALTER TABLE `Comments` ENABLE KEYS */;
 UNLOCK TABLES;
-DROP TABLE IF EXISTS `FollowerFollowings`;
+--
+  -- Table structure for table `FollowerFollowings`
+  --
+  DROP TABLE IF EXISTS `FollowerFollowings`;
   /*!40101 SET @saved_cs_client     = @@character_set_client */;
   /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `FollowerFollowings` (
@@ -368,15 +428,21 @@ CREATE TABLE `FollowerFollowings` (
     CONSTRAINT `FK_FollowerFollowings_AspNetUsers_UserBId` FOREIGN KEY (`UserBId`) REFERENCES `AspNetUsers` (`Id`) ON DELETE CASCADE
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
   /*!40101 SET character_set_client = @saved_cs_client */;
-LOCK TABLES `FollowerFollowings` WRITE;
+--
+  -- Dumping data for table `FollowerFollowings`
+  --
+  LOCK TABLES `FollowerFollowings` WRITE;
   /*!40000 ALTER TABLE `FollowerFollowings` DISABLE KEYS */;
 INSERT INTO
   `FollowerFollowings`
 VALUES
-  ('c', 'a'),('a', 'b'),('c', 'b'),('a', 'c'),('b', 'c');
+  ('b', 'a'),('c', 'a'),('a', 'b'),('c', 'b'),('a', 'c');
   /*!40000 ALTER TABLE `FollowerFollowings` ENABLE KEYS */;
 UNLOCK TABLES;
-DROP TABLE IF EXISTS `Photos`;
+--
+  -- Table structure for table `Photos`
+  --
+  DROP TABLE IF EXISTS `Photos`;
   /*!40101 SET @saved_cs_client     = @@character_set_client */;
   /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Photos` (
@@ -389,90 +455,96 @@ CREATE TABLE `Photos` (
     CONSTRAINT `FK_Photos_AspNetUsers_AppUserId` FOREIGN KEY (`AppUserId`) REFERENCES `AspNetUsers` (`Id`) ON DELETE RESTRICT
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
   /*!40101 SET character_set_client = @saved_cs_client */;
-LOCK TABLES `Photos` WRITE;
+--
+  -- Dumping data for table `Photos`
+  --
+  LOCK TABLES `Photos` WRITE;
   /*!40000 ALTER TABLE `Photos` DISABLE KEYS */;
 INSERT INTO
   `Photos`
 VALUES
   (
-    'arqz8bivpqtodn3qa1qr',
-    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1632679681/Reactivities/arqz8bivpqtodn3qa1qr.jpg',
-    1,
-    'b'
-  ),(
-    'dzjwhufpim5oevuf8low',
-    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1632679685/Reactivities/dzjwhufpim5oevuf8low.jpg',
-    1,
-    'c'
-  ),(
-    'euwrovri3gsjvofof7ux',
-    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1632679686/Reactivities/euwrovri3gsjvofof7ux.jpg',
-    0,
-    'c'
-  ),(
-    'fqimwngqqpouvrxizubl',
-    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1632679678/Reactivities/fqimwngqqpouvrxizubl.jpg',
-    0,
-    'a'
-  ),(
-    'iyytghdpyrg4zp2wzkp9',
-    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1632679682/Reactivities/iyytghdpyrg4zp2wzkp9.jpg',
-    0,
-    'b'
-  ),(
-    'ngla6bnrt9j6rep4omze',
-    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1632679678/Reactivities/ngla6bnrt9j6rep4omze.jpg',
-    0,
-    'a'
-  ),(
-    'oc8cwuncnzd7fpdhwmrx',
-    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1632679683/Reactivities/oc8cwuncnzd7fpdhwmrx.jpg',
-    0,
-    'b'
-  ),(
-    'ont4lcuyeyfpxgvjxr7h',
-    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1632679689/Reactivities/ont4lcuyeyfpxgvjxr7h.jpg',
-    0,
-    'c'
-  ),(
-    'prm622z8kzhqgks9uwzw',
-    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1632679685/Reactivities/prm622z8kzhqgks9uwzw.jpg',
-    0,
-    'b'
-  ),(
-    'tiuwx0roe4exkxjkaxhl',
-    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1632679679/Reactivities/tiuwx0roe4exkxjkaxhl.jpg',
-    0,
-    'a'
-  ),(
-    'tpuevgn7huiipzyi8gj9',
-    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1632679680/Reactivities/tpuevgn7huiipzyi8gj9.jpg',
-    0,
-    'a'
-  ),(
-    'tzybaehh4wglbmrddasl',
-    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1632679677/Reactivities/tzybaehh4wglbmrddasl.jpg',
+    'avzsk70l6bx2vooc1eeg',
+    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1614173630/Reactivities/avzsk70l6bx2vooc1eeg.jpg',
     1,
     'a'
   ),(
-    'wgfo6dldynxydzbm7jps',
-    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1632679684/Reactivities/wgfo6dldynxydzbm7jps.jpg',
+    'bwu2fu05tnoz1vhnfgti',
+    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1614173637/Reactivities/bwu2fu05tnoz1vhnfgti.jpg',
     0,
     'b'
   ),(
-    'wvks31kuotzm7n9mbes3',
-    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1632679687/Reactivities/wvks31kuotzm7n9mbes3.jpg',
+    'cgaat55bnn6bc6nq0qsr',
+    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1614173636/Reactivities/cgaat55bnn6bc6nq0qsr.jpg',
+    0,
+    'b'
+  ),(
+    'dapaeldrql5o2ktkpbgp',
+    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1614173638/Reactivities/dapaeldrql5o2ktkpbgp.jpg',
+    0,
+    'b'
+  ),(
+    'e3mv9rxgow008pzd2bmn',
+    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1614173637/Reactivities/e3mv9rxgow008pzd2bmn.jpg',
+    0,
+    'b'
+  ),(
+    'fwvf4r9ujtbqrls0x9ip',
+    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1614173633/Reactivities/fwvf4r9ujtbqrls0x9ip.jpg',
+    0,
+    'a'
+  ),(
+    'ns7hpdrpouzultyxzjw4',
+    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1614173642/Reactivities/ns7hpdrpouzultyxzjw4.jpg',
     0,
     'c'
   ),(
-    'x7auyoywusolmtjom1xg',
-    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1632679688/Reactivities/x7auyoywusolmtjom1xg.jpg',
+    'otfx6a3u1wqpkfmty03v',
+    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1614173642/Reactivities/otfx6a3u1wqpkfmty03v.jpg',
     0,
     'c'
+  ),(
+    'ouokt3knnlzyurvvxcve',
+    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1614173640/Reactivities/ouokt3knnlzyurvvxcve.jpg',
+    0,
+    'c'
+  ),(
+    'pr2alx0m0wipurxf55ae',
+    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1614173641/Reactivities/pr2alx0m0wipurxf55ae.jpg',
+    0,
+    'c'
+  ),(
+    'qn5kusmm13ev6skyyxya',
+    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1614173631/Reactivities/qn5kusmm13ev6skyyxya.jpg',
+    0,
+    'a'
+  ),(
+    'qvfa4qribklbkmisrq9x',
+    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1614173634/Reactivities/qvfa4qribklbkmisrq9x.jpg',
+    0,
+    'a'
+  ),(
+    'rpdlhfxwjoa9kmryz4sg',
+    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1614173635/Reactivities/rpdlhfxwjoa9kmryz4sg.jpg',
+    1,
+    'b'
+  ),(
+    'rsptsifih5ahxp1zxt08',
+    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1614173639/Reactivities/rsptsifih5ahxp1zxt08.jpg',
+    1,
+    'c'
+  ),(
+    'xuh8utsvgep0zgpe5clg',
+    'https://res.cloudinary.com/dvzlb9xco/image/upload/v1614173632/Reactivities/xuh8utsvgep0zgpe5clg.jpg',
+    0,
+    'a'
   );
   /*!40000 ALTER TABLE `Photos` ENABLE KEYS */;
 UNLOCK TABLES;
-DROP TABLE IF EXISTS `UserActivity`;
+--
+  -- Table structure for table `UserActivity`
+  --
+  DROP TABLE IF EXISTS `UserActivity`;
   /*!40101 SET @saved_cs_client     = @@character_set_client */;
   /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `UserActivity` (
@@ -486,115 +558,121 @@ CREATE TABLE `UserActivity` (
     CONSTRAINT `FK_UserActivity_AspNetUsers_AppUserId` FOREIGN KEY (`AppUserId`) REFERENCES `AspNetUsers` (`Id`) ON DELETE CASCADE
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
   /*!40101 SET character_set_client = @saved_cs_client */;
-LOCK TABLES `UserActivity` WRITE;
+--
+  -- Dumping data for table `UserActivity`
+  --
+  LOCK TABLES `UserActivity` WRITE;
   /*!40000 ALTER TABLE `UserActivity` DISABLE KEYS */;
 INSERT INTO
   `UserActivity`
 VALUES
   (
     'a',
-    '08d98118-a38a-6d66-4257-cdbfc3e1fb57',
-    '2021-09-22 15:48:36.392000',
+    '08d8d8c8-d9f7-ce85-3efe-793dc8008b00',
+    '2021-02-22 13:34:03.471781',
     1
   ),(
     'a',
-    '08d98118-a38b-5dba-ae65-2199b0d791bc',
-    '2021-09-20 15:48:36.392000',
+    '08d8d8c8-d9fc-cc78-0823-009e36e734fa',
+    '2021-02-23 13:34:03.471844',
     0
   ),(
     'a',
-    '08d98118-a38b-683e-a1a3-5aa66a333831',
-    '2021-09-23 15:48:36.392000',
+    '08d8d8c8-d9fc-f5be-0648-6059a9d20c9a',
+    '2021-02-25 13:34:03.471845',
     0
   ),(
     'a',
-    '08d98118-a38b-6e20-5800-4e95f6cf4a32',
-    '2021-09-24 15:48:36.392000',
+    '08d8d8c8-d9fc-fb00-5983-64579f1a11f9',
+    '2021-02-26 13:34:03.471845',
     0
   ),(
     'a',
-    '08d98118-a38b-7a13-0714-105fbb1828fc',
-    '2021-09-26 15:48:36.392000',
+    '08d8d8c8-d9fd-0537-3734-cd41da34f6a0',
+    '2021-02-28 13:34:03.471847',
     1
   ),(
     'a',
-    '08d98118-a38b-832e-9b3a-ec4cdcad28e2',
-    '2021-09-28 15:48:36.392000',
+    '08d8d8c8-d9fd-0c8e-6662-16bb538bd497',
+    '2021-03-02 13:34:03.471847',
     1
   ),(
     'a',
-    '08d98118-a38b-88b8-8e1d-07e8a458c48d',
-    '2021-09-29 15:48:36.392000',
+    '08d8d8c8-d9fd-10d1-8b7c-c4623f413017',
+    '2021-03-03 13:34:03.471848',
     1
   ),(
     'a',
-    '08d98118-a38b-8e88-1718-6dde4d80118f',
-    '2021-09-30 15:48:36.392000',
+    '08d8d8c8-d9fd-154e-2049-8dd74a25471e',
+    '2021-03-04 13:34:03.471855',
     0
   ),(
     'b',
-    '08d98118-a38b-5dba-ae65-2199b0d791bc',
-    '2021-09-21 15:48:36.392000',
+    '08d8d8c8-d9fc-cc78-0823-009e36e734fa',
+    '2021-02-23 13:34:03.471843',
     1
   ),(
     'b',
-    '08d98118-a38b-683e-a1a3-5aa66a333831',
-    '2021-09-23 15:48:36.392000',
+    '08d8d8c8-d9fc-f5be-0648-6059a9d20c9a',
+    '2021-02-25 13:34:03.471845',
     1
   ),(
     'b',
-    '08d98118-a38b-7486-ce5b-073ea7aeaf83',
-    '2021-09-25 15:48:36.392000',
+    '08d8d8c8-d9fd-00bb-e6c0-abdc245d8b12',
+    '2021-02-27 13:34:03.471846',
     1
   ),(
     'b',
-    '08d98118-a38b-7da8-1893-2208bcbad559',
-    '2021-09-27 15:48:36.392000',
+    '08d8d8c8-d9fd-0807-a205-e8b706854a69',
+    '2021-03-01 13:34:03.471847',
     0
   ),(
     'b',
-    '08d98118-a38b-832e-9b3a-ec4cdcad28e2',
-    '2021-09-28 15:48:36.392000',
+    '08d8d8c8-d9fd-0c8e-6662-16bb538bd497',
+    '2021-03-02 13:34:03.471848',
     0
   ),(
     'b',
-    '08d98118-a38b-8e88-1718-6dde4d80118f',
-    '2021-09-30 15:48:36.392000',
+    '08d8d8c8-d9fd-154e-2049-8dd74a25471e',
+    '2021-03-04 13:34:03.471848',
     1
   ),(
     'b',
-    '08d98118-a38b-944f-0b58-ef62d6079348',
-    '2021-09-30 15:48:36.392000',
+    '08d8d8c8-d9fd-1a24-ce27-3bfcb00ae025',
+    '2021-03-04 13:34:03.471855',
     1
   ),(
     'c',
-    '08d98118-a38b-6e20-5800-4e95f6cf4a32',
-    '2021-09-24 15:48:36.392000',
+    '08d8d8c8-d9fc-fb00-5983-64579f1a11f9',
+    '2021-02-26 13:34:03.471845',
     1
   ),(
     'c',
-    '08d98118-a38b-7486-ce5b-073ea7aeaf83',
-    '2021-09-25 15:48:36.392000',
+    '08d8d8c8-d9fd-00bb-e6c0-abdc245d8b12',
+    '2021-02-27 13:34:03.471846',
     0
   ),(
     'c',
-    '08d98118-a38b-7da8-1893-2208bcbad559',
-    '2021-09-27 15:48:36.392000',
+    '08d8d8c8-d9fd-0807-a205-e8b706854a69',
+    '2021-03-01 13:34:03.471847',
     1
   ),(
     'c',
-    '08d98118-a38b-88b8-8e1d-07e8a458c48d',
-    '2021-09-29 15:48:36.392000',
+    '08d8d8c8-d9fd-10d1-8b7c-c4623f413017',
+    '2021-03-03 13:34:03.471848',
     0
   ),(
     'c',
-    '08d98118-a38b-944f-0b58-ef62d6079348',
-    '2021-09-30 15:48:36.392000',
+    '08d8d8c8-d9fd-1a24-ce27-3bfcb00ae025',
+    '2021-03-04 13:34:03.471855',
     0
   );
   /*!40000 ALTER TABLE `UserActivity` ENABLE KEYS */;
 UNLOCK TABLES;
-DROP TABLE IF EXISTS `Values`;
+--
+  -- Table structure for table `Values`
+  --
+  DROP TABLE IF EXISTS `Values`;
   /*!40101 SET @saved_cs_client     = @@character_set_client */;
   /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Values` (
@@ -603,7 +681,10 @@ CREATE TABLE `Values` (
     PRIMARY KEY (`Id`)
   ) ENGINE = InnoDB AUTO_INCREMENT = 4 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
   /*!40101 SET character_set_client = @saved_cs_client */;
-LOCK TABLES `Values` WRITE;
+--
+  -- Dumping data for table `Values`
+  --
+  LOCK TABLES `Values` WRITE;
   /*!40000 ALTER TABLE `Values` DISABLE KEYS */;
 INSERT INTO
   `Values`
@@ -611,7 +692,10 @@ VALUES
   (1, 'Value01'),(2, 'Value02'),(3, 'Value03');
   /*!40000 ALTER TABLE `Values` ENABLE KEYS */;
 UNLOCK TABLES;
-DROP TABLE IF EXISTS `__EFMigrationsHistory`;
+--
+  -- Table structure for table `__EFMigrationsHistory`
+  --
+  DROP TABLE IF EXISTS `__EFMigrationsHistory`;
   /*!40101 SET @saved_cs_client     = @@character_set_client */;
   /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `__EFMigrationsHistory` (
@@ -620,7 +704,10 @@ CREATE TABLE `__EFMigrationsHistory` (
     PRIMARY KEY (`MigrationId`)
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
   /*!40101 SET character_set_client = @saved_cs_client */;
-LOCK TABLES `__EFMigrationsHistory` WRITE;
+--
+  -- Dumping data for table `__EFMigrationsHistory`
+  --
+  LOCK TABLES `__EFMigrationsHistory` WRITE;
   /*!40000 ALTER TABLE `__EFMigrationsHistory` DISABLE KEYS */;
 INSERT INTO
   `__EFMigrationsHistory`
@@ -642,3 +729,4 @@ UNLOCK TABLES;
   /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
   /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
   /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+-- Dump completed on 2021-02-24 13:35:19

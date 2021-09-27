@@ -23,7 +23,7 @@ namespace API
         {
             string workingDirectory = Environment.CurrentDirectory;
             string projectDirectory = Directory.GetParent(workingDirectory).FullName;
-            string datafile = System.IO.Path.Combine(projectDirectory, @"data/seedData.json");
+            string datafile = System.IO.Path.Combine(projectDirectory, @"data/database.json");
             string jsonString = File.ReadAllText(datafile);
             return JsonSerializer.Deserialize<SeedData>(jsonString);
         }
@@ -41,7 +41,7 @@ namespace API
             }
             if (!context.FollowerFollowings.Any())
             {
-                await SeedActivities(context, userManager, photoAccessor);
+                await SeedFollowerFollowings(context, userManager, photoAccessor);
             }
 
             await context.SaveChangesAsync();
@@ -56,17 +56,16 @@ namespace API
             var saveContext = await context.SaveChangesAsync();
 
             var results = new List<IdentityResult>();
+
             foreach (var user in userManager.Users.ToList())
             {
                 IdentityResult result = await userManager.DeleteAsync(user);
                 results.Add(result);
             }
-
             return (saveContext > 0 && results.All(res => res.Succeeded));
         }
         public static async Task<bool> ReSeedData(DataContext context, UserManager<AppUser> userManager, IPhotoAccessor photoAccessor)
         {
-
             await SeedUsers(context, userManager, photoAccessor);
             await SeedActivities(context, userManager, photoAccessor);
             await SeedFollowerFollowings(context, userManager, photoAccessor);
@@ -81,23 +80,21 @@ namespace API
             {
                 var photos = new List<Photo>();
 
-                foreach (var photo in JsonData.users[0].Photos)
+                foreach (var photo in user.Photos)
                 {
-                    photos.Add(photoAccessor.GetPhotoFromUrl(photo.Url, photo.IsMain));
+                    photos.Add(new Photo { Id = photo.Id, Url = photo.Url, IsMain = photo.IsMain });
+                    // photos.Add(photoAccessor.GetPhotoFromUrl(photo.Url, photo.IsMain));
                 }
-                users.Add(new AppUser
+
+                var res = await userManager.CreateAsync(new AppUser
                 {
                     Id = user.Id,
                     DisplayName = user.DisplayName,
                     UserName = user.UserName,
                     Email = user.Email,
                     Photos = photos
-                });
-            }
-
-            foreach (var user in users)
-            {
-                await userManager.CreateAsync(user, "Pa$$w0rd");
+                }, "Pa$$w0rd");
+                Console.WriteLine(res);
             }
         }
         public static async Task SeedFollowerFollowings(DataContext context,
@@ -125,21 +122,23 @@ namespace API
                     {
                         AppUserId = useractivity.AppUserId,
                         IsHost = useractivity.IsHost,
-                        DateJoined = useractivity.DateJoined
+                        DateJoined = useractivity.DateJoined,
+                        ActivityId = useractivity.ActivityId
                     });
                 }
+                Console.WriteLine(activity.Id);
                 activities.Add(new Activity
                 {
+                    Id = activity.Id,
                     Title = activity.Title,
                     Date = activity.Date,
                     Description = activity.Description,
                     Category = activity.Category,
                     City = activity.City,
                     Latitute = activity.Latitute,
-                    Longitute = activity.Latitute,
+                    Longitute = activity.Longitute,
                     Venue = activity.Venue,
                     UserActivities = userActivities
-
                 });
             }
             await context.Activities.AddRangeAsync(activities);

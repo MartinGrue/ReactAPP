@@ -19,10 +19,13 @@ services:
     stdin_open: true # docker run -i
     tty: true        # docker run -t
   backendapp:
+    environment: 
+      - ASPNETCORE_ENVIRONMENT=development
+      - DOTNET_ENVIRONMENT=development
     container_name: backend
     build:
       context: ./../..
-      dockerfile: .//deployment/dev/Dockerfile.dev.backend
+      dockerfile: ./deployment/dev/Dockerfile.dev.backend
     volumes:
         - ./../..:/app
         - /app/API/bin/

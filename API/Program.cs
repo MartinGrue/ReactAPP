@@ -29,7 +29,7 @@ namespace API
                     context.Database.Migrate();
                     var userManager = services.GetRequiredService<UserManager<AppUser>>();
                     var photoAccessor = services.GetRequiredService<IPhotoAccessor>();
-                    // SmallSeed.SeedData(context, userManager, photoAccessor).Wait();
+                    SmallSeed.SeedData(context, userManager, photoAccessor).Wait();
                 }
                 catch (Exception ex)
                 {

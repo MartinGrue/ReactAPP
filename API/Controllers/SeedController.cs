@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Persistence;
+using System.Collections.Generic;
+using System.Linq;
+
 
 namespace API.Controllers
 {
@@ -29,30 +32,48 @@ namespace API.Controllers
             _userManager = userManager;
             _photoAccessor = photoAccessor;
         }
+        // [HttpGet("purge")]
+        // public async Task<IActionResult> Purge()
+        // {
+        //     if (_hostEnvironment.IsDevelopment())
+        //     {
+        //         if (_userManager.Users.Any())
+        //         {
+        //             if (await SmallSeed.PurgeDb(_context, _userManager, _photoAccessor))
+        //             {
 
+        //                 return Ok();
+        //             }
+        //             return BadRequest("Failed to purge Database user");
+        //         }
+        //     }
+        //     return NotFound();
+        // }
         // POST api/seed
-        [HttpGet("purge")]
-        public async Task<IActionResult> Purge()
-        {
-            if (!_hostEnvironment.IsDevelopment())
-                return NotFound();
-
-            if (await SmallSeed.PurgeDb(_context, _userManager, _photoAccessor))
-                return Ok();
-
-            return BadRequest("Failed to purge Database user");
-        }
-
         [HttpGet("reseed")]
         public async Task<IActionResult> Reseed()
         {
-            if (!_hostEnvironment.IsDevelopment())
-                return NotFound();
-
-            if (await SmallSeed.ReSeedData(_context, _userManager, _photoAccessor))
-                return Ok();
-
-            return BadRequest("Failed to reSeed Database user");
+            if (_hostEnvironment.IsDevelopment())
+            {
+                if (_userManager.Users.Any())
+                {
+                    if (await SmallSeed.PurgeDb(_context, _userManager, _photoAccessor))
+                    {
+                        if (await SmallSeed.ReSeedData(_context, _userManager, _photoAccessor))
+                        {
+                            return Ok();
+                        }
+                        return BadRequest("Failed to reseed Database after purge");
+                        // }
+                    }
+                    return BadRequest("Failed to reseed Database while purging");
+                }
+                if (await SmallSeed.ReSeedData(_context, _userManager, _photoAccessor))
+                {
+                    return Ok();
+                }
+            }
+            return NotFound();
         }
     }
 }

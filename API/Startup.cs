@@ -44,17 +44,17 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(opt =>
-  {
-      opt.UseLazyLoadingProxies();
-      opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
-      mySqlOptions =>
-      {
-          mySqlOptions.EnableRetryOnFailure(
-          maxRetryCount: 10,
-          maxRetryDelay: TimeSpan.FromSeconds(10),
-          errorNumbersToAdd: null);
-      });
-  });
+        {
+            opt.UseLazyLoadingProxies();
+            opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
+            mySqlOptions =>
+            {
+                mySqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 10,
+                maxRetryDelay: TimeSpan.FromSeconds(10),
+                errorNumbersToAdd: null);
+            });
+        });
 
             services.AddAuthorization(authopt =>
              {
@@ -85,7 +85,7 @@ namespace API
             services.AddMediatR(typeof(CurrentUser.Handler).Assembly);
             services.AddAutoMapper(typeof(List.Handler).Assembly);
 
-            var builder = services.AddIdentityCore<AppUser>();
+            var builder = services.AddDefaultIdentity<AppUser>();
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
             identityBuilder.AddEntityFrameworkStores<DataContext>();
             identityBuilder.AddSignInManager<SignInManager<AppUser>>();
