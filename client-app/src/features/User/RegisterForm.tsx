@@ -26,11 +26,16 @@ const isValidEmail = createValidator(
 
 const isValidPassword = createValidator(
   (message) => (value) => {
-    if (value && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&{}[)'""\\["`~,;:.<>]{8,}$/i.test(value)) {
+    if (
+      value &&
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&{}[)'""\\["`~,;:.<>]+$/.test(
+        value
+      )
+    ) {
       return message;
     }
   },
-  "Password must be at least 2 characters, at least one letter and one number"
+  "Password must contain at least one uppercase letter, one lowercase letter and one number"
 );
 
 const validate = combineValidators({
@@ -47,10 +52,16 @@ const validate = combineValidators({
     hasLengthBetween(
       3,
       10
-    )({ message: "Length must be between 3 and 10 character" })
+    )({ message: "displayname must be between 3 and 10 character" })
   )(),
-  email: composeValidators(isValidEmail, isRequired("email"))(),
-  password: composeValidators(isValidPassword, isRequired("password"))(),
+  email: composeValidators(isRequired("email is required"), isValidEmail)(),
+  password: composeValidators(
+    isRequired("password"),
+    hasLengthBetween(
+      3,20
+    )({ message: "Password must be between 3 and 20 character" }),
+    isValidPassword
+  )(),
 });
 
 const RegisterForm: React.FC = () => {
@@ -140,7 +151,6 @@ const RegisterForm: React.FC = () => {
             content="Register"
             loading={submitting}
             fluid
-            
             data-cy="register-submit"
           ></Button>
           {/* <pre>{JSON.stringify(form.getState(), null, 2)}</pre> */}
