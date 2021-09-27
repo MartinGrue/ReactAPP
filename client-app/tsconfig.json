@@ -22,6 +22,7 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": [
+    "cypress",
     "src",
     "./typing-custom/**/*.ts"
   ]

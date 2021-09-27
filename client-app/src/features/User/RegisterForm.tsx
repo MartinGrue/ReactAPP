@@ -140,6 +140,8 @@ const RegisterForm: React.FC = () => {
             content="Register"
             loading={submitting}
             fluid
+            
+            data-cy="register-submit"
           ></Button>
           {/* <pre>{JSON.stringify(form.getState(), null, 2)}</pre> */}
         </Form>
