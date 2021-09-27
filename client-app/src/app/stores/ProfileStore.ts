@@ -104,7 +104,7 @@ export default class ProfileStore {
       reader.onloadend = async () => {
         let file = reader.result as string;
 
-        // formData.append("folder", "Reactivities");
+        formData.append("folder", "Reactivities");
         // formData.append("eager", "c_pad,h_100,w_100");
 
         formData.append("timestamp", this.timeStampForUpload.toString());

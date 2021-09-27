@@ -20,7 +20,7 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
   input,
   placeholder,
   meta: { touched, error },
-  }) => {
+}) => {
   const rootStore = useContext(RootStoreContext);
   const { disableUpdateForm } = rootStore.profileStore;
 
@@ -41,6 +41,7 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
       .then((results) => getLatLng(results[0]))
       .then((latLng) => {
         setLatlng(latLng);
+        console.log("latLng: ", latLng);
       })
       .catch((error) => console.error("Error", error));
   };

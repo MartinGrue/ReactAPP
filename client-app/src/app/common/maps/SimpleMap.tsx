@@ -13,27 +13,28 @@ interface IProps {
   opt: {};
 }
 export const SimpleMap: React.FC<IProps> = ({ lat, lng, opt }) => {
-  const defaultOpt = {
+  const baseOpt = {
     defaultZoom: 14,
-    defaultCenter: { lat: 52.372513, lng: 9.732968 },
     bootstrapURLKeys: {
       key: "AIzaSyCHYvacLxG7odfjovNDb1GpTHon3BMIXlw",
     },
-    key: 52.372513,
+  };
+  const defaultOpt = {
+    defaultCenter: { lat: 52.372513, lng: 9.732968 },
   };
   return (
     <Segment attached="bottom" style={{ padding: 0 }}>
       <div>
         {lat && lng ? (
           <GoogleMapReact
-            {...defaultOpt}
-            center={{ lat: lat!, lng: lng! }}
+            defaultCenter={{ lat: lat!, lng: lng! }}
+            {...baseOpt}
             {...opt}
           >
             <Marker lat={lat} lng={lng} />
           </GoogleMapReact>
         ) : (
-          <GoogleMapReact {...defaultOpt} {...opt}>
+          <GoogleMapReact {...baseOpt} {...defaultOpt} {...opt}>
             <Marker
               lat={defaultOpt.defaultCenter.lat}
               lng={defaultOpt.defaultCenter.lng}
