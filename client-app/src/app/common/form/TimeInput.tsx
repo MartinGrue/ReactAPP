@@ -15,12 +15,13 @@ const TimeInput: React.FC<IProps> = ({
 }) => {
   return (
     <>
-      <Form.Field error={touched && !!error} width={width}>
+      <Form.Field error={touched && !!error} width={width} data-cy="timepicker">
         <TimeInputWidget
           onBlur={input.onBlur}
           onChange={input.onChange}
-          value={input.value || null}
+          // value={input.value || null}
           id="timePicker"
+          readOnly={false}
         ></TimeInputWidget>
 
         {touched && !!error && (

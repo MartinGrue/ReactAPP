@@ -34,9 +34,9 @@ describe("User Sign-up and Login", function () {
     cy.visit("/randomstringhere");
     cy.location("pathname").should("equal", "/");
   });
-  it("should redirect to the home page after login", function () {
+  it("should redirect to the activitydashboard page after login", function () {
     cy.login("bob@test.com", "Pa$$w0rd");
-    cy.location("pathname").should("equal", "/");
+    cy.location("pathname").should("equal", "/activities");
   });
 
   it("should set the jwt token in local storage", function () {
@@ -47,7 +47,6 @@ describe("User Sign-up and Login", function () {
       .then(() => {
         const token = window.localStorage.getItem("jwt");
         var decoded = jwt_decode(token!);
-        console.log(decoded);
         expect(decoded).to.be.an("object");
         expect(decoded).to.have.keys(["nameid", "nbf", "exp", "iat"]);
       });

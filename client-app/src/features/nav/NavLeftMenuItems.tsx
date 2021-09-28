@@ -36,6 +36,7 @@ export const NavLeftMenuItems: React.FC<IProps> = ({ onPusherClick }) => {
           as={NavLink}
           to="/createactivity"
           onClick={() => (onPusherClick ? onPusherClick() : () => {})}
+          data-cy="createActivity"
         ></Button>
       </Menu.Item>
     </Container>

@@ -53,7 +53,11 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   );
 
   const [loading, setloading] = useState(false);
-  const [latlng, setLatlng] = useState<google.maps.LatLngLiteral>();
+  const [latlng, setLatlng] = useState<google.maps.LatLngLiteral>({
+    lat: 52.3758916,
+    lng: 9.732010400000002,
+  });
+  const [done, setdone] = useState(false);
   useEffect(() => {
     if (match.params.id) {
       setloading(true);
@@ -69,7 +73,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     } else {
       setActivity(new ActivityFormValues(undefined));
     }
-  }, [loadActivity, match.params.id]);
+  }, []);
 
   const handleFinalFormSubmit = (values: IActivityFormValues) => {
     const dateAndTime = combineDateAndTime(values.date, values.time);
@@ -101,12 +105,19 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
       });
     }
   };
-  const handleCancel = () => {
-    if (match.params.id) {
-      history.push(`/activities/${activity.id}`);
-    } else {
-      history.push("/");
+  useEffect(() => {
+    if (done) {
+      if (match.params.id) {
+        history.push(`/activities/${activity.id}`);
+      } else {
+        history.push("/");
+      }
     }
+
+    return () => {}
+  }, [match.params.id, done]);
+  const handleCancel = () => {
+    setdone(true);
   };
   const validate = combineValidators({
     title: isRequired({ message: "The title is required" }),
@@ -170,7 +181,6 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                       // format(activity.date!,'hh:mm')}
                     ></Field>
                   </Form.Group>
-
                   <Field
                     name="city"
                     key="city"
@@ -198,6 +208,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                     )}
                   ></Field>
                   <Button
+                    data-cy="submit"
                     disabled={loading || invalid || pristine}
                     loading={submitting}
                     floated="right"
@@ -219,11 +230,12 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                     ></Button>
                   )}
                   <Button
+                    data-cy="cancel"
                     disabled={loading}
                     floated="right"
                     content="Cancel"
                     onClick={() => {
-                      cancelFormOpen();
+                      // cancelFormOpen();
                       handleCancel();
                     }}
                   ></Button>
@@ -233,17 +245,11 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
           </Segment>
         </Grid.Column>
         <Grid.Column width={8}>
-          {latlng ? (
-            <SimpleMap
-              lat={latlng.lat}
-              lng={latlng.lng}
-              opt={{ style: { width: "100%", height: 400 } }}
-            ></SimpleMap>
-          ) : (
-            <SimpleMap
-              opt={{ style: { width: "100%", height: 400 } }}
-            ></SimpleMap>
-          )}
+          <SimpleMap
+            lat={latlng.lat}
+            lng={latlng.lng}
+            opt={{ style: { width: "100%", height: 400 } }}
+          ></SimpleMap>
         </Grid.Column>
       </Grid>
     </Segment>

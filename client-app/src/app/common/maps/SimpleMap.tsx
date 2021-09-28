@@ -8,8 +8,8 @@ const Marker: React.FC<{ lat: any; lng: any }> = ({ lat, lng }) => (
 );
 
 interface IProps {
-  lat?: number;
-  lng?: number;
+  lat: number;
+  lng: number;
   opt: {};
 }
 export const SimpleMap: React.FC<IProps> = ({ lat, lng, opt }) => {
@@ -19,29 +19,22 @@ export const SimpleMap: React.FC<IProps> = ({ lat, lng, opt }) => {
       key: "AIzaSyCHYvacLxG7odfjovNDb1GpTHon3BMIXlw",
     },
   };
-  const defaultOpt = {
-    defaultCenter: { lat: 52.372513, lng: 9.732968 },
-  };
   return (
     <Segment attached="bottom" style={{ padding: 0 }}>
-      <div>
-        {lat && lng ? (
-          <GoogleMapReact
-            defaultCenter={{ lat: lat!, lng: lng! }}
-            {...baseOpt}
-            {...opt}
-          >
-            <Marker lat={lat} lng={lng} />
-          </GoogleMapReact>
-        ) : (
-          <GoogleMapReact {...baseOpt} {...defaultOpt} {...opt}>
+      <GoogleMapReact
+        center={{ lat, lng }}
+        {...baseOpt}
+        {...opt}
+      >
+        <Marker lat={lat} lng={lng} />
+      </GoogleMapReact>
+
+      {/* <GoogleMapReact {...baseOpt} {...defaultOpt} {...opt}>
             <Marker
               lat={defaultOpt.defaultCenter.lat}
               lng={defaultOpt.defaultCenter.lng}
             />
-          </GoogleMapReact>
-        )}
-      </div>
+          </GoogleMapReact> */}
     </Segment>
   );
 };
