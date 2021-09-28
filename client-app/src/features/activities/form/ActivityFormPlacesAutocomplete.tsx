@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useState, useEffect, useRef, useCallback } from "react";
 import * as React from "react";
 import { observer } from "mobx-react-lite";
 import PlacesAutocomplete from "react-places-autocomplete";
@@ -8,9 +8,7 @@ import { RootStoreContext } from "../../../app/stores/rootStore";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 
 interface IProps extends FieldRenderProps<string, HTMLInputElement> {
-  setLatlng: React.Dispatch<
-    React.SetStateAction<google.maps.LatLngLiteral | undefined>
-  >;
+  setLatlng: React.Dispatch<React.SetStateAction<google.maps.LatLngLiteral>>;
   Options: {};
 }
 
@@ -19,70 +17,72 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
   Options,
   input,
   placeholder,
-  meta: { touched, error, active },
-  name,
+  meta: { touched, error },
 }) => {
   const rootStore = useContext(RootStoreContext);
   const { disableUpdateForm } = rootStore.profileStore;
 
   const [dropdownIsOpen, setdropdownIsOpen] = useState(false);
-  const [currentValue, setcurrentValue] = useState<string>(input.value);
+  const [address, setaddress] = useState("");
   const FieldProps = {
     placeholder: placeholder,
     className: "location-search-input",
   };
+
   useEffect(() => {
-    setcurrentValue(input.value);
-  }, [input.value]);
-
+    address &&
+      geocodeByAddress(address)
+        .then((results) => getLatLng(results[0]))
+        .then((latLng) => {
+          setLatlng(latLng);
+        })
+        .catch((error) => console.error("Error", error));
+    return () => {};
+  }, [address]);
   const handleSelect = (address: string) => {
-    geocodeByAddress(address)
-      .then((results) => getLatLng(results[0]))
-      .then((latLng) => {
-        setLatlng(latLng);
-      })
-      .catch((error) => console.error("Error", error));
+    setdropdownIsOpen(false);
+    setaddress(address);
   };
-  const ref = useRef<HTMLInputElement | null>(null);
-
-  const handleKeyUp = () => {
-    let timeout: any = null;
-    clearTimeout(timeout);
-    timeout = setTimeout(function () {
-      handleSelect(ref.current?.value!);
-    }, 2000);
+  const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    input.onBlur();
+    setdropdownIsOpen(false);
+    handleSelect(e.currentTarget.value);
   };
+  const handleKeyUp = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      e.currentTarget.value.length > 0
+        ? setdropdownIsOpen(true)
+        : setdropdownIsOpen(false);
+      if (e.key === "Enter") {
+        input.onChange(e); //trigger validation to work
+        handleSelect(e.currentTarget.value);
+      }
+    },
+    []
+  );
   return (
     <Form.Field disabled={disableUpdateForm} error={touched && !!error}>
       <PlacesAutocomplete
-        value={currentValue}
-        onChange={(value) => {
-          setcurrentValue(value);
-        }}
+        value={input.value}
+        onChange={() => {}}
         searchOptions={Options}
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
             <input
-              ref={ref}
-              name={name}
-              onBlur={() => {
-                input.onBlur();
-                setdropdownIsOpen(false);
-              }}
+              // {...input}
+              name={input.name}
+              onBlur={onBlur}
               onFocus={input.onFocus}
               onKeyUp={handleKeyUp}
               onChange={(e) => {
                 getInputProps().onChange(e); //trigger PlacesAutocomplete search
                 input.onChange(e); //trigger validation to work
-
-                e.currentTarget.value.length > 0
-                  ? setdropdownIsOpen(true)
-                  : setdropdownIsOpen(false);
               }}
-              value={currentValue}
+              value={getInputProps().value}
               placeholder={getInputProps(FieldProps).placeholder}
               className={getInputProps(FieldProps).className}
+              autoComplete="off"
             ></input>
             {touched && !!error && (
               <Label basic color="red">
@@ -107,7 +107,10 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
                         }
                       : { backgroundColor: "#ffffff", cursor: "pointer" };
                     return (
-                      <List.Item key={suggestion.description}>
+                      <List.Item
+                        key={suggestion.description}
+                        data-cy="suggestion-item"
+                      >
                         <div
                           {...getSuggestionItemProps(suggestion, {
                             className,
@@ -116,7 +119,6 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
                         >
                           <span
                             onClick={() => {
-                              setdropdownIsOpen(false);
                               input.onChange(suggestion.description);
                               handleSelect(suggestion.description);
                             }}

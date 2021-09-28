@@ -37,13 +37,11 @@ const Routes: React.FC = () => {
             path="/profiles/:userName"
             component={ProfilePage}
           ></Route>
-          <Route path="/login" component={LoginForm}></Route>
           <Route component={NotFound}></Route>
         </Switch>
       </Container>
     );
   } else {
-    // return <div></div>;
     return <Route render={() => <Redirect to={"/"}></Redirect>}></Route>;
   }
 };

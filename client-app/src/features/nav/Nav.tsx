@@ -19,9 +19,14 @@ const NavBarMobile: React.FC<{
 
   const sidebarPusherStyle = {
     minHeight: "100vh",
+    overflowY: "hidden",
   };
   return (
-    <Sidebar.Pushable>
+    <Sidebar.Pushable
+      style={
+        visible ? { overflowY: "hidden", position: "fixed", width: "100%" } : {}
+      }
+    >
       <Sidebar
         as={Menu}
         animation="overlay"
@@ -33,11 +38,10 @@ const NavBarMobile: React.FC<{
         <NavLeftMenuItems onPusherClick={onPusherClick}></NavLeftMenuItems>
       </Sidebar>
       <Sidebar.Pusher
-        dimmed={false}
+        dimmed={visible ? true : false}
         onClick={() => {
           onPusherClick();
         }}
-        style={sidebarPusherStyle}
       >
         {children}
         <div style={{ height: "5rem" }}>

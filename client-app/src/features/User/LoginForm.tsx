@@ -95,6 +95,7 @@ const LoginForm: React.FC = () => {
             content="Login"
             loading={submitting}
             fluid
+            data-cy="login-submit"
           ></Button>
           {/* <pre>{JSON.stringify(form.getState(), null, 2)}</pre> */}
         </Form>

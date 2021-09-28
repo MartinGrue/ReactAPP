@@ -1,5 +1,5 @@
-import { useContext, Fragment, useState } from 'react';
-import * as React from 'react';
+import { useContext, Fragment, useState } from "react";
+import * as React from "react";
 import {
   Container,
   Segment,
@@ -8,17 +8,17 @@ import {
   Image,
   Divider,
   Transition,
-  Icon
-} from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
-import { RootStoreContext } from '../../app/stores/rootStore';
-import LoginForm from '../User/LoginForm';
-import RegisterForm from '../User/RegisterForm';
-import { GoogleLogin } from 'react-google-login';
-import { IExternalLoginInfo } from '../../app/models/user';
+  Icon,
+} from "semantic-ui-react";
+import { Link } from "react-router-dom";
+import { RootStoreContext } from "../../app/stores/rootStore";
+import LoginForm from "../User/LoginForm";
+import RegisterForm from "../User/RegisterForm";
+import { GoogleLogin } from "react-google-login";
+import { IExternalLoginInfo } from "../../app/models/user";
 
 const HomePage: React.FC = () => {
-  const token = window.localStorage.getItem('jwt');
+  const token = window.localStorage.getItem("jwt");
   const rootStore = useContext(RootStoreContext);
   const { isLoggedIn, user, loginExternal } = rootStore.userStore;
   const { openModal } = rootStore.modalStore;
@@ -26,27 +26,27 @@ const HomePage: React.FC = () => {
 
   const [visible, setvisible] = useState(false);
   const containerStyle = {
-    padding: '5%',
-    justifyContent: 'center',
-    alignItems: 'center'
+    padding: "5%",
+    justifyContent: "center",
+    alignItems: "center",
   };
 
   const onSuccess = (response: any) => {
     setGoogleToken(response.Zi.id_token);
     const info: IExternalLoginInfo = {
-      provider: 'google',
-      token: response.Zi.id_token
+      provider: "google",
+      token: response.Zi.id_token,
     };
     loginExternal(info);
   };
   return (
-    <Segment inverted textAlign='center' vertical className='masthead'>
+    <Segment inverted textAlign="center" vertical className="masthead">
       <Container text style={containerStyle}>
-        <Header as='h1' inverted>
+        <Header as="h1" inverted>
           <Image
-            size='massive'
-            src='/assets/logo.png'
-            alt='logo'
+            size="massive"
+            src="/assets/logo.png"
+            alt="logo"
             style={{ marginBottom: 12 }}
           />
           Reactivities
@@ -54,27 +54,29 @@ const HomePage: React.FC = () => {
         {isLoggedIn && user && token ? (
           <Fragment>
             <Header
-              as='h2'
+              as="h2"
               inverted
               content={`Welcome back ${user.displayName}`}
             />
-            <Button as={Link} to='/activities' size='huge' inverted>
+            <Button as={Link} to="/activities" size="huge" inverted>
               Go to Activities!
             </Button>
           </Fragment>
         ) : (
           <Fragment>
-            <Header as='h2' inverted content='Welcome to Reactivities' />
+            <Header as="h2" inverted content="Welcome to Reactivities" />
             <Button
+              data-cy="login"
               onClick={() => openModal(<LoginForm />)}
-              size='huge'
+              size="huge"
               inverted
             >
               Login!
             </Button>
             <Button
+              data-cy="register"
               onClick={() => openModal(<RegisterForm />)}
-              size='huge'
+              size="huge"
               inverted
             >
               Register!
@@ -82,39 +84,37 @@ const HomePage: React.FC = () => {
           </Fragment>
         )}
         <Divider hidden />
-        {
-          !isLoggedIn &&
+        {!isLoggedIn && (
           <GoogleLogin
-          clientId='1084577743891-l4thqbo5qkbr1lo3mmple5vu0od5oktn.apps.googleusercontent.com'
-          buttonText='Login'
-          onSuccess={onSuccess}
-          onFailure={ () => {}}
-          prompt='select_account'
-          render={(renderProps: any) => (
-            <Button
-              onClick={renderProps.onClick}
-              type='button'
-              color='google plus'
-            >
-              <Icon name='google' />
-              Login with Google
-            </Button>
-          )}
-        ></GoogleLogin>
+            clientId="1084577743891-l4thqbo5qkbr1lo3mmple5vu0od5oktn.apps.googleusercontent.com"
+            buttonText="Login"
+            onSuccess={onSuccess}
+            onFailure={() => {}}
+            prompt="select_account"
+            render={(renderProps: any) => (
+              <Button
+                onClick={renderProps.onClick}
+                type="button"
+                color="google plus"
+              >
+                <Icon name="google" />
+                Login with Google
+              </Button>
+            )}
+          ></GoogleLogin>
+        )}
 
-        }
-        
         <Divider hidden />
         <div>
           <Button
-            size='huge'
+            size="huge"
             inverted
-            content={visible ? 'Hide Dev Info' : 'Show Dev Info'}
+            content={visible ? "Hide Dev Info" : "Show Dev Info"}
             onClick={() => setvisible(!visible)}
           />
           <Divider hidden />
           {visible && (
-            <Transition animation='scale' duration={500}>
+            <Transition animation="scale" duration={500}>
               <div>
                 <strong>This is a demo single page application</strong>
                 <br></br>

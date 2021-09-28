@@ -1,4 +1,6 @@
-FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
+FROM mcr.microsoft.com/dotnet/sdk:3.1
+ENV ASPNETCORE_ENVIRONMENT=development
+ENV DOTNET_ENVIRONMENT=development
 WORKDIR /app
 # Copy csproj and restore as distinct layers
 COPY ReactApp.sln ./
@@ -11,7 +13,8 @@ COPY API ./API
 
 RUN dotnet restore
 WORKDIR /app/API
-ENTRYPOINT ["dotnet", "watch", "run"]
+
+ENTRYPOINT ["dotnet", "watch", "run", "environment=development"]
 
 # # Copy everything else and build
 # RUN dotnet publish -c Debug -o /out

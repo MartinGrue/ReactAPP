@@ -19,8 +19,10 @@ const DateInput: React.FC<IProps> = ({
     <Localization
       date={new DateLocalizer({ culture: "de-de", firstOfWeek: 1 })}
     >
-      <Form.Field error={touched && !!error} width={width}>
+      <Form.Field error={touched && !!error} width={width} data-cy="datepicker">
         <DateTimePicker
+          // name={input.name}
+          {...input}
           // containerClassName={"dateTimePicker-Container"}
           onKeyDown={(e) => e.preventDefault()}
           onBlur={input.onBlur}
