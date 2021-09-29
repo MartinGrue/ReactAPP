@@ -1,19 +1,10 @@
 //test functionality after redirection from manage activity
 
-describe("New Transaction", function () {
+describe("Create New Activity", function () {
   const user = {
     email: "bob@test.com",
     password: "Pa$$w0rd",
   };
-  beforeEach(function () {
-    cy.task("db:seed");
-    cy.login(user.email, user.password);
-
-    cy.intercept("POST", "http://localhost:5000/api/Activities").as(
-      "createNewActivity"
-    );
-    cy.get("[data-cy=createActivity]").click(); //this is not visible on mobile
-  });
   const categories = ["Drinks", "Culture", "Film", "Food", "Music", "Travel"];
 
   const validActivity = {
@@ -46,71 +37,24 @@ describe("New Transaction", function () {
     venueDescription: "Berliner Tor, Hamburg, Germany",
   };
 
-  const fillTitle = (title: string) => {
-    cy.get("[name=title]").clear().type(title);
-  };
+  beforeEach(function () {
+    cy.task("db:seed");
+    cy.login(user.email, user.password);
 
-  const fillDesctiption = (description: string) => {
-    cy.get("[name=description]").get("textarea").type(description);
-  };
-
-  const fillCategory = (category: string) => {
-    cy.get("[name=category] i").click();
-    categories.forEach((c) => {
-      cy.get("[name=category] .menu").contains(c);
-    });
-    cy.get("[name=category] .menu").contains(category).click();
-  };
-
-  const fillDate = () => {
-    cy.get(
-      "[data-cy=datepicker] button.rw-input-addon.rw-picker-btn.rw-btn"
-    ).click();
-    cy.get("[data-cy=datepicker] [id=id_date] button")
-      .contains("Today")
-      .click();
-  };
-
-  const fillTime = () => {
-    cy.get("[data-cy=timepicker] input:first")
-      .click()
-      .focus()
-      .type(validActivity.timeHours.firstDigit, { force: true })
-      .type(validActivity.timeHours.secondDigit, { force: true });
-
-    cy.get("[data-cy=timepicker] input:last")
-      .click()
-      .focus()
-      .type(validActivity.timeMinutes.firstDigit, { force: true })
-      .type(validActivity.timeMinutes.secondDigit, { force: true });
-  };
-  const fillCity = () => {
-    cy.get("[name=city]").click().type(validActivity.city.searchString);
-    cy.get("[data-cy=suggestion-item]")
-      .each((el, index) => {
-        cy.wrap(el).should("have.text", validActivity.city.suggestions[index]);
-      })
-      .first()
-      .click();
-  };
-  const fillVenue = () => {
-    cy.get("[name=venue]").click().type(validActivity.venue.searchString);
-    cy.get("[data-cy=suggestion-item]")
-      .each((el, index) => {
-        cy.wrap(el).should("have.text", validActivity.venue.suggestions[index]);
-      })
-      .first()
-      .click();
-  };
+    cy.intercept("POST", "http://localhost:5000/api/Activities").as(
+      "createNewActivity"
+    );
+    cy.get("[data-cy=createActivity]").click(); //this is not visible on mobile
+  });
 
   it("should submit a valid new Activity", () => {
-    fillTitle(validActivity.title);
-    fillDesctiption(validActivity.description);
-    fillCategory(categories[0]);
-    fillDate();
-    fillTime();
-    fillCity();
-    fillVenue();
+    cy.fillTitle(validActivity.title);
+    cy.fillDesctiption(validActivity.description);
+    cy.fillCategory(categories, categories[0]);
+    cy.fillDate();
+    cy.fillTime(validActivity.timeHours, validActivity.timeMinutes);
+    cy.fillCity(validActivity.city);
+    cy.fillVenue(validActivity.venue);
 
     cy.wait(1000);
     cy.visualSnapshot("MapsTest");
@@ -128,18 +72,18 @@ describe("New Transaction", function () {
     cy.get("[data-cy=error-label]")
       .should("be.visible")
       .and("contain", "The title is required");
-    fillTitle(validActivity.title);
+    cy.fillTitle(validActivity.title);
 
     cy.get("[name=description]").get("textarea").focus().clear().blur();
     cy.get("[data-cy=error-label]")
       .should("be.visible")
       .and("contain", "Description is required");
 
-    fillDesctiption("abc");
+    cy.fillDesctiption("abc");
     cy.get("[data-cy=error-label]")
       .should("be.visible")
       .and("contain", "Description needs to be at least 5 characters");
-    fillDesctiption(validActivity.description);
+    cy.fillDesctiption(validActivity.description);
 
     cy.get(
       "[data-cy=datepicker] button.rw-input-addon.rw-picker-btn.rw-btn"
@@ -149,7 +93,7 @@ describe("New Transaction", function () {
     cy.get("[data-cy=error-label]")
       .should("be.visible")
       .and("contain", "Date is required");
-    fillDate();
+    cy.fillDate();
 
     cy.get("[data-cy=timepicker] input:last").click();
     cy.get("[name=title]").focus().blur();
@@ -157,19 +101,19 @@ describe("New Transaction", function () {
     cy.get("[data-cy=error-label]")
       .should("be.visible")
       .and("contain", "Time is required");
-    fillTime();
+    cy.fillTime(validActivity.timeHours, validActivity.timeMinutes);
 
     cy.get("[name=city]").focus().click().blur();
     cy.get("[data-cy=error-label]")
       .should("be.visible")
       .and("contain", "City is required");
-    fillCity();
+    cy.fillCity(validActivity.city);
 
     cy.get("[name=venue]").focus().click().blur();
     cy.get("[data-cy=error-label]")
       .should("be.visible")
       .and("contain", "Venue is required");
-    fillVenue();
+    cy.fillVenue(validActivity.venue);
 
     cy.get("[data-cy=cancel]").click();
     cy.location("pathname").should("equal", "/activities");
