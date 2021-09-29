@@ -1,7 +1,9 @@
 content {
   background-color: rgb(234, 234, 234);
 }
-
+.modal-open {
+  overflow-y: hidden;
+}
 .ui.inverted.top.fixed.menu {
   background-image: linear-gradient(
     135deg,

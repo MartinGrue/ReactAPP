@@ -23,6 +23,7 @@ export default class CommonStore {
   @observable token: string | null = window.localStorage.getItem("jwt");
   @observable google_id_token: string | null = null;
   @observable appLoaded = false;
+  @observable mobilePusherOpen = false;
 
   @action setToken = (token: string | null) => {
     // window.localStorage.setItem('jwt', token!);
@@ -33,5 +34,9 @@ export default class CommonStore {
   };
   @action setGoogleToken = (id_token: string) => {
     window.localStorage.setItem("google_id_token", id_token);
+  };
+
+  @action setmobilePusherOpen = (open: boolean) => {
+    this.mobilePusherOpen = open;
   };
 }
