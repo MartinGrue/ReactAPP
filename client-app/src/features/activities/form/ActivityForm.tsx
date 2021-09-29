@@ -73,7 +73,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     } else {
       setActivity(new ActivityFormValues(undefined));
     }
-  }, [match.params.id]);
+  }, [match.params.id, loadActivity]);
 
   const handleFinalFormSubmit = (values: IActivityFormValues) => {
     const dateAndTime = combineDateAndTime(values.date, values.time);
@@ -114,8 +114,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
       }
     }
 
-    return () => {}
-  }, [match.params.id, done]);
+    return () => {};
+  }, [match.params.id, done, activity, history]);
   const handleCancel = () => {
     setdone(true);
   };

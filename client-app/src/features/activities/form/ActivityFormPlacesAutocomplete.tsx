@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useRef, useCallback } from "react";
+import { useContext, useState, useEffect, useCallback } from "react";
 import * as React from "react";
 import { observer } from "mobx-react-lite";
 import PlacesAutocomplete from "react-places-autocomplete";
@@ -38,7 +38,7 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
         })
         .catch((error) => console.error("Error", error));
     return () => {};
-  }, [address]);
+  }, [address, setLatlng]);
   const handleSelect = (address: string) => {
     setdropdownIsOpen(false);
     setaddress(address);
@@ -58,7 +58,7 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
         handleSelect(e.currentTarget.value);
       }
     },
-    []
+    [input]
   );
   return (
     <Form.Field disabled={disableUpdateForm} error={touched && !!error}>
