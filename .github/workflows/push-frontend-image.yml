@@ -17,10 +17,6 @@ jobs:
       # - name: Update SHA
       #   run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/site/_meta
 
-      - name: build client-app
-        working-directory: ./client-app
-        run: "npm i && npm run build"
-
       - name: link .dockerignore
         run: ln -fs ./deployment/prod/Dockerfile.prod.frontend.dockerignore .dockerignore
 
