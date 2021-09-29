@@ -33,7 +33,7 @@ const DateInput: React.FC<IProps> = ({
           id="id"
         />
         {touched && !!error && (
-          <Label basic color="red">
+          <Label basic color="red" data-cy="error-label">
             {error}
           </Label>
         )}

@@ -19,13 +19,13 @@ const TimeInput: React.FC<IProps> = ({
         <TimeInputWidget
           onBlur={input.onBlur}
           onChange={input.onChange}
-          // value={input.value || null}
+          value={input.value || null}
           id="timePicker"
           readOnly={false}
         ></TimeInputWidget>
 
         {touched && !!error && (
-          <Label basic color="red">
+          <Label basic color="red" data-cy="error-label">
             {error}
           </Label>
         )}
