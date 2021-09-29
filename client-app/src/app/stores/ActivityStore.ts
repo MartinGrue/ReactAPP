@@ -32,7 +32,6 @@ export default class ActivityStore {
   rootStore: RootStore;
 
   @observable selectedActivity: IActivity | undefined;
-  @observable editMode = false;
   @observable submitting = false;
   @observable target = "";
   @observable loading = false;
@@ -49,11 +48,11 @@ export default class ActivityStore {
   @observable activityCount = 0;
   @observable page = 0;
   @observable predicate = new Map();
-
   /*
    SignalR
   */
-  @observable.ref hubConnection: signalR.HubConnection | null = null;
+  @observable.ref
+  hubConnection: signalR.HubConnection | null = null;
 
   @computed get axiosParams() {
     const params = new URLSearchParams();
@@ -151,18 +150,13 @@ export default class ActivityStore {
     );
   }
 
-  @action openEditForm = (id: string) => {
-    this.selectedActivity = this.activityRegistry.get(id);
-    this.editMode = true;
-  };
+
 
   @action cancelSelectedActivity = () => {
     this.selectedActivity = undefined;
+    console.log("called cancelSelectedActivity");
   };
 
-  @action cancelFormOpen = () => {
-    this.editMode = false;
-  };
 
   @action editActivity = async (activity: IActivity) => {
     this.submitting = true;
@@ -172,7 +166,6 @@ export default class ActivityStore {
         this.activityRegistry.set(activity.id, activity);
         this.selectedActivity = activity;
         this.submitting = false;
-        this.editMode = false;
         toast.success("Activity Updated");
       });
     } catch (error) {
@@ -279,7 +272,6 @@ export default class ActivityStore {
         // this.activities.push(activity);
         this.activityRegistry.set(activity.id, activity);
         this.selectedActivity = activity;
-        this.editMode = false;
         this.submitting = false;
         toast.success("Activity Created");
       });
@@ -297,7 +289,6 @@ export default class ActivityStore {
     id: string
   ) => {
     this.submitting = true;
-    // this.target = event.currentTarget.name;
     try {
       await agent.Activities.delete(id);
       runInAction(() => {
@@ -314,15 +305,9 @@ export default class ActivityStore {
     }
   };
 
-  @action openCreateForm = () => {
-    this.editMode = true;
-    this.selectedActivity = undefined;
-  };
-
   @action selectActivity = (id: string) => {
     // this.selectedActivity = this.activities.find(p => p.id === id);
     this.selectedActivity = this.activityRegistry.get(id);
-    this.editMode = false;
   };
 
   @action joinActivity = async () => {

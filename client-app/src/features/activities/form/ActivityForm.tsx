@@ -42,10 +42,10 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     createActivity,
     editActivity,
     submitting,
-    cancelFormOpen,
     loadActivity,
     deleteActivity,
     selectedActivity,
+    cancelSelectedActivity,
   } = rootStore.activityStore;
 
   const [activity, setActivity] = useState<IActivityFormValues>(
@@ -72,10 +72,12 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
         .finally(() => setloading(false));
     } else {
       setActivity(new ActivityFormValues(undefined));
+      cancelSelectedActivity();
     }
   }, [match.params.id, loadActivity]);
 
   const handleFinalFormSubmit = (values: IActivityFormValues) => {
+    console.log("called submit");
     const dateAndTime = combineDateAndTime(values.date, values.time);
     if (latlng) {
       values.longitute = latlng.lng;
@@ -104,6 +106,12 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
         history.push(`/activities/${newActivity.id}`);
       });
     }
+  };
+
+  const handleDelete = () => {
+    deleteActivity(selectedActivity!.id).then(() => {
+      history.push(`/activities`);
+    });
   };
   useEffect(() => {
     if (done) {
@@ -218,24 +226,25 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                   ></Button>
                   {match.params.id && (
                     <Button
+                      data-cy="delete"
                       disabled={loading}
                       loading={submitting}
                       floated="right"
                       negative
+                      type="button"
                       content="Delete"
                       onClick={() => {
-                        history.push(`/activities`);
-                        deleteActivity(selectedActivity!.id);
+                        handleDelete();
                       }}
                     ></Button>
                   )}
                   <Button
+                    type="button"
                     data-cy="cancel"
                     disabled={loading}
                     floated="right"
                     content="Cancel"
                     onClick={() => {
-                      cancelFormOpen();
                       handleCancel();
                     }}
                   ></Button>
