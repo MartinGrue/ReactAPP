@@ -1,4 +1,3 @@
-// import React, { Component } from 'react';
 import { Fragment, useContext, useEffect } from "react";
 import Nav from "../../features/nav/Nav";
 import { observer } from "mobx-react-lite";
@@ -12,7 +11,8 @@ import Routes from "./Routes";
 
 const App = () => {
   const rootStore = useContext(RootStoreContext);
-  const { setApploaded, token, appLoaded } = rootStore.commonStore;
+  const { setApploaded, token, appLoaded, mobilePusherOpen } =
+    rootStore.commonStore;
   const { getUser } = rootStore.userStore;
 
   useEffect(() => {
@@ -25,9 +25,16 @@ const App = () => {
     }
   }, [getUser, setApploaded, token]);
 
+  useEffect(() => {
+    console.log(mobilePusherOpen);
+    document.body.classList.toggle("modal-open", mobilePusherOpen);
+    return () => {};
+  }, [mobilePusherOpen]);
+
   if (!appLoaded) {
     return <LoadingComponent content="Loading app"></LoadingComponent>;
   }
+
   return (
     <Fragment>
       <ModalContainer></ModalContainer>
@@ -37,9 +44,8 @@ const App = () => {
         path={"/(.+)"}
         render={() => (
           <Fragment>
-            <Nav>
-              <Routes />
-            </Nav>
+            <Nav></Nav>
+            <Routes />
           </Fragment>
         )}
       />

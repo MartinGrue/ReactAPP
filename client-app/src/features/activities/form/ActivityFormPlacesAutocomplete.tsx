@@ -85,7 +85,7 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
               autoComplete="off"
             ></input>
             {touched && !!error && (
-              <Label basic color="red">
+              <Label basic color="red" data-cy="error-label">
                 {error}
               </Label>
             )}
@@ -116,15 +116,12 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
                             className,
                             style,
                           })}
+                          onClick={() => {
+                            input.onChange(suggestion.description);
+                            handleSelect(suggestion.description);
+                          }}
                         >
-                          <span
-                            onClick={() => {
-                              input.onChange(suggestion.description);
-                              handleSelect(suggestion.description);
-                            }}
-                          >
-                            {suggestion.description}
-                          </span>
+                          <span>{suggestion.description}</span>
                         </div>
                       </List.Item>
                     );

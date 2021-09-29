@@ -4,12 +4,12 @@ obj
 .DS_Store
 *.db
 .vs
+# test
+**/cypress/videos
+**/cypress/screenshots
 
 # dependencies
 node_modules
-
-# testing
-coverage
 
 # production
 wwwroot
