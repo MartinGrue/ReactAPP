@@ -6,7 +6,6 @@ import ActivityDashboard from "../../features/activities/dashbord/ActivityDashbo
 import ActivityForm from "../../features/activities/form/ActivityForm";
 import ActivityDetails from "../../features/activities/details/ActivityDetails";
 import ProfilePage from "../../features/profile/ProfilePage";
-import LoginForm from "../../features/User/LoginForm";
 import NotFound from "./NotFound";
 import { observer } from "mobx-react-lite";
 import { RootStoreContext } from "../stores/rootStore";
