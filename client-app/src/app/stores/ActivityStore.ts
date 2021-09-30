@@ -293,7 +293,7 @@ export default class ActivityStore {
       await agent.Activities.delete(id);
       runInAction(() => {
         this.activityRegistry.delete(id);
-        this.selectedActivity = undefined;
+        // this.selectedActivity = undefined;
         this.submitting = false;
       });
     } catch (error) {

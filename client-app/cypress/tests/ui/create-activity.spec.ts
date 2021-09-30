@@ -118,4 +118,17 @@ describe("Create New Activity", function () {
     cy.get("[data-cy=cancel]").click();
     cy.location("pathname").should("equal", "/activities");
   });
+  it("should display the form correctly if redirected from manage Activity Route", () => {
+    cy.visit("/manage/08d98198-c819-0bfa-2b7f-783337b71419");
+    cy.wait(2000);
+    cy.get("[data-cy=createActivity]").click(); //this is not visible on mobile
+    cy.get("[name=title]").focus().should("have.value", "");
+    cy.get("[name=description]").get("textarea").should("have.value", "");
+    cy.get("[name=category]").and("contain", "");
+    cy.get("[data-cy=datepicker] input[id=id_input").should("have.value", "");
+    cy.get("[data-cy=timepicker] input:first").should("have.value", "--");
+    cy.get("[data-cy=timepicker] input:last").should("have.value", "--");
+    cy.get("[name=city]").should("have.value", "");
+    cy.get("[name=venue]").should("have.value", "");
+  });
 });
