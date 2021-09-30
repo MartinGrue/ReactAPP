@@ -14,7 +14,7 @@ const ActivityList: React.FC = () => {
     <Fragment>
       {activitiesByDate.map(([group, activities]) => (
         <Fragment key={group}>
-          <Label size="large" color="blue">
+          <Label size="large" color="blue" data-cy="groupByDateLabel">
             {format(parseISO(group), "dd.MM.yyyy")}
           </Label>
           <Segment>

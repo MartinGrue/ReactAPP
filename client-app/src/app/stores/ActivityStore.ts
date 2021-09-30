@@ -55,6 +55,11 @@ export default class ActivityStore {
   hubConnection: signalR.HubConnection | null = null;
 
   @computed get axiosParams() {
+    console.log(
+      `new axiosparams, limit:${String(PagingLimit)} offset: ${
+        this.page ? this.page * PagingLimit : 0
+      }`
+    );
     const params = new URLSearchParams();
     params.append("limit", String(PagingLimit));
     params.append("offset", `${this.page ? this.page * PagingLimit : 0}`);
@@ -150,13 +155,9 @@ export default class ActivityStore {
     );
   }
 
-
-
   @action cancelSelectedActivity = () => {
     this.selectedActivity = undefined;
-    console.log("called cancelSelectedActivity");
   };
-
 
   @action editActivity = async (activity: IActivity) => {
     this.submitting = true;

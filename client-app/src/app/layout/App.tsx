@@ -26,7 +26,6 @@ const App = () => {
   }, [getUser, setApploaded, token]);
 
   useEffect(() => {
-    console.log(mobilePusherOpen);
     document.body.classList.toggle("modal-open", mobilePusherOpen);
     return () => {};
   }, [mobilePusherOpen]);

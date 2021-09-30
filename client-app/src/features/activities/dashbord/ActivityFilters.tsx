@@ -13,6 +13,7 @@ const ActivityFilters = () => {
       <Menu vertical size={"large"} style={{ width: "100%", marginTop: 30 }}>
         <Header icon={"filter"} attached color={"teal"} content={"Filters"} />
         <Menu.Item
+          data-cy="activities-filter-all"
           color={"blue"}
           name={"all"}
           content={"All Activities"}
@@ -22,6 +23,7 @@ const ActivityFilters = () => {
           }}
         />
         <Menu.Item
+          data-cy="activities-filter-imgoing"
           color={"blue"}
           name={"username"}
           content={"I'm Going"}
@@ -31,6 +33,7 @@ const ActivityFilters = () => {
           }}
         />
         <Menu.Item
+          data-cy="activities-filter-ishost"
           color={"blue"}
           name={"host"}
           content={"I'm hosting"}

@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 // Import Cypress Percy plugin command (https://docs.percy.io/docs/cypress)
 import "@percy/cypress";
+
 Cypress.Commands.add("visualSnapshot", (maybeName) => {
   // @ts-ignore
   let snapshotTitle = cy.state("runnable").fullTitle();
