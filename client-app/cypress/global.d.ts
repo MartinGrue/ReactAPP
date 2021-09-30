@@ -4,6 +4,13 @@
  */
 declare namespace Cypress {
   interface Chainable {
+    task(
+      event: "get:data",
+      arg: dbQueryArg,
+      options?: Partial<Loggable & Timeoutable>
+    ): Chainable<{}>;
+
+    getData(): any;
     login(email: string, password: string): void;
     visualSnapshot(maybeName?): Chainable<any>;
     fillTitle(title: string): Chainable<any>;
