@@ -58,7 +58,6 @@ describe("Manage existing Activity", function () {
       "have.value",
       getTime(activity.Date).hours
     );
-    console.log(getTime(activity.Date).minutes);
     cy.get("[data-cy=timepicker] input:last").should(
       "have.value",
       getTime(activity.Date).minutes
@@ -97,6 +96,21 @@ describe("Manage existing Activity", function () {
 
   it("should display the activity correctly after reload", () => {
     cy.reload();
+    CheckForm();
+  });
+
+  it.only("should display the activity correctly if redirected from create ActivityRoute", () => {
+    cy.visit("/createactivity");
+    cy.wait(2000);
+
+    cy.visit(`/activities/${activity.Id}`);
+    cy.get("[data-cy=manage]").should("be.visible").click();
+    cy.location("pathname").should("equal", `/manage/${activity.Id}`);
+    CheckForm();
+
+    cy.visit("/createactivity");
+    cy.wait(2000);
+    cy.visit(`/manage/${activity.Id}`);
     CheckForm();
   });
 

@@ -49,7 +49,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   } = rootStore.activityStore;
 
   const [activity, setActivity] = useState<IActivityFormValues>(
-    new ActivityFormValues()
+    new ActivityFormValues(undefined)
   );
 
   const [loading, setloading] = useState(false);
@@ -60,38 +60,34 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   const [done, setdone] = useState(false);
   useEffect(() => {
     if (match.params.id) {
-      setloading(true);
-      loadActivity(match.params.id)
-        .then((activity) => {
-          setActivity(new ActivityFormValues(activity));
-          setLatlng({
-            lat: activity!.latitute,
-            lng: activity!.longitute,
-          });
-        })
-        .finally(() => setloading(false));
+      if (!selectedActivity) {
+        setloading(true);
+        loadActivity(match.params.id).finally(() => setloading(false));
+      } else {
+        setActivity(new ActivityFormValues(selectedActivity));
+        setLatlng({
+          lat: selectedActivity!.latitute,
+          lng: selectedActivity!.longitute,
+        });
+      }
     } else {
       setActivity(new ActivityFormValues(undefined));
       cancelSelectedActivity();
     }
-  }, [match.params.id, loadActivity]);
+  }, [match.params.id, loadActivity, selectedActivity, cancelSelectedActivity]);
 
   const handleFinalFormSubmit = (values: IActivityFormValues) => {
-    console.log("called submit");
     const dateAndTime = combineDateAndTime(values.date, values.time);
-    if (latlng) {
-      values.longitute = latlng.lng;
-      values.latitute = latlng.lat;
-    }
-
     if (match.params.id) {
       const editedActivity: IActivity = {
         ...selectedActivity!,
         ...values,
         date: dateAndTime,
+        longitute: latlng.lng,
+        latitute: latlng.lat,
       };
       editActivity(editedActivity).then(() =>
-        history.push(`/activities/${activity.id}`)
+        history.push(`/activities/${selectedActivity!.id}`)
       );
     } else {
       const newActivity: IActivity = {
@@ -101,6 +97,8 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
         isHost: true,
         isGoing: true,
         date: dateAndTime,
+        longitute: latlng.lng,
+        latitute: latlng.lat,
       };
       createActivity(newActivity).then(() => {
         history.push(`/activities/${newActivity.id}`);
@@ -116,14 +114,14 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   useEffect(() => {
     if (done) {
       if (match.params.id) {
-        history.push(`/activities/${activity.id}`);
+        history.push(`/activities/${selectedActivity!.id}`);
       } else {
         history.push("/activities");
       }
     }
 
     return () => {};
-  }, [match.params.id, done, activity, history]);
+  }, [match.params.id, done, selectedActivity, history]);
   const handleCancel = () => {
     setdone(true);
   };

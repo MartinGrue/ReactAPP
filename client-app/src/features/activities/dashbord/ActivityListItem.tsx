@@ -20,9 +20,13 @@ import { SimpleMap } from "../../../app/common/maps/SimpleMap";
 const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
   const host = activity.userActivities.filter((x) => x.isHost)[0];
   return (
-    <Segment.Group>
+    <Segment.Group data-cy="activity-listitem">
       <Segment>
-        <Header as={Link} to={`/activities/${activity.id}`}>
+        <Header
+          as={Link}
+          to={`/activities/${activity.id}`}
+          data-cy="activity-header"
+        >
           {activity.title}
         </Header>
         <Divider></Divider>
@@ -39,6 +43,7 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
                       style={{ marginBottom: 3 }}
                       as={Link}
                       to={`/profiles/${host.userName}`}
+                      data-cy="activity-image"
                     ></Item.Image>
                   </Item>
                 </Item.Group>
@@ -48,7 +53,7 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
                   <Item key={activity.id}>
                     <Item.Content>
                       <Item.Description>
-                        <Header>
+                        <Header data-cy="activity-hostedby">
                           Hosted by{" "}
                           <Link to={`/profiles/${host.userName}`}>
                             {host.displayName}
@@ -58,6 +63,7 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
                       {activity.isHost && (
                         <ItemDescription>
                           <Label
+                            data-cy="activity-isHost"
                             tag
                             color="orange"
                             content="you are hosting this activity"
@@ -67,6 +73,7 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
                       {activity.isGoing && !activity.isHost && (
                         <ItemDescription>
                           <Label
+                            data-cy="activity-isGoing"
                             tag
                             color="green"
                             content="you are going to this activity"
@@ -81,6 +88,7 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
           </Grid.Column>
           <Grid.Column width={8}>
             <SimpleMap
+              data-cy="activity-map"
               lat={activity.latitute}
               lng={activity.longitute}
               opt={{ style: { width: "100%", height: 200 } }}
@@ -96,12 +104,14 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
       </Segment>
       <Segment secondary>
         <ActivityListAttendee
+          data-cy="attendee-List"
           attendees={activity.userActivities}
         ></ActivityListAttendee>
       </Segment>
       <Segment clearing>
         <span>{activity.description}</span>
         <Button
+          data-cy="activity-viewBtn"
           floated="right"
           content="View"
           color="blue"
