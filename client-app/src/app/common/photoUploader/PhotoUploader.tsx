@@ -54,6 +54,7 @@ export const PhotoUploader: React.FC<Props> = ({ loading }) => {
               ></div>
               <Button.Group fluid>
                 <Button
+                  data-cy="upload-imagebtn"
                   positive
                   icon="check"
                   disabled={loading}

@@ -12,6 +12,7 @@ declare namespace Cypress {
 
     getData(): any;
     login(email: string, password: string): void;
+    changeLogin(email: string, password: string): void;
     visualSnapshot(maybeName?): Chainable<any>;
     fillTitle(title: string): Chainable<any>;
     fillDesctiption(description: string): Chainable<any>;

@@ -101,17 +101,18 @@ describe("Manage existing Activity", function () {
 
   it.only("should display the activity correctly if redirected from create ActivityRoute", () => {
     cy.visit("/createactivity");
-    cy.wait(2000);
-
-    cy.visit(`/activities/${activity.Id}`);
-    cy.get("[data-cy=manage]").should("be.visible").click();
-    cy.location("pathname").should("equal", `/manage/${activity.Id}`);
-    CheckForm();
+    cy.wait(1000).then(() => {
+      cy.visit(`/activities/${activity.Id}`);
+      cy.get("[data-cy=manage]").should("be.visible").click();
+      cy.location("pathname").should("equal", `/manage/${activity.Id}`);
+      CheckForm();
+    });
 
     cy.visit("/createactivity");
-    cy.wait(2000);
-    cy.visit(`/manage/${activity.Id}`);
-    CheckForm();
+    cy.wait(1000).then(() => {
+      cy.visit(`/manage/${activity.Id}`);
+      CheckForm();
+    });
   });
 
   it("should be able to make changes and persist the changes", () => {

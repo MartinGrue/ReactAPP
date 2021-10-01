@@ -20,11 +20,16 @@ export default class CommonStore {
       }
     );
   }
+  @observable isLogedIn = window.localStorage.getItem("jwt") ? true : false ;
   @observable token: string | null = window.localStorage.getItem("jwt");
   @observable google_id_token: string | null = null;
   @observable appLoaded = false;
   @observable mobilePusherOpen = false;
 
+  @action logIn = (token: string | null) => {
+    this.setToken(token);
+    this.isLogedIn = true;
+  };
   @action setToken = (token: string | null) => {
     // window.localStorage.setItem('jwt', token!);
     this.token = token;

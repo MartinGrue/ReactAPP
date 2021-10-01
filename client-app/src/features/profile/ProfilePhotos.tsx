@@ -44,9 +44,15 @@ const ProfilePhotos = () => {
       <Tab.Pane>
         <Grid>
           <GridColumn width={16}>
-            <Header floated="left" icon="image" content="Photos"></Header>
+            <Header
+              data-cy="PaneContentHeader"
+              floated="left"
+              icon="image"
+              content="Photos"
+            ></Header>
             {isLoggedIn && (
               <Button
+                data-cy="addphoto-btn"
                 floated="right"
                 basic
                 content={addPhotoToggle ? "Cancel" : "AddPhoto"}

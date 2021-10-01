@@ -72,7 +72,6 @@ namespace Infrastructure.photos
         public async Task<string> GetSignature(Dictionary<string, object> parameters)
         {
             var Signature = await Task.Run(() => cloudinary.Api.SignParameters(parameters));
-            Console.WriteLine("THis is Signature" + Signature);
             return Signature;
         }
         public Photo GetPhotoFromUrl(string url, bool isMain)

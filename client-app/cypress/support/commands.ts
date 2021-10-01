@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 // Import Cypress Percy plugin command (https://docs.percy.io/docs/cypress)
 import "@percy/cypress";
+import jwt_decode from "jwt-decode";
 
 Cypress.Commands.add("visualSnapshot", (maybeName) => {
   // @ts-ignore
@@ -25,29 +26,45 @@ Cypress.Commands.add("login", (email, password) => {
     autoEnd: false,
   });
   cy.intercept("POST", "http://localhost:5000/api/User/login").as("loginUser");
+  cy.intercept("GET", "http://localhost:5000/api/activities**").as("initload");
+  cy.intercept("GET", "http://localhost:5000/api/User").as("userload");
 
   cy.visit("/");
   cy.get("[data-cy=login]").click();
   cy.get("[name=email]").clear().type(email);
   cy.get("[name=password]").clear().type(password);
   cy.get("[data-cy=login-submit]").click();
-  cy.wait("@loginUser").then((loginUser: any) => {
-    // Cypress.log({
-    //   consoleProps: () => {
-    //     return {
-    //       email,
-    //       password,
-    //       displayName:
-    //         loginUser.response.statusCode !=,401 &&
-    //         loginUser.response.body.displayName,
-    //      token:
-    //         loginUser.response.statusCode !=,401 &&
-    //         loginUser.response.body.token
-    //     };
-    //   },
-    // });
-    log.end();
+  cy.wait("@loginUser");
+  cy.wait("@initload");
+  cy.wait("@userload");
+  log.end();
+});
+
+Cypress.Commands.add("changeLogin", (email, password) => {
+  const token = window.localStorage.getItem("jwt");
+  var decoded = jwt_decode(token!);
+  expect(decoded).to.be.an("object");
+  expect(decoded).to.have.keys(["nameid", "nbf", "exp", "iat"]);
+  const { nameid } = decoded as any;
+
+  Cypress.log({
+    name: "logout",
+    displayName: "LOGOUT",
+    message: [`🔐 DEauthenticating | ${nameid}`],
+    // @ts-ignore
+    autoEnd: false,
   });
+
+  cy.visit("/activities");
+  cy.get("[data-cy=profile-dropdown]").click();
+  cy.get("[data-cy=logout]").click();
+  cy.location("pathname").should("equal", "/");
+  cy.wait(500).then(() => {
+    const token = window.localStorage.getItem("jwt");
+    expect(token).to.eq(null);
+  });
+
+  cy.login(email, password);
 });
 
 Cypress.Commands.add("fillTitle", (title: string) => {

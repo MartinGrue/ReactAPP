@@ -1,27 +1,23 @@
-import { useEffect, useContext } from 'react';
-import * as React from 'react';
-import { observer } from 'mobx-react-lite';
-import { Tab, Grid, Header, Card, Image, TabProps } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { useEffect, useContext } from "react";
+import * as React from "react";
+import { observer } from "mobx-react-lite";
+import { Tab, Grid, Header, Card, Image, TabProps } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
-import { format } from 'date-fns';
-import { RootStoreContext } from '../../app/stores/rootStore';
-import { IUserActivity } from '../../app/models/IActivity';
+import { format } from "date-fns";
+import { RootStoreContext } from "../../app/stores/rootStore";
+import { IUserActivity } from "../../app/models/IActivity";
 
 const panes = [
-  { menuItem: 'Future Events', pane: { key: 'futureEvents' } },
-  { menuItem: 'Past Events', pane: { key: 'pastEvents' } },
-  { menuItem: 'Hosting', pane: { key: 'hosted' } }
+  { menuItem: "Future Events", pane: { key: "futureEvents" } },
+  { menuItem: "Past Events", pane: { key: "pastEvents" } },
+  { menuItem: "Hosting", pane: { key: "hosted" } },
 ];
 
 const ProfileEvents = () => {
   const rootStore = useContext(RootStoreContext);
-  const {
-    loadUserActivities,
-    profile,
-    loadingUserActivities,
-    userActivities
-  } = rootStore.profileStore!;
+  const { loadUserActivities, profile, loadingUserActivities, userActivities } =
+    rootStore.profileStore!;
 
   useEffect(() => {
     loadUserActivities(profile!.userName);
@@ -34,13 +30,13 @@ const ProfileEvents = () => {
     let predicate: string;
     switch (data.activeIndex) {
       case 1:
-        predicate = 'past';
+        predicate = "past";
         break;
       case 2:
-        predicate = 'hosting';
+        predicate = "hosting";
         break;
       default:
-        predicate = 'future';
+        predicate = "future";
         break;
     }
     loadUserActivities(predicate);
@@ -50,7 +46,12 @@ const ProfileEvents = () => {
     <Tab.Pane loading={loadingUserActivities}>
       <Grid>
         <Grid.Column width={16}>
-          <Header floated='left' icon='calendar' content={'Activities'} />
+          <Header
+            data-cy="PaneContentHeader"
+            floated="left"
+            icon="calendar"
+            content={"Activities"}
+          />
         </Grid.Column>
         <Grid.Column width={16}>
           <Tab
@@ -68,13 +69,13 @@ const ProfileEvents = () => {
               >
                 <Image
                   src={`/assets/categoryImages/${activity.category}.jpg`}
-                  style={{ minHeight: 100, objectFit: 'cover' }}
+                  style={{ minHeight: 100, objectFit: "cover" }}
                 />
                 <Card.Content>
-                  <Card.Header textAlign='center'>{activity.title}</Card.Header>
-                  <Card.Meta textAlign='center'>
-                    <div>{format(new Date(activity.date), 'd.MM')}</div>
-                    <div>{format(new Date(activity.date), 'HH:mm')}</div>
+                  <Card.Header textAlign="center">{activity.title}</Card.Header>
+                  <Card.Meta textAlign="center">
+                    <div>{format(new Date(activity.date), "d.MM")}</div>
+                    <div>{format(new Date(activity.date), "HH:mm")}</div>
                   </Card.Meta>
                 </Card.Content>
               </Card>

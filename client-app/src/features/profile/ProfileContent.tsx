@@ -13,6 +13,7 @@ export const ProfileContent: React.FC<{
 
   return (
     <Tab
+    data-cy="panes"
       panes={[
         {
           menuItem: 'About',

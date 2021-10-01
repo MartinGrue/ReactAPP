@@ -1,60 +1,57 @@
-import { useContext } from 'react';
-import * as React from 'react';
-import { Form as FinalForm, Field } from 'react-final-form';
-import { FORM_ERROR } from 'final-form';
-import { Form, Button, Segment } from 'semantic-ui-react';
-import TextInput from '../../app/common/form/TextInput';
-import { RootStoreContext } from '../../app/stores/rootStore';
-import { IProfileFormValues } from '../../app/models/IProfile';
-import { combineValidators, isRequired } from 'revalidate';
+import { useContext } from "react";
+import React from "react";
+import { Form as FinalForm, Field } from "react-final-form";
+import { Form, Button, Segment } from "semantic-ui-react";
+import TextInput from "../../app/common/form/TextInput";
+import { RootStoreContext } from "../../app/stores/rootStore";
+import { combineValidators, isRequired } from "revalidate";
+import { observer } from "mobx-react-lite";
 
 export const ProfileEditForm: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
-  const { isLoggedIn, profile } = rootStore.profileStore;
-  const { updateUser} = rootStore.userStore;
+  const { isLoggedIn, profile, isFormDisapled } = rootStore.profileStore;
+  const { updateUser } = rootStore.userStore;
 
   const validate = combineValidators({
-    userName: isRequired('displayName')
+    userName: isRequired("displayName"),
   });
-
+  const handleSubmit = updateUser;
   return (
     <Segment clearing>
       <FinalForm
         validate={validate}
         initialValues={profile!}
-        onSubmit={
-          (values: IProfileFormValues) => 
-          updateUser(values).catch(error => ({
-            [FORM_ERROR]: error
-          }))
-        }
+        onSubmit={handleSubmit}
         render={({
           handleSubmit,
           submitting,
           invalid,
           pristine,
-          dirtySinceLastSubmit
+          dirtySinceLastSubmit,
         }) => (
-          <Form onSubmit={handleSubmit} error>
+          <Form onSubmit={handleSubmit} error data-cy="profileEditForm">
             <Field
-              name='displayName'
+              disabled={isFormDisapled}
+              name="displayName"
               value={profile!.displayName}
               component={TextInput}
-              placeholder='displayName'
+              placeholder="displayName"
             ></Field>
             <Field
-              name='bio'
+              disabled={isFormDisapled}
+              name="bio"
               value={profile!.bio}
               component={TextInput}
-              placeholder='bio'
+              placeholder="bio"
             ></Field>
             {isLoggedIn && (
               <Button
+                data-cy="submitEditProfile"
                 disabled={(invalid && !dirtySinceLastSubmit) || pristine}
                 loading={submitting}
                 positive
-                content='Update Profile'
-                floated='right'
+                content="Update Profile"
+                floated="right"
               ></Button>
             )}
             {/* <pre>{JSON.stringify(form.getState(), null, 2)}</pre> */}
@@ -65,4 +62,4 @@ export const ProfileEditForm: React.FC = () => {
   );
 };
 
-export default ProfileEditForm;
+export default observer(ProfileEditForm);
