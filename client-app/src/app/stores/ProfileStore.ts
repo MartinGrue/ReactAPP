@@ -32,7 +32,7 @@ export default class ProfileStore {
   @observable loadingSetMain: boolean = false;
   @observable loadingFollow: boolean = false;
 
-  @observable disableUpdateForm: boolean = false;
+  @observable isFormDisapled: boolean = true;
   @observable loadingProfile: boolean = true;
   @observable userActivities: IUserActivity[] = [];
   @observable loadingUserActivities: boolean = false;
@@ -89,7 +89,7 @@ export default class ProfileStore {
     this.setLoadingPhoto();
 
     this.timeStampForUpload = Math.round(new Date().getTime() / 1000);
-    const api_key = "716959181144487";
+    const api_key = process.env.REACT_APP_CLOUDINARY_PUP_KEY;
     const formData = new FormData();
     try {
       // let file = files![i];
@@ -97,20 +97,24 @@ export default class ProfileStore {
       reader.readAsDataURL(image!);
       reader.onloadend = async () => {
         let file = reader.result as string;
-        const appendData = {
+
+        let appendData: { [k: string]: any } = {
           folder: "Reactivities",
+          timestamp: this.timeStampForUpload.toString(),
+          transformation: "w_500,h_500,c_fill",
         };
 
-        formData.append("folder", "Reactivities");
-        // formData.append("eager", "c_pad,h_100,w_100");
-
-        formData.append("timestamp", this.timeStampForUpload.toString());
-        formData.append("transformation", "w_500,h_500,c_fill");
+        Object.entries(appendData).forEach((entry) => {
+          formData.set(entry[0], entry[1]);
+        });
 
         const signature = await agent.Profile.getSignature(formData);
-        formData.append("file", file);
-        formData.append("api_key", api_key);
-        formData.append("signature", signature);
+
+        appendData = { ...appendData, file: file, api_key, signature };
+        Object.entries(appendData).forEach((entry) => {
+          formData.set(entry[0], entry[1]);
+        });
+
         const response = await fetch(
           "http://api.cloudinary.com/v1_1/dvzlb9xco/image/upload",
           { method: "POST", body: formData }
@@ -171,14 +175,12 @@ export default class ProfileStore {
   };
 
   @action toggledisableUpdateForm = () => {
-    this.disableUpdateForm = !this.disableUpdateForm;
+    this.isFormDisapled = !this.isFormDisapled;
   };
-  @action setdisableUpdateForm = () => {
-    this.disableUpdateForm = true;
+  @action disableUpdateForm = () => {
+    this.isFormDisapled = true;
   };
-  @action unsetdisableUpdateForm = () => {
-    this.disableUpdateForm = false;
-  };
+
   @action followUser = async () => {
     this.loadingFollow = true;
     try {

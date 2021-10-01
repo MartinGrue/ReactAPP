@@ -39,6 +39,7 @@ export const PhotoUploaderDropZone: React.FC<IProps> = ({
   });
   return (
     <div
+    data-cy="photo-dropzone"
       {...getRootProps()}
       style={
         isDragActive
