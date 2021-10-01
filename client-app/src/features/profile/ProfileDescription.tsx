@@ -6,34 +6,37 @@ import { observer } from "mobx-react-lite";
 
 export const ProfileDescription = () => {
   const rootStore = useContext(RootStoreContext);
-  const {
-    isLoggedIn,
-    setdisableUpdateForm,
-    toggledisableUpdateForm,
-    unsetdisableUpdateForm,
-  } = rootStore.profileStore;
+  const { isLoggedIn, toggledisableUpdateForm, disableUpdateForm } =
+    rootStore.profileStore;
 
   const [editProfileToggle, seteditProfileToggle] = useState(false);
 
   useEffect(() => {
-    setdisableUpdateForm();
-    return () => unsetdisableUpdateForm();
-  }, [setdisableUpdateForm, unsetdisableUpdateForm]);
+    disableUpdateForm();
+    return () => disableUpdateForm();
+  }, [disableUpdateForm]);
+
+  const handleEdit = () => {
+    seteditProfileToggle(!editProfileToggle);
+    toggledisableUpdateForm();
+  };
   return (
     <Tab.Pane>
       <Grid>
         <GridColumn width={16}>
-          <Header floated="left" icon="address card" content="About"></Header>
+          <Header
+            data-cy="PaneContentHeader"
+            floated="left"
+            icon="address card"
+            content="About"
+          ></Header>
           {isLoggedIn && (
             <Button
               floated="right"
               basic
               content={editProfileToggle ? "Cancel" : "Edit Profile"}
               color={editProfileToggle ? "red" : "green"}
-              onClick={() => {
-                seteditProfileToggle(!editProfileToggle);
-                toggledisableUpdateForm();
-              }}
+              onClick={handleEdit}
             ></Button>
           )}
         </GridColumn>

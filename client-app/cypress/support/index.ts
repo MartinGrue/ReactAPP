@@ -16,7 +16,7 @@
 // Import commands.js using ES2015 syntax:
 import "./commands";
 import "cypress-promise/register";
-
+import "cypress-file-upload";
 // beforeEach(() => {
 //   cy.intercept({ url: "/api", hostname:"localhost", port:5000, method:"POST" });
 // });
