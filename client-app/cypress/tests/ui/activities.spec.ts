@@ -68,7 +68,7 @@ describe("Have a working activity dashboard", () => {
     ) {
       cy.scrollTo("bottom");
       await cy.wait("@fetchmore").promisify();
-      cy.wait(500); //give react sometime to render
+      await cy.wait(500).promisify(); //give react sometime to render
     }
     cy.scrollTo("bottom");
     cy.get("[data-cy=activity-listitem]").should(
@@ -108,7 +108,7 @@ describe("Have a working activity dashboard", () => {
     for (let index = 1; index <= Math.round(selection.length / 2); index++) {
       cy.scrollTo("bottom");
       await cy.wait("@fetchmore").promisify();
-      cy.wait(500); //give react sometime to render
+      await cy.wait(500).promisify(); //give react sometime to render
     }
     cy.scrollTo("bottom");
     cy.get("[data-cy=activity-listitem]").should(
@@ -127,7 +127,7 @@ describe("Have a working activity dashboard", () => {
     for (let index = 1; index <= Math.round(selection.length / 2); index++) {
       cy.scrollTo("bottom");
       await cy.wait("@fetchmore").promisify();
-      cy.wait(500); //give react sometime to render
+      await cy.wait(500).promisify(); //give react sometime to render
     }
     cy.scrollTo("bottom");
     cy.get("[data-cy=activity-listitem]").should(
