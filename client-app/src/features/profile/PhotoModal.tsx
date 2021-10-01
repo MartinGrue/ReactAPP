@@ -18,6 +18,7 @@ const PhotoModal: React.FC<PhotoModalProps> = ({
       onClose={() => setmodalOpen(false)}
       onOpen={() => setmodalOpen(true)}
       open={modalOpen}
+      data-cy="PhotoModal"
     >
       <div
         onClick={() => {
