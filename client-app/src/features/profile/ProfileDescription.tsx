@@ -32,6 +32,7 @@ export const ProfileDescription = () => {
           ></Header>
           {isLoggedIn && (
             <Button
+              data-cy="editProfileBtn"
               floated="right"
               basic
               content={editProfileToggle ? "Cancel" : "Edit Profile"}

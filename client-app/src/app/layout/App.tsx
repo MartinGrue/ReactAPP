@@ -11,19 +11,19 @@ import Routes from "./Routes";
 
 const App = () => {
   const rootStore = useContext(RootStoreContext);
-  const { setApploaded, token, appLoaded, mobilePusherOpen } =
+  const { setApploaded, isLogedIn, appLoaded, mobilePusherOpen } =
     rootStore.commonStore;
   const { getUser } = rootStore.userStore;
 
   useEffect(() => {
-    if (token) {
+    if (isLogedIn) {
       getUser().then(() => {
         setApploaded();
       });
     } else {
       setApploaded();
     }
-  }, [getUser, setApploaded, token]);
+  }, [isLogedIn, setApploaded, getUser]);
 
   useEffect(() => {
     document.body.classList.toggle("modal-open", mobilePusherOpen);

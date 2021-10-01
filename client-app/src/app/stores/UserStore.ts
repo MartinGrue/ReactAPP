@@ -32,7 +32,7 @@ export default class UserStore {
         history.push("/activities");
         toast.success("login success");
       });
-      this.rootStore.commonStore.setToken(user.token);
+      this.rootStore.commonStore.logIn(user.token);
       this.rootStore.modalStore.closeModal();
     } catch (error) {
       toast.error("login error");
@@ -88,7 +88,6 @@ export default class UserStore {
       const user = await agent.User.update(values);
       runInAction(() => {
         this.user = user;
-        history.push(`/profiles/${user.userName}`);
         this.rootStore.activityStore.activityRegistryHasNotChanged = false;
         this.rootStore.commonStore.setToken(user.token);
         toast.success("update success");

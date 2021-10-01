@@ -33,6 +33,7 @@ describe("Check the Profile functionality", () => {
     cy.login(user1.email, user1.password);
     // cy.changeLogin(user2.email, user2.password);
 
+    cy.intercept("PUT", "http://localhost:5000/api/User").as("updateProfile");
     cy.intercept("GET", `http://localhost:5000/api/Profiles/**`).as(
       "userProfile"
     );
@@ -86,12 +87,44 @@ describe("Check the Profile functionality", () => {
         .contains(pane)
         .should("be.visible")
         .click();
-      cy.get("[data-cy=PaneContentHeader]").contains(paneHeader[i]);
-      pane === "About" &&
-      
-    });
 
-    //CONTENT
+      //CONTENT
+      cy.get("[data-cy=PaneContentHeader]").contains(paneHeader[i]);
+
+      if (pane === "About") {
+        cy.get("[data-cy=profileEditForm] div").each((el) => {
+          cy.wrap(el).should("have.class", "disabled");
+        });
+        cy.get("[data-cy=editProfileBtn]")
+          .should("have.text", "Edit Profile")
+          .click()
+          .should("have.text", "Cancel");
+
+        cy.get("[data-cy=profileEditForm] div").each((el) => {
+          cy.wrap(el).should("not.have.class", "disabled");
+        });
+        cy.get("[data-cy=submitEditProfile]").should("have.class", "disabled");
+        cy.get("[data-cy=profileEditForm] div")
+          .find("[name=displayName]")
+          .type("Bob_mod");
+        cy.get("[data-cy=profileEditForm] div")
+          .find("[name=bio]")
+          .type("Bio_mod");
+        cy.get("[data-cy=submitEditProfile]").should("not.have.class").click();
+        cy.wait("@updateProfile");
+
+        //This is needed to restore original displayName
+        cy.get("[data-cy=editProfileBtn]")
+          .should("have.text", "Edit Profile")
+          .click();
+        cy.get("[data-cy=profileEditForm] div")
+          .find("[name=displayName]")
+          .clear()
+          .type("Bob");
+        cy.get("[data-cy=submitEditProfile]").should("not.have.class").click();
+        cy.wait("@updateProfile");
+      }
+    });
   });
   it("should be able to upload an image directly to cloudinary", () => {
     cy.get("[data-cy=panes] a.item").contains("Photos").click();
