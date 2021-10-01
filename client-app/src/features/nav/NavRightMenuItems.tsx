@@ -27,6 +27,7 @@ const NavRightMenuItems: React.FC = () => {
           >
             <Dropdown.Menu>
               <Dropdown.Item
+                data-cy="profile"
                 as={Link}
                 to={`/profiles/${user.userName}`}
                 text="My profile"

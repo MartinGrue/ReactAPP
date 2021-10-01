@@ -1,17 +1,14 @@
-import { useContext } from "react";
-import * as React from "react";
+import React from "react";
 import { FieldRenderProps } from "react-final-form";
-import { FormFieldProps, Form, Label } from "semantic-ui-react";
-import { RootStoreContext } from "../../stores/rootStore";
+import { Form, Label } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
 
-interface IProps
-  extends FieldRenderProps<string, HTMLElement>,
-    FormFieldProps {
+interface IProps extends FieldRenderProps<string, HTMLElement> {
   style?: React.CSSProperties | undefined;
 }
 
 const TextInput: React.FC<IProps> = ({
+  disabled,
   input,
   width,
   type,
@@ -19,17 +16,9 @@ const TextInput: React.FC<IProps> = ({
   meta: { touched, error },
   style,
 }) => {
-  const rootStore = useContext(RootStoreContext);
-  const { disableUpdateForm } = rootStore.profileStore;
-
   return (
-    <Form.Field
-      disabled={disableUpdateForm}
-      error={touched && !!error}
-      type={type}
-      width={width}
-    >
-      <input {...input} placeholder={placeholder} style={style}></input>
+    <Form.Field error={touched && !!error} {...{ disabled, width, type }}>
+      <input {...input} {...{ placeholder, style }}></input>
       {touched && !!error && (
         <Label basic color="red" data-cy="error-label">
           {error}

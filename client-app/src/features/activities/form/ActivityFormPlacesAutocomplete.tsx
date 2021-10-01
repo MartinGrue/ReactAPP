@@ -1,10 +1,9 @@
-import { useContext, useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import * as React from "react";
 import { observer } from "mobx-react-lite";
 import PlacesAutocomplete from "react-places-autocomplete";
 import { Form, Label, List, Segment } from "semantic-ui-react";
 import { FieldRenderProps } from "react-final-form";
-import { RootStoreContext } from "../../../app/stores/rootStore";
 import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 
 interface IProps extends FieldRenderProps<string, HTMLInputElement> {
@@ -19,9 +18,6 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
   placeholder,
   meta: { touched, error },
 }) => {
-  const rootStore = useContext(RootStoreContext);
-  const { disableUpdateForm } = rootStore.profileStore;
-
   const [dropdownIsOpen, setdropdownIsOpen] = useState(false);
   const [address, setaddress] = useState("");
   const FieldProps = {
@@ -61,7 +57,7 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
     [input]
   );
   return (
-    <Form.Field disabled={disableUpdateForm} error={touched && !!error}>
+    <Form.Field error={touched && !!error}>
       <PlacesAutocomplete
         value={input.value}
         onChange={() => {}}
