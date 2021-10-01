@@ -49,7 +49,6 @@ const plugins = (on: any, config: any) => {
     "get:data"() {
       const activities = lowercaseData.activities;
       const users = lowercaseData.users;
-      console.log(users);
       return { activities, users };
     },
   });

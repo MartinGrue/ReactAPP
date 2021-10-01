@@ -52,25 +52,19 @@ export default class ProfileStore {
       const profile = await agent.Profile.get(userName);
 
       runInAction(() => {
-        //console.log(profile);
         this.profile = profile;
         this.loadingProfile = false;
-        // console.log("profile: ", this.profile);
-        // console.log("user: ", this.user);
-        // console.log("from store direct: ", this!.rootStore.userStore.user);
       });
     } catch (error) {
       runInAction(() => {
         this.loadingProfile = false;
-        //console.log(error);
+        console.log(error);
       });
     }
   };
   @action setLoadingPhoto = () => {
-    //console.log(this.loadingPhoto + 'in set before');
     runInAction(() => {
       this.loadingPhoto = true;
-      console.log(this.loadingPhoto + "in set after");
     });
   };
   @action uploadImage = async (file: Blob) => {
@@ -88,7 +82,7 @@ export default class ProfileStore {
       runInAction(() => {
         this.loadingPhoto = false;
       });
-      //console.log(error);
+      console.log(error);
     }
   };
   @action uploadImageDirect = async (image: any) => {
@@ -103,6 +97,9 @@ export default class ProfileStore {
       reader.readAsDataURL(image!);
       reader.onloadend = async () => {
         let file = reader.result as string;
+        const appendData = {
+          folder: "Reactivities",
+        };
 
         formData.append("folder", "Reactivities");
         // formData.append("eager", "c_pad,h_100,w_100");
@@ -111,7 +108,6 @@ export default class ProfileStore {
         formData.append("transformation", "w_500,h_500,c_fill");
 
         const signature = await agent.Profile.getSignature(formData);
-        console.log("signature: ", signature);
         formData.append("file", file);
         formData.append("api_key", api_key);
         formData.append("signature", signature);
@@ -127,7 +123,6 @@ export default class ProfileStore {
         runInAction(() => {
           this.profile!.photos.push(photo);
           this.loadingPhoto = false;
-          // console.log(photo);
           history.push(`/Profiles/${this.user!.userName}`);
         });
       };
@@ -171,7 +166,7 @@ export default class ProfileStore {
       runInAction(() => {
         this.loadingSetMain = false;
       });
-      //console.log(error);
+      console.log(error);
     }
   };
 

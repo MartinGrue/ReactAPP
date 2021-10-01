@@ -55,11 +55,6 @@ export default class ActivityStore {
   hubConnection: signalR.HubConnection | null = null;
 
   @computed get axiosParams() {
-    console.log(
-      `new axiosparams, limit:${String(PagingLimit)} offset: ${
-        this.page ? this.page * PagingLimit : 0
-      }`
-    );
     const params = new URLSearchParams();
     params.append("limit", String(PagingLimit));
     params.append("offset", `${this.page ? this.page * PagingLimit : 0}`);
@@ -96,8 +91,6 @@ export default class ActivityStore {
       .configureLogging(signalR.LogLevel.Information)
       .build();
     this.hubConnection.start();
-    // .then(() => console.log(this.hubConnection!.state));
-
     this.hubConnection.on("ReceiveComment", (comment) => {
       runInAction(() => {
         this.selectedActivity!.comments.push(comment);
@@ -131,25 +124,13 @@ export default class ActivityStore {
     const sorted = activities.sort(
       (a, b) => b.date!.getTime() - a.date!.getTime()
     );
-    // console.log(Object.entries(sorted));
 
-    // console.log(Object.entries(sorted.reduce((a,b)=>{return a}, {})));
     return Object.entries(
       sorted.reduce((activities, activity) => {
-        // console.log(activity.date!);
         const key: string = activity.date!.toISOString();
-        // // console.log(activities);
-        // activities[key] = activities[key]
-        //   ? [...activities[key], activity]
-        //   : [activity];
         key in activities
           ? (activities[key] = [...activities[key], activity])
           : (activities[key] = [activity]);
-        // if (key in activities) {
-        //   activities[key] = [...activities[key], activity];
-        // } else {
-        //   activities[key] = [activity];
-        // }
         return activities;
       }, {} as { [key: string]: IActivity[] })
     );
@@ -185,27 +166,7 @@ export default class ActivityStore {
     try {
       const activitiesEnvelope = await agent.Activities.list(this.axiosParams);
       const { activities, activityCount } = activitiesEnvelope;
-      // Object.entries(
-      //   activities.reduce(
-      //     (multi, single) => {
-      //       // console.log(JSON.stringify(multi));
-      //       single.date = new Date(single.date!);
-      //       const key: string = single.date!.toISOString().split('T')[0];
-      //       // console.log(single.date);
-      //       // multi[key] = [single];
-      //       if (key in multi) {
-      //         console.log(key + 'gabs schon');
-      //         multi[key] = [...multi[key],single];
-      //       } else {
-      //         console.log(key + 'ist neu');
-      //         multi[key] = [single];
-      //       }
-      //       return multi;
-      //     },
-      //     {} as { [key: string]: IActivity[] }
-      //   )
-      // );
-      runInAction(() => {
+           runInAction(() => {
         activities.forEach((activity) => {
           FillActivityProps(activity, this.rootStore.userStore.user!);
           this.activityRegistry.set(activity.id, activity);
@@ -213,7 +174,6 @@ export default class ActivityStore {
         this.loadingInitial = false;
         this.activityRegistryHasNotChanged = true;
         this.activityCount = activityCount;
-        // console.log(this.activityRegistry);
       });
     } catch (error) {
       runInAction(() => {
