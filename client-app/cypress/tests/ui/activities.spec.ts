@@ -26,7 +26,7 @@ describe("Have a working activity dashboard", () => {
   const getData = async () => {
     ctx.seedData = await cy.task<SeedData>("get:data").promisify();
     ctx.activitiesByDate = groupActivitiesByDate(ctx.seedData!.activities);
-  };
+  }; //this should come from global thingy
 
   const user = {
     email: "bob@test.com",

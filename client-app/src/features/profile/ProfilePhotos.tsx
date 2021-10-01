@@ -25,9 +25,11 @@ const ProfilePhotos = () => {
     loadingSetMain,
     setMainPhoto,
     loadingPhoto,
+    addPhotoOpen,
+    toggleaddPhotoOpen,
+    closeaddPhotoOpen,
   } = rootStore.profileStore;
 
-  const [addPhotoToggle, setaddPhotoToggle] = useState(false);
   const [target, settarget] = useState<string | undefined>(undefined);
 
   const [modalOpen, setmodalOpen] = React.useState(false);
@@ -36,11 +38,7 @@ const ProfilePhotos = () => {
   let className = "isNotMainButton";
   return (
     <>
-      <PhotoModal
-        setmodalOpen={setmodalOpen}
-        modalOpen={modalOpen}
-        modalImage={modalImage}
-      ></PhotoModal>
+      <PhotoModal {...{ modalOpen, setmodalOpen, modalImage }}></PhotoModal>
       <Tab.Pane>
         <Grid>
           <GridColumn width={16}>
@@ -55,22 +53,27 @@ const ProfilePhotos = () => {
                 data-cy="addphoto-btn"
                 floated="right"
                 basic
-                content={addPhotoToggle ? "Cancel" : "AddPhoto"}
-                color={addPhotoToggle ? "red" : "green"}
-                onClick={() => setaddPhotoToggle(!addPhotoToggle)}
+                content={addPhotoOpen ? "Cancel" : "AddPhoto"}
+                color={addPhotoOpen ? "red" : "green"}
+                onClick={toggleaddPhotoOpen}
               ></Button>
             )}
           </GridColumn>
         </Grid>
         <GridColumn>
-          {addPhotoToggle ? (
+          {addPhotoOpen ? (
             <PhotoUploader loading={loadingPhoto}></PhotoUploader>
           ) : (
             <Segment>
               <Card.Group itemsPerRow={4} stackable doubling>
                 {profile &&
                   profile.photos.map((photo) => (
-                    <Card key={photo.id} fluid className="imageWithHover">
+                    <Card
+                      key={photo.id}
+                      fluid
+                      className="imageWithHover"
+                      data-cy="imagecard"
+                    >
                       <Image
                         style={{
                           marginLeft: "auto",
@@ -98,7 +101,6 @@ const ProfilePhotos = () => {
                             ? (className = "isMainButton")
                             : (className = "isNotMainButton")}
                           <Button
-                            name={photo.id}
                             color="teal"
                             content="Main"
                             icon="star"

@@ -36,6 +36,7 @@ export default class ProfileStore {
   @observable loadingProfile: boolean = true;
   @observable userActivities: IUserActivity[] = [];
   @observable loadingUserActivities: boolean = false;
+  @observable addPhotoOpen: boolean = false;
 
   @computed get isLoggedIn() {
     if (this.rootStore.userStore.user && this.profile) {
@@ -66,6 +67,12 @@ export default class ProfileStore {
     runInAction(() => {
       this.loadingPhoto = true;
     });
+  };
+  @action toggleaddPhotoOpen = () => {
+    this.addPhotoOpen = !this.addPhotoOpen;
+  };
+  @action closeaddPhotoOpen = () => {
+    this.addPhotoOpen = false;
   };
   @action uploadImage = async (file: Blob) => {
     this.loadingPhoto = true;
@@ -127,7 +134,7 @@ export default class ProfileStore {
         runInAction(() => {
           this.profile!.photos.push(photo);
           this.loadingPhoto = false;
-          history.push(`/Profiles/${this.user!.userName}`);
+          // history.push(`/Profiles/${this.user!.userName}`);
         });
       };
     } catch (error) {

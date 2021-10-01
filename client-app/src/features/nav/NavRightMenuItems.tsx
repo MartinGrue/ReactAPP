@@ -12,7 +12,11 @@ const NavRightMenuItems: React.FC = () => {
   return (
     <div>
       {user && (
-        <Menu.Item position="right" className="NavRightMenu">
+        <Menu.Item
+          position="right"
+          className="NavRightMenu"
+          data-cy="NavMenuRightItems"
+        >
           <Image
             avatar
             size="tiny"
