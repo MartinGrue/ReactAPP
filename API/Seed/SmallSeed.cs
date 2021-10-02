@@ -201,7 +201,7 @@ namespace API
             }
             foreach (var user in users)
             {
-                var res = await userManager.CreateAsync(user);
+                var res = await userManager.CreateAsync(user, "Pa$$w0rd");
             }
             return users;
         }
