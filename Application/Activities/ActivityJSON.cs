@@ -16,7 +16,7 @@ namespace Application.Activities
         public string Venue { get; set; }
         public double Latitute { get; set; }
         public double Longitute { get; set; }
-        public IList<UserActivityJSON> UserActivities { get; set; }
+        public List<UserActivityJSON> UserActivities { get; set; }
         // public ICollection<CommentDTO> Comments { get; set; }
     }
 }

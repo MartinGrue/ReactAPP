@@ -68,7 +68,7 @@ namespace API
                     await userManager.CreateAsync(user, "Pa$$w0rd");
                 }
             }
-            Console.WriteLine(DateTime.Now);
+            // Console.WriteLine(DateTime.Now);
             if (!context.Activities.Any())
             {
                 var activities = new List<Activity>

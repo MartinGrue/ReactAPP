@@ -1,6 +1,6 @@
 using System;
 
-namespace Domain
+namespace Application.Activities
 {
     public class UserActivityJSON
     {
