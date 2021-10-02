@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Application.Activities;
 using Application.interfaces;
+using AutoMapper;
 using Domain;
 using Microsoft.AspNetCore.Identity;
 using Persistence;
@@ -28,8 +30,8 @@ namespace API
             return JsonSerializer.Deserialize<SeedData>(jsonString);
         }
         private static SeedData JsonData = GetSeedFromJson();
-        public static async Task SeedData(DataContext context,
-            UserManager<AppUser> userManager, IPhotoAccessor photoAccessor)
+        public static async Task Seed(DataContext context,
+            UserManager<AppUser> userManager, IPhotoAccessor photoAccessor, IMapper mapper)
         {
             if (!userManager.Users.Any())
             {
@@ -45,6 +47,25 @@ namespace API
             }
 
             await context.SaveChangesAsync();
+            var list = new List<ActivityJSON>();
+            var Id = Guid.Parse("08d98198-c818-fb1d-c57f-ed4f1c4863e4");
+            var Id2 = Guid.Parse("08d98198-c818-ff94-8722-d997c295bf5e");
+            var activity1 = await context.Activities.FindAsync(Id);
+            var activity2 = await context.Activities.FindAsync(Id);
+
+            var data = mapper.Map<Activity, ActivityJSON>(activity1);
+            var data2 = mapper.Map<Activity, ActivityJSON>(activity2);
+
+            list.Add(data);
+            list.Add(data2);
+
+            // var ar = data.UserActivities.ToArray();
+            string jsonString = JsonSerializer.Serialize(list);
+            // Console.WriteLine(data.UserActivities.ToArray()[0].AppUserId);
+            Console.WriteLine("hi");
+
+            Console.WriteLine(data.UserActivities[0].DateJoined);
+            Console.WriteLine(jsonString);
         }
         public static async Task<bool> PurgeDb(DataContext context, UserManager<AppUser> userManager, IPhotoAccessor photoAccessor)
         {
