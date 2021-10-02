@@ -44,25 +44,25 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(opt =>
-        {
-            opt.UseLazyLoadingProxies();
-            opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
-            mySqlOptions =>
             {
-                mySqlOptions.EnableRetryOnFailure(
-                maxRetryCount: 10,
-                maxRetryDelay: TimeSpan.FromSeconds(10),
-                errorNumbersToAdd: null);
+                opt.UseLazyLoadingProxies();
+                opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
+                mySqlOptions =>
+                {
+                    mySqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 10,
+                    maxRetryDelay: TimeSpan.FromSeconds(10),
+                    errorNumbersToAdd: null);
+                });
             });
-        });
 
             services.AddAuthorization(authopt =>
-             {
-                 authopt.AddPolicy("IsActivityHost", authpolbuilder =>
-                {
-                    authpolbuilder.Requirements.Add(new IsHostRequirement());
-                });
-             });
+            {
+                authopt.AddPolicy("IsActivityHost", authpolbuilder =>
+               {
+                   authpolbuilder.Requirements.Add(new IsHostRequirement());
+               });
+            });
             services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 
             services.AddControllers(opt =>

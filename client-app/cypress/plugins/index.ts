@@ -7,7 +7,7 @@ interface PhotoFromDB {
   ismain: boolean;
   appuserid: string;
 }
-interface UserFromDB {
+export interface UserFromDB {
   id: string;
   displayname: string;
   username: string;
@@ -35,21 +35,31 @@ export interface ActivityFromDB {
 export interface SeedData {
   activities: ActivityFromDB[];
   users: UserFromDB[];
+  followerfollowings: FollowerFollowingsDB[];
 }
-const seedData = JSON.stringify(data);
-var lowercase = seedData.replace(/"([\w]+)":/g, function ($0, $1) {
-  return '"' + $1.toLowerCase() + '":';
-});
-const lowercaseData = JSON.parse(lowercase);
+export interface FollowerFollowingsDB {
+  useraid: string;
+  userbid: string;
+}
 
 const plugins = (on: any, config: any) => {
   const testDataApiEndpoint = `${config.env.apiUrl}/seed`;
 
   on("task", {
     "get:data"() {
-      const activities = lowercaseData.activities;
-      const users = lowercaseData.users;
-      return { activities, users };
+      var lowercase = JSON.stringify(data).replace(
+        /"([\w]+)":/g,
+        function ($0, $1) {
+          return '"' + $1.toLowerCase() + '":';
+        }
+      );
+      const { activities, users, followerfollowings } = JSON.parse(lowercase);
+      // const lowercaseData = JSON.parse(lowercase);
+      // const activities = lowercaseData.activities;
+      // const users = lowercaseData.users;
+      // const followerFollowings = lowercaseData.followerfollowings;
+
+      return { activities, users, followerfollowings };
     },
   });
   on("task", {

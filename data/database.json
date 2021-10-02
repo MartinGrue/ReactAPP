@@ -14,14 +14,12 @@
         },
         {
           "Id": "tpuevgn7huiipzyi8gj9",
-
           "Url": "https://res.cloudinary.com/dvzlb9xco/image/upload/v1632679680/Reactivities/tpuevgn7huiipzyi8gj9.jpg",
           "IsMain": false,
           "AppUserId": "a"
         },
         {
           "Id": "tiuwx0roe4exkxjkaxhl",
-
           "Url": "https://res.cloudinary.com/dvzlb9xco/image/upload/v1632679679/Reactivities/tiuwx0roe4exkxjkaxhl.jpg",
           "IsMain": false,
           "AppUserId": "a"
@@ -389,7 +387,7 @@
       ]
     }
   ],
-  
+
   "followerFollowings": [
     { "UserAId": "a", "UserBId": "b" },
     { "UserAId": "b", "UserBId": "c" },

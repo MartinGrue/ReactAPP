@@ -9,9 +9,9 @@ using Persistence;
 
 namespace API
 {
-    public class Seed
+    public class NewDataSeed
     {
-        public static async Task SeedData(DataContext context,
+        public static async Task SeedNewData(DataContext context,
             UserManager<AppUser> userManager, IPhotoAccessor photoAccessor)
         {
             if (!userManager.Users.Any())
@@ -68,7 +68,7 @@ namespace API
                     await userManager.CreateAsync(user, "Pa$$w0rd");
                 }
             }
-            Console.WriteLine(DateTime.Now);
+            // Console.WriteLine(DateTime.Now);
             if (!context.Activities.Any())
             {
                 var activities = new List<Activity>

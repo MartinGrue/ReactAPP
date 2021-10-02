@@ -12,7 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Persistence;
 using System.Collections.Generic;
 using System.Linq;
-
+using AutoMapper;
 
 namespace API.Controllers
 {
@@ -24,13 +24,15 @@ namespace API.Controllers
         private readonly DataContext _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly IPhotoAccessor _photoAccessor;
+        private readonly IMapper _mapper;
         public SeedController(DataContext context, UserManager<AppUser> userManager,
-         IPhotoAccessor photoAccessor, IWebHostEnvironment HostEnvironment)
+         IPhotoAccessor photoAccessor, IWebHostEnvironment HostEnvironment, IMapper mapper)
         {
             _hostEnvironment = HostEnvironment;
             _context = context;
             _userManager = userManager;
             _photoAccessor = photoAccessor;
+            _mapper = mapper;
         }
         // [HttpGet("purge")]
         // public async Task<IActionResult> Purge()
@@ -59,7 +61,7 @@ namespace API.Controllers
                 {
                     if (await SmallSeed.PurgeDb(_context, _userManager, _photoAccessor))
                     {
-                        if (await SmallSeed.ReSeedData(_context, _userManager, _photoAccessor))
+                        if (await SmallSeed.ReSeedData(_context, _userManager, _photoAccessor, _mapper))
                         {
                             return Ok();
                         }
@@ -68,7 +70,7 @@ namespace API.Controllers
                     }
                     return BadRequest("Failed to reseed Database while purging");
                 }
-                if (await SmallSeed.ReSeedData(_context, _userManager, _photoAccessor))
+                if (await SmallSeed.ReSeedData(_context, _userManager, _photoAccessor, _mapper))
                 {
                     return Ok();
                 }
