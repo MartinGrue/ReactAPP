@@ -7,7 +7,7 @@ const ProfileCard: React.FC<{ profile: IProfileForFollowerOrFollowing }> = ({
   profile
 }) => {
   return (
-    <Card as={Link} to={`/profiles/${profile.userName}`}>
+    <Card as={Link} to={`/profiles/${profile.userName}`} data-cy="profilecard">
       <Image src={profile.image || '/assets/user.png'} wrapped/>
       <Card.Content>
         <Card.Header>{profile.displayName}</Card.Header>

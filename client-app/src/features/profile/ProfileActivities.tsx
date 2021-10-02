@@ -55,6 +55,7 @@ const ProfileEvents = () => {
         </Grid.Column>
         <Grid.Column width={16}>
           <Tab
+            data-cy="activities-panes"
             panes={panes}
             menu={{ secondary: true, pointing: true }}
             onTabChange={(e, data) => handleTabChange(e, data)}
@@ -63,6 +64,7 @@ const ProfileEvents = () => {
           <Card.Group itemsPerRow={4} stackable doubling>
             {userActivities.map((activity: IUserActivity) => (
               <Card
+                data-cy="activities-card"
                 as={Link}
                 to={`/activities/${activity.id}`}
                 key={activity.id}
