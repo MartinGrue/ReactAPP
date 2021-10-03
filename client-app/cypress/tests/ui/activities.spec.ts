@@ -91,7 +91,7 @@ describe("Have a working activity dashboard", () => {
       });
   };
 
-  it.only("The latest activity should be displayed on top", () => {
+  it("should display the latest activity should be displayed on top", () => {
     const { activitiesByDate } = ctx!;
     const sample = activitiesByDate![0];
     checkActivityGroup(sample);

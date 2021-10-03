@@ -1,5 +1,5 @@
 import axios from "axios";
-import data from "/run/media/data/ReactApp/data/database.json";
+import data from "/run/media/data/ReactApp/data/Database.json";
 
 interface PhotoFromDB {
   id: string;
@@ -67,6 +67,7 @@ const plugins = (on: any, config: any) => {
       // seed database with test data
       try {
         const { data } = await axios.get(`${testDataApiEndpoint}/reseed`);
+        console.log(data)
         return data;
       } catch (error) {
         console.log(error);

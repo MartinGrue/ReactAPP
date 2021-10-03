@@ -223,7 +223,7 @@ export default class ActivityStore {
         userName: this.rootStore.userStore.user!.userName,
         displayName: this.rootStore.userStore.user!.displayName,
         isHost: true,
-        image: null,
+        image: this.rootStore.userStore.user!.image,
       };
       let attendees = [];
       attendees.push(NewAttendee);

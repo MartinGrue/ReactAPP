@@ -99,7 +99,7 @@ describe("Manage existing Activity", function () {
     CheckForm();
   });
 
-  it.only("should display the activity correctly if redirected from create ActivityRoute", () => {
+  it("should display the activity correctly if redirected from create ActivityRoute", () => {
     cy.visit("/createactivity");
     cy.wait(1000).then(() => {
       cy.visit(`/activities/${activity.Id}`);

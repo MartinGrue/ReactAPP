@@ -16,7 +16,8 @@ export const PhotoUploader: React.FC<Props> = ({ loading }) => {
   const [files, setfiles] = useState<FileWithPreview[]>([]);
   const [image, setimage] = useState<Blob | null>(null);
   const rootStore = useContext(RootStoreContext);
-  const { uploadImageDirect, setLoadingPhoto } = rootStore.profileStore;
+  const { uploadImageDirect, setLoadingPhoto } =
+    rootStore.profileStore;
 
   //Component will unmount
   //Remove image from memory
@@ -61,7 +62,7 @@ export const PhotoUploader: React.FC<Props> = ({ loading }) => {
                   loading={loading}
                   onClick={() => {
                     setLoadingPhoto();
-                    uploadImageDirect(image!);
+                    uploadImageDirect(image!)
                     // uploadImage(image!);
                   }}
                 ></Button>
