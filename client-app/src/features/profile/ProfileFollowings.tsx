@@ -35,8 +35,8 @@ const ProfileFollowings = () => {
       <Grid.Column width={16}>
         <Card.Group itemsPerRow={5} stackable doubling>
           {followings &&
-            followings.map((profile) => (
-              <ProfileCard key={profile.userName} profile={profile} />
+            followings.map((ffprofile) => (
+              <ProfileCard key={ffprofile.userName}{...{ffprofile}} />
             ))}
         </Card.Group>
       </Grid.Column>

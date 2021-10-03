@@ -48,7 +48,6 @@ export default class ProfileStore {
 
   @action getProfile = async (userName: string) => {
     this.loadingProfile = true;
-
     try {
       const profile = await agent.Profile.get(userName);
 
