@@ -13,7 +13,6 @@ export default class FollowersStore {
   constructor(rootStore: RootStore) {
     makeObservable(this);
     this.rootStore = rootStore;
-
     reaction(
       () => this.activeTab,
       (activeTab) => {
@@ -36,6 +35,7 @@ export default class FollowersStore {
 
   @action resetFollowings = () => {
     this.followings = [];
+    this.activeTab = undefined;
   };
   @action setLoading = () => {
     this.loading = false;
@@ -51,6 +51,7 @@ export default class FollowersStore {
       runInAction(() => {
         this.followings = profiles;
         this.loading = false;
+        // this.activeTab = undefined;
       });
     } catch (error) {
       runInAction(() => {

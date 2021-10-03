@@ -27,7 +27,6 @@ const ProfilePhotos = () => {
     loadingPhoto,
     addPhotoOpen,
     toggleaddPhotoOpen,
-    closeaddPhotoOpen,
   } = rootStore.profileStore;
 
   const [target, settarget] = useState<string | undefined>(undefined);

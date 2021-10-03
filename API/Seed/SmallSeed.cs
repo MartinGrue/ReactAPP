@@ -32,7 +32,7 @@ namespace API
         public static string workingDirectory = Environment.CurrentDirectory;
         public static string projectDirectory = Directory.GetParent(workingDirectory).FullName;
         public static SeedData newdata = Deserialize("seedData.json");
-        public static SeedData database = Deserialize("test.json");
+        public static SeedData database = Deserialize("Database.json");
         private static void Serialize(string filename, UserManager<AppUser> userManager, IMapper mapper, DataContext context)
         {
             string datapath = Path.Combine(projectDirectory, @"data/", filename);
@@ -43,7 +43,6 @@ namespace API
             {
                 var fromMapper = mapper.Map<AppUser, UserJSON>(user);
                 fromMapper.Photos.ForEach((photo) => { photo.AppUserId = user.Id; });
-
                 users.Add(fromMapper);
             }
             foreach (var activity in context.Activities)
@@ -55,26 +54,7 @@ namespace API
                 followerFollowings.Add(mapper.Map<FollowerFollowings, FollowerFollowingsJSON>(followerfollowing));
             }
             var jsonData = new JSONData { activities = activities, followerFollowings = followerFollowings, users = users };
-            // string jsonString = JsonSerializer.Serialize(activities);
-            // string jsonString2 = JsonSerializer.Serialize(followerfollowings);
-            // string jsonString3 = JsonSerializer.Serialize(users);
-
             string jsonString = JsonSerializer.Serialize(jsonData);
-            // Console.WriteLine(jsonString);
-            // Console.WriteLine(jsonString2);
-            // Console.WriteLine(jsonString3);
-
-            // Console.WriteLine("hihihhih");
-            // Console.WriteLine("hihihhih");
-
-            // Console.WriteLine("hihihhih");
-
-            // Console.WriteLine("hihihhih");
-
-            // Console.WriteLine("hihihhih");
-
-
-
             File.WriteAllText(datapath, jsonString);
 
         }
@@ -90,7 +70,7 @@ namespace API
         {
             if (!userManager.Users.Any())
             {
-                var users = await SeedUsers(context, userManager, photoAccessor);
+                await SeedUsers(context, userManager, photoAccessor);
             }
             if (!context.Activities.Any())
             {
@@ -100,8 +80,6 @@ namespace API
             {
                 await SeedFollowerFollowings(context, userManager, photoAccessor);
             }
-
-
         }
         public static async Task<bool> PurgeDb(DataContext context, UserManager<AppUser> userManager, IPhotoAccessor photoAccessor)
         {
@@ -123,140 +101,110 @@ namespace API
         }
         public static async Task<bool> ReSeedData(DataContext context, UserManager<AppUser> userManager, IPhotoAccessor photoAccessor, IMapper mapper)
         {
-            var users = await SeedUsers(context, userManager, photoAccessor);
-            var activities = await SeedActivities(context, userManager, photoAccessor);
-            var followerFollowings = await SeedFollowerFollowings(context, userManager, photoAccessor);
+            newdata = Deserialize("seedData.json");
+            database = Deserialize("Database.json");
+
+            await SeedUsers(context, userManager, photoAccessor);
+            await SeedActivities(context, userManager, photoAccessor);
+            await SeedFollowerFollowings(context, userManager, photoAccessor);
 
             var success = await context.SaveChangesAsync();
 
-
-            Serialize("test.json", userManager, mapper, context);
-
-            // var list = new List<ActivityJSON>();
-            // var Id = Guid.Parse("08d98198-c818-fb1d-c57f-ed4f1c4863e4");
-            // var Id2 = Guid.Parse("08d98198-c818-ff94-8722-d997c295bf5e");
-            // var activity1 = await context.Activities.FindAsync(Id);
-            // var activity2 = await context.Activities.FindAsync(Id);
-
-            // var data = mapper.Map<Activity, ActivityJSON>(activity1);
-            // var data2 = mapper.Map<Activity, ActivityJSON>(activity2);
-
-            // list.Add(data);
-            // list.Add(data2);
-
-            // // // var ar = data.UserActivities.ToArray();
-            // string jsonString = JsonSerializer.Serialize(list);
-            // // // Console.WriteLine(data.UserActivities.ToArray()[0].AppUserId);
-            // // Console.WriteLine("hi");
-
-            // // Console.WriteLine(data.UserActivities[0].DateJoined);
-            // Console.WriteLine(jsonString);
+            Serialize("Database.json", userManager, mapper, context);
 
             return success > 0;
         }
-        public static async Task<List<AppUser>> SeedUsers(DataContext context,
+        public static void CreateUser(AppUser user, List<AppUser> users, IPhotoAccessor photoAccessor = null)
+        {
+            var photos = new List<Photo>();
+            foreach (var photo in user.Photos)
+            {
+                photos.Add(
+                    photoAccessor == null
+                    ? new Photo { Id = photo.Id, Url = photo.Url, IsMain = photo.IsMain }
+                    : photoAccessor.GetPhotoFromUrl(photo.Url, photo.IsMain));
+            }
+            users.Add(new AppUser
+            {
+                Id = user.Id,
+                DisplayName = user.DisplayName,
+                UserName = user.UserName,
+                Email = user.Email,
+                Photos = photos
+            });
+        }
+        public static async Task ForEachAsync<T>(this List<T> list, Func<T, Task> func)
+        {
+            foreach (var value in list)
+            {
+                await func(value);
+            }
+        }
+
+        public static async Task SeedUsers(DataContext context,
             UserManager<AppUser> userManager, IPhotoAccessor photoAccessor)
         {
-
             var users = new List<AppUser>();
-
-            foreach (var user in newdata.users)
+            newdata.users.ForEach((user) =>
             {
                 if (!database.users.Exists((dbUser) => dbUser.Id == user.Id))
-                {
-                    Console.WriteLine("new user");
-                    var photos = new List<Photo>();
-                    foreach (var photo in user.Photos)
-                    {
-                        photos.Add(photoAccessor.GetPhotoFromUrl(photo.Url, photo.IsMain));
-                    }
-                    users.Add(new AppUser
-                    {
-                        Id = user.Id,
-                        DisplayName = user.DisplayName,
-                        UserName = user.UserName,
-                        Email = user.Email,
-                        Photos = photos
-                    });
-                }
+                    CreateUser(user, users, photoAccessor);
             }
-            foreach (var user in database.users)
-            {
-                var photos = new List<Photo>();
-
-                foreach (var photo in user.Photos)
-                {
-                    photos.Add(new Photo { Id = photo.Id, Url = photo.Url, IsMain = photo.IsMain });
-                }
-
-                users.Add(new AppUser
-                {
-                    Id = user.Id,
-                    DisplayName = user.DisplayName,
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    Photos = photos
-                });
-                // Console.WriteLine(res);
-            }
-            foreach (var user in users)
-            {
-                var res = await userManager.CreateAsync(user, "Pa$$w0rd");
-            }
-            return users;
+            );
+            database.users.ForEach((user) => CreateUser(user, users));
+            List<IdentityResult> results = new List<IdentityResult>();
+            await users.ForEachAsync(async (user) => results.Add(await userManager.CreateAsync(user, "Pa$$w0rd")));
+            results.ToList().TrueForAll((res) => res.Succeeded);
         }
-        public static async Task<List<FollowerFollowings>> SeedFollowerFollowings(DataContext context,
+        public static async Task SeedFollowerFollowings(DataContext context,
             UserManager<AppUser> userManager, IPhotoAccessor photoAccessor)
         {
-            // SeedData database = Deserialize("database.json");
-
             var FollowerFollowings = new List<FollowerFollowings>();
-            foreach (var followerFollowing in database.followerFollowings)
-            {
-
-                FollowerFollowings.Add(new FollowerFollowings { UserAId = followerFollowing.UserAId, UserBId = followerFollowing.UserBId });
-            }
+            database.followerFollowings.ForEach((ff) =>
+             FollowerFollowings.Add(new FollowerFollowings { UserAId = ff.UserAId, UserBId = ff.UserBId }));
             await context.FollowerFollowings.AddRangeAsync(FollowerFollowings);
-            return FollowerFollowings;
         }
-
-        public static async Task<List<Activity>> SeedActivities(DataContext context,
-            UserManager<AppUser> userManager, IPhotoAccessor photoAccessor)
+        public static void CreateActivity(Activity activity, List<Activity> activities)
         {
+            activity.Id = activity.Id == Guid.Empty ? Guid.NewGuid() : activity.Id;
 
-            // SeedData database = Deserialize("database.json");
-
-            var activities = new List<Activity>();
-            foreach (var activity in database.activities)
+            var userActivities = new List<UserActivity>();
+            foreach (var useractivity in activity.UserActivities)
             {
-                var userActivities = new List<UserActivity>();
-                foreach (var useractivity in activity.UserActivities)
+                userActivities.Add(new UserActivity
                 {
-                    userActivities.Add(new UserActivity
-                    {
-                        AppUserId = useractivity.AppUserId,
-                        IsHost = useractivity.IsHost,
-                        DateJoined = useractivity.DateJoined,
-                        ActivityId = useractivity.ActivityId
-                    });
-                }
-                // Console.WriteLine(activity.Id);
-                activities.Add(new Activity
-                {
-                    Id = activity.Id,
-                    Title = activity.Title,
-                    Date = activity.Date,
-                    Description = activity.Description,
-                    Category = activity.Category,
-                    City = activity.City,
-                    Latitute = activity.Latitute,
-                    Longitute = activity.Longitute,
-                    Venue = activity.Venue,
-                    UserActivities = userActivities
+                    AppUserId = useractivity.AppUserId,
+                    IsHost = useractivity.IsHost,
+                    DateJoined = useractivity.DateJoined,
+                    ActivityId = activity.Id
                 });
             }
+            activities.Add(new Activity
+            {
+                Id = activity.Id,
+                Title = activity.Title,
+                Date = activity.Date,
+                Description = activity.Description,
+                Category = activity.Category,
+                City = activity.City,
+                Latitute = activity.Latitute,
+                Longitute = activity.Longitute,
+                Venue = activity.Venue,
+                UserActivities = userActivities
+            });
+        }
+        public static async Task SeedActivities(DataContext context,
+            UserManager<AppUser> userManager, IPhotoAccessor photoAccessor)
+        {
+            var activities = new List<Activity>();
+
+            newdata.activities.ForEach((newactivity) =>
+            {
+                if (!database.activities.Exists((oldactivity) => oldactivity.Title == newactivity.Title))
+                    CreateActivity(newactivity, activities);
+            });
+            database.activities.ForEach((activity) => CreateActivity(activity, activities));
             await context.Activities.AddRangeAsync(activities);
-            return activities;
         }
     }
 }

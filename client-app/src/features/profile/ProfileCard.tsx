@@ -1,29 +1,34 @@
-import * as React from 'react';
-import { Card, Image, Icon } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
-import { IProfileForFollowerOrFollowing } from '../../app/models/IProfile';
+import React from "react";
+import { Card, Image, Icon } from "semantic-ui-react";
+import { Link } from "react-router-dom";
+import { IProfileForFollowerOrFollowing } from "../../app/models/IProfile";
+import { observer } from "mobx-react-lite";
 
-const ProfileCard: React.FC<{ profile: IProfileForFollowerOrFollowing }> = ({
-  profile
+const ProfileCard: React.FC<{ ffprofile: IProfileForFollowerOrFollowing }> = ({
+  ffprofile,
 }) => {
   return (
-    <Card as={Link} to={`/profiles/${profile.userName}`} data-cy="profilecard">
-      <Image src={profile.image || '/assets/user.png'} wrapped/>
+    <Card
+      as={Link}
+      to={`/profiles/${ffprofile.userName}`}
+      data-cy="profilecard"
+    >
+      <Image src={ffprofile.image || "/assets/user.png"} wrapped />
       <Card.Content>
-        <Card.Header>{profile.displayName}</Card.Header>
+        <Card.Header>{ffprofile.displayName}</Card.Header>
       </Card.Content>
       <Card.Content extra>
-          {profile.followersCount ? (
-            <div>
-              <Icon name='user' />
-              {profile.followersCount} Followers
-            </div>
-          ) : (
-            <div></div>
-          )}
+        {ffprofile.followersCount ? (
+          <div>
+            <Icon name="user" />
+            {ffprofile.followersCount} Followers
+          </div>
+        ) : (
+          <div></div>
+        )}
       </Card.Content>
     </Card>
   );
 };
 
-export default ProfileCard;
+export default observer(ProfileCard);

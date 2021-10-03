@@ -48,7 +48,6 @@ export default class ProfileStore {
 
   @action getProfile = async (userName: string) => {
     this.loadingProfile = true;
-
     try {
       const profile = await agent.Profile.get(userName);
 
@@ -94,6 +93,7 @@ export default class ProfileStore {
   };
   @action uploadImageDirect = async (image: any) => {
     this.setLoadingPhoto();
+    this.loadingPhoto = true;
 
     this.timeStampForUpload = Math.round(new Date().getTime() / 1000);
     const api_key = process.env.REACT_APP_CLOUDINARY_PUP_KEY;
@@ -134,7 +134,8 @@ export default class ProfileStore {
         runInAction(() => {
           this.profile!.photos.push(photo);
           this.loadingPhoto = false;
-          // history.push(`/Profiles/${this.user!.userName}`);
+          this.toggleaddPhotoOpen()
+          // history.push(`/profiles/${this.user!.userName}`);
         });
       };
     } catch (error) {
