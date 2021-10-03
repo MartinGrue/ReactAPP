@@ -32,7 +32,7 @@ namespace API
         public static string workingDirectory = Environment.CurrentDirectory;
         public static string projectDirectory = Directory.GetParent(workingDirectory).FullName;
         public static SeedData newdata = Deserialize("seedData.json");
-        public static SeedData database = Deserialize("test.json");
+        public static SeedData database = Deserialize("Database.json");
         private static void Serialize(string filename, UserManager<AppUser> userManager, IMapper mapper, DataContext context)
         {
             string datapath = Path.Combine(projectDirectory, @"data/", filename);
@@ -102,7 +102,7 @@ namespace API
         public static async Task<bool> ReSeedData(DataContext context, UserManager<AppUser> userManager, IPhotoAccessor photoAccessor, IMapper mapper)
         {
             newdata = Deserialize("seedData.json");
-            database = Deserialize("test.json");
+            database = Deserialize("Database.json");
 
             await SeedUsers(context, userManager, photoAccessor);
             await SeedActivities(context, userManager, photoAccessor);
@@ -110,7 +110,7 @@ namespace API
 
             var success = await context.SaveChangesAsync();
 
-            Serialize("test.json", userManager, mapper, context);
+            Serialize("Database.json", userManager, mapper, context);
 
             return success > 0;
         }
