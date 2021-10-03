@@ -345,6 +345,28 @@
           "DateJoined": "2021-09-30T15:48:36.392Z"
         }
       ]
+    },
+    {
+      "Title": "Future Activity 999999999",
+      "Date": "2021-09-30T15:48:36.392Z",
+      "Description": "Activity 8 days in future",
+      "Category": "Drinks",
+      "City": "Berlin",
+      "Latitute": 52.52000659999999,
+      "Longitute": 13.404953999999975,
+      "Venue": "Kurfürstendamm",
+      "UserActivities": [
+        {
+          "AppUserId": "b",
+          "IsHost": true,
+          "DateJoined": "2021-09-30T15:48:36.392Z"
+        },
+        {
+          "AppUserId": "c",
+          "IsHost": false,
+          "DateJoined": "2021-09-30T15:48:36.392Z"
+        }
+      ]
     }
   ],
   "followerFollowings": [
