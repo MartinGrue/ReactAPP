@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { RootStore } from "./rootStore";
 import { FillActivityProps, transformateTimeZone } from "../common/util/util";
 import * as signalR from "@microsoft/signalr";
+import { param } from "cypress/types/jquery";
 
 const PagingLimit = 2;
 // class ActivityStore {
@@ -163,10 +164,14 @@ export default class ActivityStore {
     //implicity returning a promise
     this.loadingInitial = true;
     // let activities = this.activityRegistry;
+    console.log("limit: ", this.axiosParams.getAll("limit"))
+    console.log("offset: ", this.axiosParams.getAll("offset"))
+    console.log("startDate: ", this.axiosParams.getAll("startDate"))
     try {
       const activitiesEnvelope = await agent.Activities.list(this.axiosParams);
+      console.log(activitiesEnvelope);
       const { activities, activityCount } = activitiesEnvelope;
-           runInAction(() => {
+      runInAction(() => {
         activities.forEach((activity) => {
           FillActivityProps(activity, this.rootStore.userStore.user!);
           this.activityRegistry.set(activity.id, activity);

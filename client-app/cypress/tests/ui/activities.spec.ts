@@ -2,54 +2,22 @@
 //avatas loaded
 //information should be correct
 import promisify from "cypress-promise";
-import { ActivityFromDB, SeedData } from "../../plugins";
-
-type ActivitiesContext = {
-  seedData?: SeedData;
-  activitiesByDate?: [{ date: string; items: ActivityFromDB[] }];
-};
-
-const formatDate = (date: string): string => {
-  const year = new Date(date).getFullYear();
-  const montdate = new Date(date);
-  const month =
-    montdate.getMonth() + 1 < 10
-      ? "" + 0 + (montdate.getMonth() + 1)
-      : montdate.getMonth() + 1;
-
-  const day = new Date(date).getDate();
-  return `${day}.${month}.${year}`;
-};
+import { ActivitiesContext, getData } from "../../plugins";
+import {
+  fetchSelection,
+  checkActivityGroup,
+} from "../../support/activitiesSupport";
 
 describe("Have a working activity dashboard", () => {
   let ctx: ActivitiesContext = {};
-  const getData = async () => {
-    ctx.seedData = await cy.task<SeedData>("get:data").promisify();
-    ctx.activitiesByDate = groupActivitiesByDate(ctx.seedData!.activities);
-  }; //this should come from global thingy
-
   const user = {
     email: "bob@test.com",
     password: "Pa$$w0rd",
   };
 
-  const groupActivitiesByDate = (activities: ActivityFromDB[]) => {
-    const sorted = activities.sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
-    return sorted.reduce((acc, item) => {
-      const key = formatDate(item.date);
-      const found = acc.findIndex((el) => el.date === key);
-      found !== -1
-        ? acc[found].items.push(item)
-        : acc.push({ date: key, items: [item] });
-      return acc;
-    }, [] as unknown as [{ date: string; items: ActivityFromDB[] }]);
-  };
-
   beforeEach(() => {
+    getData(ctx);
     cy.task("db:seed");
-    getData();
     cy.login(user.email, user.password);
 
     cy.intercept("GET", "http://localhost:5000/api/activities**").as(
@@ -58,47 +26,31 @@ describe("Have a working activity dashboard", () => {
     cy.intercept("GET", "http://localhost:5000/api/activities/").as("initLoad");
   });
 
-  it("should display the correct amount of activities for all filter on page load", async () => {
-    cy.get("[data-cy=activities-filter-all]").click();
+  it("should display the correct amount of activities for all filter", async () => {
     const { activities } = ctx.seedData!;
-    for (
-      let index = 1;
-      index <= Math.round(activities.length / 2) - 1;
-      index++
-    ) {
-      cy.scrollTo("bottom");
-      await cy.wait("@fetchmore").promisify();
-      await cy.wait(500).promisify(); //give react sometime to render
-    }
+
+    cy.get("[data-cy=activities-filter-all]").click();
+    fetchSelection(activities);
     cy.scrollTo("bottom");
     cy.get("[data-cy=activity-listitem]").should(
       "have.length",
       activities.length
     );
   });
-  const checkActivityGroup = (activity: {
-    date: string;
-    items: ActivityFromDB[];
-  }) => {
+  it("should display the activity grouping correctly", () => {
     const { activitiesByDate } = ctx!;
-    const group = activitiesByDate!.find((el) => el.date === activity.date);
-    cy.get("[data-cy=groupByDateLabel]")
-      .should("have.text", group?.date)
-      .get("[data-cy=activity-listitem]")
-      .should("have.length", group?.items.length)
-      .each((item) => {
-        cy.wrap(item).find("[data-cy=activity-header]").should("be.visible");
-      });
-  };
+    const { activities } = ctx.seedData!;
 
-  it("should display the latest activity should be displayed on top", () => {
-    const { activitiesByDate } = ctx!;
-    const sample = activitiesByDate![0];
-    checkActivityGroup(sample);
+    cy.get("[data-cy=activities-filter-all]").click();
+    fetchSelection(activities);
+    activitiesByDate!.forEach((group) => {
+      checkActivityGroup(group);
+    });
   });
 
   it("should display the correct amount of activities for imgoing filter", async () => {
     const { activities, users } = ctx.seedData!;
+
     const user = users.find((user) => user.displayname === "Bob");
     const selection = activities.filter((act) =>
       act.useractivities.some((ua) => ua.appuserid === user!.id)
@@ -118,6 +70,7 @@ describe("Have a working activity dashboard", () => {
   });
   it("should display the correct amount of activities for imhosting filter", async () => {
     const { activities, users } = ctx.seedData!;
+
     const user = users.find((user) => user.displayname === "Bob");
     const selection = activities.filter((act) =>
       act.useractivities.some((ua) => ua.appuserid === user!.id && ua.ishost)

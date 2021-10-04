@@ -17,6 +17,13 @@
 import "./commands";
 import "cypress-promise/register";
 import "cypress-file-upload";
+import "./formSupport";
+
+export interface userToLogin {
+  email: string;
+  password: string;
+  displayname: string;
+}
 // beforeEach(() => {
 //   cy.intercept({ url: "/api", hostname:"localhost", port:5000, method:"POST" });
 // });

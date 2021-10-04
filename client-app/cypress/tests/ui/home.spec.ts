@@ -4,3 +4,7 @@
 //if logged in redirection should work
 
 //google login should work
+describe("Should have a working home page", () => {
+  beforeEach(() => {});
+  it.only("", () => {});
+});

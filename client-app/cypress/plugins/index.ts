@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+import { resolve } from "cypress/types/bluebird";
 import data from "/run/media/data/ReactApp/data/Database.json";
-
 interface PhotoFromDB {
   id: string;
   url: string;
@@ -41,6 +41,45 @@ export interface FollowerFollowingsDB {
   useraid: string;
   userbid: string;
 }
+export interface ActivitiesByDate {
+  date: string;
+  items: ActivityFromDB[];
+}
+export type ActivitiesContext = {
+  seedData?: SeedData;
+  activitiesByDate?: ActivitiesByDate[];
+};
+
+const groupActivitiesByDate = (activities: ActivityFromDB[]) => {
+  const sorted = activities.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
+  return sorted.reduce((acc, item) => {
+    const key = formatDate(item.date);
+    const found = acc.findIndex((el) => el.date === key);
+    found !== -1
+      ? acc[found].items.push(item)
+      : acc.push({ date: key, items: [item] });
+    return acc;
+  }, [] as unknown as [ActivitiesByDate]);
+};
+
+export const formatDate = (date: string): string => {
+  const year = new Date(date).getFullYear();
+  const montdate = new Date(date);
+  const month =
+    montdate.getMonth() + 1 < 10
+      ? "" + 0 + (montdate.getMonth() + 1)
+      : montdate.getMonth() + 1;
+
+  const day = new Date(date).getDate();
+  return `${day}.${month}.${year}`;
+};
+
+export const getData = async (ctx: ActivitiesContext) => {
+  ctx.seedData = await cy.task<SeedData>("get:data").promisify();
+  ctx.activitiesByDate = groupActivitiesByDate(ctx.seedData!.activities);
+};
 
 const plugins = (on: any, config: any) => {
   const testDataApiEndpoint = `${config.env.apiUrl}/seed`;
@@ -63,16 +102,16 @@ const plugins = (on: any, config: any) => {
     },
   });
   on("task", {
-    async "db:seed"() {
+    "db:seed"() {
       // seed database with test data
-      try {
-        const { data } = await axios.get(`${testDataApiEndpoint}/reseed`);
-        console.log(data)
-        return data;
-      } catch (error) {
-        console.log(error);
-        return null;
-      }
+      const data = axios
+        .get("http://localhost:5000/api/seed/reseed")
+        .then((response: AxiosResponse) => {
+          console.log(response.status);
+        });
+      return null;
+      // return new Promise((resolve) => resolve(null));
+      // return 1
     },
   });
 };

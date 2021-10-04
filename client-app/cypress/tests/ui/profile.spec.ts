@@ -1,8 +1,14 @@
 //0.
 //show FOLLOWERS/FOLLOWING correctly (in tabs and in header)--> make api calls to validate changes
 
-import { should } from "chai";
-import { SeedData, UserActivityDB, UserFromDB } from "../../plugins";
+import { ActivitiesContext, getData } from "../../plugins";
+import { userToLogin } from "../../support";
+import {
+  getFollowers,
+  getFollowing,
+  checkPane,
+  getPanes,
+} from "../../support/profileSupport";
 
 //1.
 //enable photo upload --> and validate new photo persistance
@@ -13,76 +19,26 @@ import { SeedData, UserActivityDB, UserFromDB } from "../../plugins";
 //show other users profile
 //disable photo upload
 //image should not have setMain option
-//should have follow/unfollow functionality  --> check with database records from 
+//should have follow/unfollow functionality  --> check with database records from
 
-type ProfilesContext = {
-  seedData?: SeedData;
-}; //this should come from a global thingy
-
-const user1 = {
+const user1: userToLogin = {
   email: "bob@test.com",
   password: "Pa$$w0rd",
   displayname: "bob",
 };
-const user2 = {
+const user2: userToLogin = {
   email: "jane@test.com",
   password: "Pa$$w0rd",
   displayname: "jane",
 };
-const panes = [
-  { tabname: "About", header: "About" },
-  { tabname: "Photos", header: "Photos" },
-  { tabname: "Activities", header: "Activities" },
-  { tabname: "Followers", header: `People following Bob` },
-  { tabname: "Following", header: `People Bob is following` }, // template from datastore here
-];
-
-const checkPane = (
-  user: UserFromDB,
-  pane: { tabname: string; header: string }
-) => {
-  cy.get("[data-cy=panes] a.item")
-    .contains(pane.tabname)
-    .should("be.visible")
-    .click();
-  const header =
-    pane.tabname === "Followers"
-      ? `People following ${user.displayname}`
-      : pane.tabname === "Following"
-      ? `People ${user.displayname} is following`
-      : pane.header;
-  cy.get("[data-cy=PaneContentHeader]").contains(header);
-};
+const panes = getPanes(user1);
 
 describe("Check the Profile functionality", () => {
-  let ctx: ProfilesContext = {};
-  const getFollowing = (user: UserFromDB) => {
-    const { followerfollowings, users } = ctx.seedData!;
-    const following = followerfollowings.filter(
-      (item) => item.useraid === user!.id
-    );
-    return users.filter((user) =>
-      following.map((ff) => ff.userbid).some((id) => id === user.id)
-    );
-  };
-  const getFollowers = (user: UserFromDB) => {
-    const { followerfollowings, users } = ctx.seedData!;
-    const followers = followerfollowings.filter(
-      (item) => item.userbid === user!.id
-    );
-    return users.filter((user) =>
-      followers.map((ff) => ff.useraid).some((id) => id === user.id)
-    );
-  };
-  const getData = async () => {
-    ctx.seedData = await cy.task<SeedData>("get:data").promisify();
-  }; //this should come from global thingy
+  let ctx: ActivitiesContext = {};
 
   beforeEach(function () {
-    cy.task("db:seed").then((res) => {
-      console.log(res);
-    });
-    getData();
+    cy.task("db:seed")
+    getData(ctx);
     cy.login(user1.email, user1.password);
     // cy.changeLogin(user2.email, user2.password);
 
@@ -118,23 +74,30 @@ describe("Check the Profile functionality", () => {
   it("should display the default route correctly", () => {
     //HEADER
     const { users } = ctx.seedData!;
-    const user = users.find((user) => user.username === "bob");
-    const followers = getFollowers(user!);
-    const followings = getFollowing(user!);
+    const user = users.find((user) => user.username === user1.displayname);
+    const followers = getFollowers(ctx, user!);
+    const followings = getFollowing(ctx, user!);
     cy.wait(500);
     cy.get("[data-cy=profileHeader-avatar]")
       .should("be.visible")
       .find("img")
       .should("have.attr", "src"); //to test if the image is displayed; make percy snapshot
-    cy.get("[data-cy=profileHeader-name]").should("have.text", "Bob"); //call to datastore here
-    cy.get("[data-cy=profileHeader-followers]")
-      .should("be.visible")
-      .find("div.value")
-      .should("have.text", followers.length);
-    cy.get("[data-cy=profileHeader-following]")
-      .should("be.visible")
-      .find("div.value")
-      .should("have.text", followings!.length);
+    cy.get("[data-cy=profileHeader-name]").should(
+      "have.text",
+      user!.displayname
+    ); //call to datastore here
+    followers &&
+      cy
+        .get("[data-cy=profileHeader-followers]")
+        .should("be.visible")
+        .find("div.value")
+        .should("have.text", followers.length);
+    followings &&
+      cy
+        .get("[data-cy=profileHeader-following]")
+        .should("be.visible")
+        .find("div.value")
+        .should("have.text", followings!.length);
 
     //PANES
     cy.get("[data-cy=panes] a.item")
@@ -144,7 +107,7 @@ describe("Check the Profile functionality", () => {
   //CONTENT -- ABOUT
   it("should display the About Tab correctly", () => {
     const { users } = ctx.seedData!;
-    const user = users.find((user) => user.username === "bob");
+    const user = users.find((user) => user.username === user1.displayname);
     checkPane(user!, panes.find((pane) => pane.tabname === "About")!);
     cy.get("[data-cy=profileEditForm] div").each((el) => {
       cy.wrap(el).should("have.class", "disabled");
@@ -194,14 +157,14 @@ describe("Check the Profile functionality", () => {
     cy.get("[data-cy=profileEditForm] div")
       .find("[name=displayName]")
       .clear()
-      .type("Bob");
+      .type(user1.displayname);
     cy.get("[data-cy=submitEditProfile]").should("not.have.class").click();
     cy.wait("@updateProfile");
   });
   //CONTENT -- PHOTOS
   it("should display the Photos Tab correctly", () => {
     const { users } = ctx.seedData!;
-    const user = users.find((user) => user.username === "bob");
+    const user = users.find((user) => user.username === user1.displayname);
 
     checkPane(user!, panes.find((pane) => pane.tabname === "Photos")!);
 
@@ -252,7 +215,7 @@ describe("Check the Profile functionality", () => {
   //CONTENT -- ACTIVITIES
   it("should display the Activities Tab correctly", () => {
     const { users, activities } = ctx.seedData!;
-    const user = users.find((user) => user.username === "bob");
+    const user = users.find((user) => user.username === user1.displayname);
     const futureEvents = activities.filter(
       (act) =>
         new Date().getTime() - new Date(act.date).getTime() < 0 &&
@@ -292,12 +255,13 @@ describe("Check the Profile functionality", () => {
   //CONTENT -- Followers
   it("should display the Followers Tab correctly", () => {
     const { users } = ctx.seedData!;
-    const user = users.find((user) => user.username === "bob");
-    const followers = getFollowers(user!);
+    const user = users.find((user) => user.username === user1.displayname);
+    const followers = getFollowers(ctx, user!);
 
     checkPane(user!, panes.find((pane) => pane.tabname === "Followers")!);
 
-    cy.get("[data-cy=profilecard]").should("have.length", followers.length);
+    followers &&
+      cy.get("[data-cy=profilecard]").should("have.length", followers.length);
     //check click and route to profile here
   });
   //CONTENT -- Following
@@ -309,18 +273,18 @@ describe("Check the Profile functionality", () => {
 
     const { users } = ctx.seedData!;
     const user = users.find((user) => user.username === user1.displayname);
-    const following = getFollowing(user!);
+    const following = getFollowing(ctx, user!);
 
     checkPane(user!, panes.find((pane) => pane.tabname === "Following")!);
-
-    cy.get("[data-cy=profilecard]").should("have.length", following.length);
+    following &&
+      cy.get("[data-cy=profilecard]").should("have.length", following.length);
 
     //test unfollow
 
     //test follow
     // const user = users.find((user) => user.username === "bob");
   });
-  it.only("should be able to upload an image directly to cloudinary", () => {
+  it("should be able to upload an image directly to cloudinary", () => {
     const { users } = ctx.seedData!;
     const user = users.find((user) => user.username === user1.displayname);
     checkPane(user!, panes.find((pane) => pane.tabname === "Photos")!);
@@ -334,7 +298,7 @@ describe("Check the Profile functionality", () => {
       cy.wait("@getSignature");
       cy.wait("@directCloudUpload");
       cy.wait("@postUploadResults");
-      cy.location("pathname").should("equal", `/profiles/bob`); //This Profiles should be uppercase, fix in client
+      cy.location("pathname").should("equal", `/profiles/${user!.username}`); //This Profiles should be uppercase, fix in client
     });
   });
   it("should display another users Profile: Followers/Following", () => {
@@ -342,62 +306,86 @@ describe("Check the Profile functionality", () => {
     const user = users.find((user) => user.username === user1.displayname);
 
     // Followers
-    const followers = getFollowers(user!);
-    const following = getFollowing(user!);
+    const followers = getFollowers(ctx, user!);
+    const following = getFollowing(ctx, user!);
+    if (followers) {
+      let newProfile = followers[0];
+      console.log("newporofle", newProfile);
+      let newProfilefollowers = getFollowers(ctx, newProfile!);
+      let newProfilefollowing = getFollowing(ctx, newProfile!);
 
-    let newProfile = followers[0];
-    console.log("newporofle", newProfile);
-    let newProfilefollowers = getFollowers(newProfile!);
-    let newProfilefollowing = getFollowing(newProfile!);
-    checkPane(user!, panes.find((pane) => pane.tabname === "Followers")!);
+      checkPane(user!, panes.find((pane) => pane.tabname === "Followers")!);
 
-    cy.get("[data-cy=profilecard]")
-      .should("have.length", followers.length)
-      .contains(newProfile!.displayname)
-      .click()
-      .wait("@userProfile");
+      cy.get("[data-cy=profilecard]")
+        .should("have.length", followers.length)
+        .contains(newProfile!.displayname)
+        .click()
+        .wait("@userProfile");
 
-    //Followers --> Followers
-    checkPane(newProfile!, panes.find((pane) => pane.tabname === "Followers")!);
-    cy.get("[data-cy=profilecard]").should(
-      "have.length",
-      newProfilefollowers.length
-    );
-    //Followers --> Following
-    checkPane(newProfile!, panes.find((pane) => pane.tabname === "Following")!);
-    cy.get("[data-cy=profilecard]").should(
-      "have.length",
-      newProfilefollowing.length
-    );
+      if (newProfilefollowers) {
+        //Followers --> Followers
+        checkPane(
+          newProfile!,
+          panes.find((pane) => pane.tabname === "Followers")!
+        );
+        cy.get("[data-cy=profilecard]").should(
+          "have.length",
+          newProfilefollowers.length
+        );
+      }
+      if (newProfilefollowing) {
+        //Followers --> Following
+        checkPane(
+          newProfile!,
+          panes.find((pane) => pane.tabname === "Following")!
+        );
+        cy.get("[data-cy=profilecard]").should(
+          "have.length",
+          newProfilefollowing.length
+        );
+      }
+    }
 
     //Following
     cy.get("[data-cy=profile-dropdown]").click();
     cy.get("[data-cy=profile]").click();
     cy.wait("@userProfile");
-    newProfile = following[0];
-    newProfilefollowing = getFollowing(newProfile!);
-    newProfilefollowers = getFollowers(newProfile!);
+    if (following) {
+      let newProfile = following[0];
+      let newProfilefollowing = getFollowing(ctx, newProfile!);
+      let newProfilefollowers = getFollowers(ctx, newProfile!);
 
-    checkPane(user!, panes.find((pane) => pane.tabname === "Following")!);
+      checkPane(user!, panes.find((pane) => pane.tabname === "Following")!);
 
-    cy.get("[data-cy=profilecard]")
-      .should("have.length", following.length)
-      .contains(newProfile!.displayname)
-      .click()
-      .wait("@userProfile");
+      cy.get("[data-cy=profilecard]")
+        .should("have.length", following.length)
+        .contains(newProfile!.displayname)
+        .click()
+        .wait("@userProfile");
 
-    //Following --> Followers
-    checkPane(newProfile!, panes.find((pane) => pane.tabname === "Followers")!);
-    cy.get("[data-cy=profilecard]").should(
-      "have.length",
-      newProfilefollowers.length
-    );
-    //Following --> Following
-    checkPane(newProfile!, panes.find((pane) => pane.tabname === "Following")!);
-    cy.get("[data-cy=profilecard]").should(
-      "have.length",
-      newProfilefollowing.length
-    );
+      if (newProfilefollowers) {
+        //Following --> Followers
+        checkPane(
+          newProfile!,
+          panes.find((pane) => pane.tabname === "Followers")!
+        );
+        cy.get("[data-cy=profilecard]").should(
+          "have.length",
+          newProfilefollowers.length
+        );
+      }
+      if (newProfilefollowing) {
+        //Following --> Following
+        checkPane(
+          newProfile!,
+          panes.find((pane) => pane.tabname === "Following")!
+        );
+        cy.get("[data-cy=profilecard]").should(
+          "have.length",
+          newProfilefollowing.length
+        );
+      }
+    }
   });
   it("should display another users Profile: About", () => {
     const { users } = ctx.seedData!;
@@ -412,7 +400,7 @@ describe("Check the Profile functionality", () => {
     });
     cy.get("[data-cy=editProfileBtn]").should("not.exist");
   });
-  it("should display another users Profile: About", () => {
+  it("should display another users Profile: Photos", () => {
     const { users } = ctx.seedData!;
     const user = users!.find((user) => user.username === user2.displayname); //this should respect upper/lowercase
 
@@ -432,7 +420,7 @@ describe("Check the Profile functionality", () => {
       cy.wrap(el).find("button").should("not.exist");
     });
   });
-  it("should display another users Profile: About", () => {
+  it("should display another users Profile: Activities", () => {
     //all of this should be in in function because its the same code as for main user
     const { users, activities } = ctx.seedData!;
     const user = users!.find((user) => user.username === user2.displayname); //this should respect upper/lowercase
