@@ -67,13 +67,12 @@ namespace Application.Activities
                     .Where(x => x.UserActivities
                     .Any(p => p.AppUser == user));
                 }
+                var activities = await queryable.ToListAsync();
+                List<Activity> list = activities.Skip(request.Offset ?? 0).Take(request.Limit ?? 3).ToList();
 
-                var activities = await queryable
-                .Skip(request.Offset ?? 0)
-                .Take(request.Limit ?? 3).ToListAsync();
                 return new ActivitiesEnvelope
                 {
-                    Activities = _mapper.Map<List<Activity>, List<ActivityDTO>>(activities),
+                    Activities = _mapper.Map<List<Activity>, List<ActivityDTO>>(list),
                     ActivityCount = queryable.Count()
                 };
 
