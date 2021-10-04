@@ -93,26 +93,18 @@ const plugins = (on: any, config: any) => {
         }
       );
       const { activities, users, followerfollowings } = JSON.parse(lowercase);
-      // const lowercaseData = JSON.parse(lowercase);
-      // const activities = lowercaseData.activities;
-      // const users = lowercaseData.users;
-      // const followerFollowings = lowercaseData.followerfollowings;
-
       return { activities, users, followerfollowings };
     },
-  });
-  on("task", {
     "db:seed"() {
-      // seed database with test data
-      const data = axios
-        .get("http://localhost:5000/api/seed/reseed")
+      axios
+        .get(`${testDataApiEndpoint}/reseed`)
         .then((response: AxiosResponse) => {
-          console.log(response.status);
+          response.status !== 200 &&
+            console.log("Error from api reseed: ", response.status);
         });
       return null;
-      // return new Promise((resolve) => resolve(null));
-      // return 1
     },
   });
+  return config;
 };
 export default plugins;

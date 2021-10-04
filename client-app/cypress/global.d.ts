@@ -4,6 +4,7 @@
  */
 declare namespace Cypress {
   interface Chainable {
+    clickOutside(): Chainable<any>;
     task(
       event: "get:data",
       arg: dbQueryArg,

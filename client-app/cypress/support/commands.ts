@@ -3,6 +3,7 @@
 import "@percy/cypress";
 import jwt_decode from "jwt-decode";
 
+
 Cypress.Commands.add("visualSnapshot", (maybeName) => {
   // @ts-ignore
   let snapshotTitle = cy.state("runnable").fullTitle();
@@ -26,8 +27,8 @@ Cypress.Commands.add("login", (email, password) => {
     autoEnd: false,
   });
   cy.intercept("POST", "http://localhost:5000/api/User/login").as("loginUser");
-  cy.intercept("GET", "http://localhost:5000/api/activities**").as("initload");
-  cy.intercept("GET", "http://localhost:5000/api/User").as("userload");
+  cy.intercept("GET", "http://localhost:5000/api/activities**").as("initLoad");
+  cy.intercept("GET", "http://localhost:5000/api/User").as("userLoad");
 
   cy.visit("/");
   cy.get("[data-cy=login]").click();
@@ -35,8 +36,8 @@ Cypress.Commands.add("login", (email, password) => {
   cy.get("[name=password]").clear().type(password);
   cy.get("[data-cy=login-submit]").click();
   cy.wait("@loginUser");
-  cy.wait("@initload");
-  cy.wait("@userload");
+  cy.wait("@initLoad");
+  cy.wait("@userLoad");
   log.end();
 });
 
@@ -66,4 +67,3 @@ Cypress.Commands.add("changeLogin", (email, password) => {
 
   cy.login(email, password);
 });
-

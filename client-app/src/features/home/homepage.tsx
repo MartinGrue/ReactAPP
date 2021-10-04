@@ -58,7 +58,13 @@ const HomePage: React.FC = () => {
               inverted
               content={`Welcome back ${user.displayName}`}
             />
-            <Button as={Link} to="/activities" size="huge" inverted>
+            <Button
+              data-cy="gotoactivities"
+              as={Link}
+              to="/activities"
+              size="huge"
+              inverted
+            >
               Go to Activities!
             </Button>
           </Fragment>
