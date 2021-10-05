@@ -18,6 +18,7 @@ const ActivityDashboard: React.FC = () => {
     page,
     totalPages,
     activitiesByDate,
+    loadAllActivities,
   } = rootStore.activityStore;
 
   const [loadingnext, setLoadingnext] = useState(false);
@@ -31,6 +32,11 @@ const ActivityDashboard: React.FC = () => {
   useEffect(() => {
     loadActivities();
   }, [loadActivities]);
+  useEffect(() => {
+    window.innerHeight > 1000 && loadAllActivities();
+
+    return () => {};
+  }, []);
 
   return (
     <Grid stackable>
@@ -53,9 +59,7 @@ const ActivityDashboard: React.FC = () => {
             endMessage={
               <Fragment>
                 <Divider></Divider>
-                <div style={{ textAlign: "center" }}>
-                  This is the End
-                </div>
+                <div style={{ textAlign: "center" }}>This is the End</div>
               </Fragment>
             }
           >

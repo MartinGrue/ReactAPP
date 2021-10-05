@@ -159,14 +159,42 @@ export default class ActivityStore {
       });
     }
   };
-
+  @action loadAllActivities = async () => {
+    this.loadingInitial = true;
+    this.loadingInitial = true;
+    try {
+      for (let index = 0; index < 12 / 2; index++) {
+        console.log("get");
+        const activitiesEnvelope = await agent.Activities.list(
+          this.axiosParams
+        );
+        this.setPage(this.page + 1);
+        const { activities, activityCount } = activitiesEnvelope;
+        runInAction(() => {
+          activities.forEach((activity) => {
+            FillActivityProps(activity, this.rootStore.userStore.user!);
+            this.activityRegistry.set(activity.id, activity);
+          });
+        });
+      }
+      runInAction(() => {
+        this.loadingInitial = false;
+      });
+    } catch (error) {
+      runInAction(() => {
+        console.log(error);
+        this.loadingInitial = false;
+        this.activityRegistryHasNotChanged = true;
+      });
+    }
+  };
   @action loadActivities = async () => {
     //implicity returning a promise
     this.loadingInitial = true;
     // let activities = this.activityRegistry;
-    console.log("limit: ", this.axiosParams.getAll("limit"))
-    console.log("offset: ", this.axiosParams.getAll("offset"))
-    console.log("startDate: ", this.axiosParams.getAll("startDate"))
+    console.log("limit: ", this.axiosParams.getAll("limit"));
+    console.log("offset: ", this.axiosParams.getAll("offset"));
+    console.log("startDate: ", this.axiosParams.getAll("startDate"));
     try {
       const activitiesEnvelope = await agent.Activities.list(this.axiosParams);
       console.log(activitiesEnvelope);

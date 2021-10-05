@@ -17,6 +17,7 @@ describe("Have a working activity dashboard", () => {
 
   beforeEach(() => {
     getData(ctx);
+    // cy.viewport(1920, 5000);
     cy.task("db:seed");
     cy.login(user.email, user.password);
     cy.intercept("GET", "http://localhost:5000/api/activities**").as(
@@ -24,13 +25,18 @@ describe("Have a working activity dashboard", () => {
     );
     cy.intercept("GET", "http://localhost:5000/api/activities/").as("initLoad");
   });
-  it.only("", () => {});
   it("should display the correct amount of activities for all filter", () => {
     const { activities } = ctx.seedData!;
     //this can take up to 30s
+    cy.visit("/activities");
+    cy.wait(5000);
+
+    cy.scrollTo(0, 500);
+    cy.wait("@fetchmore");
+
     cy.get("[data-cy=activities-filter-all]").click();
     fetchSelection(activities);
-    cy.scrollTo("bottom");
+    cy.window().scrollTo(0, 1000);
     cy.get("[data-cy=activity-listitem]").should(
       "have.length",
       activities.length
