@@ -1,0 +1,75 @@
+version: "3.2"
+
+networks:
+  frontend:
+
+services:
+  # cypress:
+  #   build:
+  #     context: ./../..
+  #     dockerfile: ./deployment/test/Dockerfile.cypress
+  #   volumes:
+  #     - ./../../client-app:/e2e/client-app
+  #     - ./../../data:/e2e/data
+  #   working_dir: /e2e
+  #   stdin_open: true # docker run -i
+  #   tty: true # docker run -t
+  #   network_mode: "service:backendapp"
+  #   environment:
+  #     - API_HOST=backend
+  cypress:
+    build:
+      context: ./../..
+      dockerfile: ./deployment/test/Dockerfile.cypress
+    volumes:
+      - ./../../client-app:/e2e/client-app
+      - ./../../data:/e2e/data
+    working_dir: /e2e/client-app
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
+    network_mode: "service:backendapp"
+    # entrypoint: "cypress --spec=/e2e/client-app/"
+    environment:
+      - API_HOST=backend
+
+  backendapp:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=development
+      - DOTNET_ENVIRONMENT=development
+    container_name: backend
+    build:
+      context: ./../..
+      dockerfile: ./deployment/dev/Dockerfile.dev.backend
+    volumes:
+      - ./../..:/app
+      - /app/API/bin/
+      - /app/API/obj/
+      - /app/Application/bin/
+      - /app/Application/obj/
+      - /app/Domain/bin/
+      - /app/Domain/obj/
+      - /Infrastructure/bin/
+      - /Infrastructure/obj/
+      - /Persistence/bin/
+      - /Persistence/obj/
+    networks:
+      - frontend
+    ports:
+      - "5000:5000"
+      - "3000:3000"
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
+  activitydb:
+    image: mysql
+    container_name: activitydb
+    networks:
+      - frontend
+    ports:
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - ./../database_setup.sql:/docker-entrypoint-initdb.d/database_setup.sql
+      # - ./../databaseBackUps/backup.sql:/docker-entrypoint-initdb.d/backup.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: example
