@@ -7,8 +7,9 @@ import { RootStoreContext } from "../../../app/stores/rootStore";
 import ActivityFilters from "./ActivityFilters";
 import ActivityListItemPlaceholder from "./ActivityListItemPlaceholder";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { RouteComponentProps } from "react-router-dom";
 
-const ActivityDashboard: React.FC = () => {
+const ActivityDashboard: React.FC<RouteComponentProps> = ({ match }) => {
   const rootStore = useContext(RootStoreContext);
 
   const {
@@ -18,7 +19,7 @@ const ActivityDashboard: React.FC = () => {
     page,
     totalPages,
     activitiesByDate,
-    loadAllActivities,
+    setPredicate,
   } = rootStore.activityStore;
 
   const [loadingnext, setLoadingnext] = useState(false);
@@ -30,11 +31,11 @@ const ActivityDashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    loadActivities();
-  }, [loadActivities]);
+    setPredicate("all", "true");
+  }, [match.path]);
   useEffect(() => {
-    window.innerHeight > 1000 && loadAllActivities();
-
+    // window.innerHeight > 1000 && loadAllActivities();
+    console.log("fetch");
     return () => {};
   }, []);
 

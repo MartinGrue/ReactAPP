@@ -28,12 +28,12 @@ describe("Have a working activity dashboard", () => {
   it("should display the correct amount of activities for all filter", () => {
     const { activities } = ctx.seedData!;
     //this can take up to 30s
-    cy.visit("/activities");
-    cy.wait(5000);
+    // cy.visit("/activities");
+
 
     cy.scrollTo(0, 500);
-    cy.wait("@fetchmore");
-
+    // cy.wait("@fetchmore");
+    cy.wait(500);
     cy.get("[data-cy=activities-filter-all]").click();
     fetchSelection(activities);
     cy.window().scrollTo(0, 1000);
@@ -45,9 +45,13 @@ describe("Have a working activity dashboard", () => {
   it("should display the activity grouping correctly", () => {
     const { activitiesByDate } = ctx!;
     const { activities } = ctx.seedData!;
+    cy.scrollTo(0, 500);
+    cy.wait(500);
 
     cy.get("[data-cy=activities-filter-all]").click();
     fetchSelection(activities);
+    cy.window().scrollTo(0, 1000);
+
     activitiesByDate!.forEach((group) => {
       checkActivityGroup(group);
     });
@@ -61,10 +65,12 @@ describe("Have a working activity dashboard", () => {
       act.useractivities.some((ua) => ua.appuserid === user!.id)
     );
     cy.scrollTo(0, 500);
-    cy.wait("@fetchmore");
+    // cy.wait("@fetchmore");
 
-    cy.get("[data-cy=activities-filter-imgoing]").click();
-    cy.wait(1000);
+    cy.get("[data-cy=activities-filter-imgoing]").click();    
+    cy.wait(500);
+    cy.get("[data-cy=activities-filter-imgoing]").click();    
+    cy.wait(500);
     fetchSelection(selection);
     cy.get("[data-cy=activity-listitem]").should(
       "have.length",
@@ -78,10 +84,12 @@ describe("Have a working activity dashboard", () => {
     const selection = activities.filter((act) =>
       act.useractivities.some((ua) => ua.appuserid === user!.id && ua.ishost)
     );
-    cy.scrollTo(0, 500);
-    cy.wait("@fetchmore");
+    // cy.scrollTo(0, 500);
+    // cy.wait("@fetchmore");
     cy.get("[data-cy=activities-filter-ishost]").click();
-
+    cy.wait(500);
+    cy.get("[data-cy=activities-filter-ishost]").click();
+    cy.wait(500);
     fetchSelection(selection);
     cy.get("[data-cy=activity-listitem]").should(
       "have.length",

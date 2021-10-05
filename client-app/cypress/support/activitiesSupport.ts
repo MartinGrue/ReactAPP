@@ -24,8 +24,8 @@ export const fetchSelection = async (selection: ActivityFromDB[]) => {
   ) {
     cy.wait(500); //give react sometime to render
     // cy.scrollTo("bottom");
-    cy.scrollTo("bottom", { duration: 1000 });
-    cy.wait("@fetchmore");
+    cy.scrollTo("bottom", { duration: 500 });
+    // cy.wait("@fetchmore");
 
   }
   // cy.scrollTo("top");

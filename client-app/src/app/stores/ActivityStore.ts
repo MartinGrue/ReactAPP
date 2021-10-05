@@ -26,7 +26,9 @@ export default class ActivityStore {
       () => {
         this.page = 0;
         this.activityRegistry.clear();
-        this.loadActivities();
+        window.innerHeight > 1000
+          ? this.loadAllActivities()
+          : this.loadActivities();
       }
     );
   }
@@ -36,6 +38,7 @@ export default class ActivityStore {
   @observable submitting = false;
   @observable target = "";
   @observable loading = false;
+  @observable init = true;
   /*
     get: /activities
    */
@@ -143,6 +146,8 @@ export default class ActivityStore {
 
   @action editActivity = async (activity: IActivity) => {
     this.submitting = true;
+    console.log("getAll");
+
     try {
       await agent.Activities.update(transformateTimeZone(activity));
       runInAction(() => {
@@ -161,10 +166,8 @@ export default class ActivityStore {
   };
   @action loadAllActivities = async () => {
     this.loadingInitial = true;
-    this.loadingInitial = true;
     try {
       for (let index = 0; index < 12 / 2; index++) {
-        console.log("get");
         const activitiesEnvelope = await agent.Activities.list(
           this.axiosParams
         );
@@ -192,9 +195,6 @@ export default class ActivityStore {
     //implicity returning a promise
     this.loadingInitial = true;
     // let activities = this.activityRegistry;
-    console.log("limit: ", this.axiosParams.getAll("limit"));
-    console.log("offset: ", this.axiosParams.getAll("offset"));
-    console.log("startDate: ", this.axiosParams.getAll("startDate"));
     try {
       const activitiesEnvelope = await agent.Activities.list(this.axiosParams);
       console.log(activitiesEnvelope);
@@ -356,8 +356,10 @@ export default class ActivityStore {
 
   @action setPredicate = (predicate: string, value: string | Date) => {
     this.predicate.clear();
+    this.init = false;
+    this.predicate.set(predicate, value);
+
     if (predicate !== "all") {
-      this.predicate.set(predicate, value);
     }
   };
 }
