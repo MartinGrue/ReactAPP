@@ -1,5 +1,4 @@
-import { userToLogin } from ".";
-import { ActivitiesContext, UserFromDB } from "../plugins";
+import { ActivitiesContext, UserFromDB, userToLogin } from "../plugins";
 export const getPanes = (user: userToLogin) => {
   return [
     { tabname: "About", header: "About" },

@@ -14,15 +14,11 @@ const user1: userToLogin = {
 //google login should work
 describe("Should have a working home page", () => {
   beforeEach(() => {
-    cy.task("db:seed", { timeout: 5000 });
+    cy.task("db:seed");
 
-    cy.intercept("POST", "http://localhost:5000/api/User/login").as(
-      "loginUser"
-    );
-    cy.intercept("GET", "http://localhost:5000/api/activities**").as(
-      "initLoad"
-    );
-    cy.intercept("GET", "http://localhost:5000/api/User").as("userLoad");
+    cy.intercept("POST", `${Cypress.env("apiUrl")}/User/login`).as("loginUser");
+    cy.intercept("GET", `${Cypress.env("apiUrl")}/activities**`).as("initLoad");
+    cy.intercept("GET", `${Cypress.env("apiUrl")}/User`).as("userLoad");
   });
 
   it("should open the register modal", () => {

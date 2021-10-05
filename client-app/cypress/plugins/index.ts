@@ -1,6 +1,12 @@
 import axios, { AxiosResponse } from "axios";
 import { resolve } from "cypress/types/bluebird";
-import data from "/run/media/data/ReactApp/data/Database.json";
+import * as data from "../../../data/Database.json";
+import Cypress from "cypress";
+export interface userToLogin {
+  email: string;
+  password: string;
+  displayname: string;
+}
 interface PhotoFromDB {
   id: string;
   url: string;
@@ -76,14 +82,16 @@ export const formatDate = (date: string): string => {
   return `${day}.${month}.${year}`;
 };
 
-export const getData = async (ctx: ActivitiesContext) => {
-  ctx.seedData = await cy.task<SeedData>("get:data").promisify();
-  ctx.activitiesByDate = groupActivitiesByDate(ctx.seedData!.activities);
+export const getData = (ctx: ActivitiesContext) => {
+  cy.task<SeedData>("get:data").then((data) => {
+    ctx.seedData = data;
+    ctx.activitiesByDate = groupActivitiesByDate(ctx.seedData!.activities);
+  });
 };
 
 const plugins = (on: any, config: any) => {
   const testDataApiEndpoint = `${config.env.apiUrl}/seed`;
-
+  config.env.apiUrl = process.env.CYPRESS_API_URL;
   on("task", {
     "get:data"() {
       var lowercase = JSON.stringify(data).replace(

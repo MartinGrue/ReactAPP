@@ -1,8 +1,8 @@
 /// <reference types="cypress" />
 // Import Cypress Percy plugin command (https://docs.percy.io/docs/cypress)
 import "@percy/cypress";
+import cypress from "cypress";
 import jwt_decode from "jwt-decode";
-
 
 Cypress.Commands.add("visualSnapshot", (maybeName) => {
   // @ts-ignore
@@ -40,7 +40,12 @@ Cypress.Commands.add("login", (email, password) => {
   cy.wait("@userLoad");
   log.end();
 });
-
+Cypress.Commands.add("logout", () => {
+  cy.location("pathname").should("equal", "/activities");
+  cy.get("[data-cy=profile-dropdown]").click();
+  cy.get("[data-cy=logout]").click();
+  cy.wait(500);
+});
 Cypress.Commands.add("changeLogin", (email, password) => {
   const token = window.localStorage.getItem("jwt");
   var decoded = jwt_decode(token!);

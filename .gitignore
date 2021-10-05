@@ -7,7 +7,6 @@ obj
 # test
 **/cypress/videos
 **/cypress/screenshots
-
 # dependencies
 node_modules
 

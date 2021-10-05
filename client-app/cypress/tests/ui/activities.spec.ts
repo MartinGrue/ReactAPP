@@ -1,11 +1,11 @@
-//maps should work
-//avatas loaded
-//information should be correct
-import promisify from "cypress-promise";
+//TODO:
+// //maps should work
+// //avatas loaded
+// //information should be correct
 import { ActivitiesContext, getData } from "../../plugins";
 import {
-  fetchSelection,
   checkActivityGroup,
+  fetchSelection,
 } from "../../support/activitiesSupport";
 
 describe("Have a working activity dashboard", () => {
@@ -19,16 +19,15 @@ describe("Have a working activity dashboard", () => {
     getData(ctx);
     cy.task("db:seed");
     cy.login(user.email, user.password);
-
     cy.intercept("GET", "http://localhost:5000/api/activities**").as(
       "fetchmore"
     );
     cy.intercept("GET", "http://localhost:5000/api/activities/").as("initLoad");
   });
-
-  it("should display the correct amount of activities for all filter", async () => {
+  it.only("", () => {});
+  it("should display the correct amount of activities for all filter", () => {
     const { activities } = ctx.seedData!;
-
+    //this can take up to 30s
     cy.get("[data-cy=activities-filter-all]").click();
     fetchSelection(activities);
     cy.scrollTo("bottom");
@@ -48,51 +47,46 @@ describe("Have a working activity dashboard", () => {
     });
   });
 
-  it("should display the correct amount of activities for imgoing filter", async () => {
+  it("should display the correct amount of activities for imgoing filter", () => {
     const { activities, users } = ctx.seedData!;
 
     const user = users.find((user) => user.displayname === "Bob");
     const selection = activities.filter((act) =>
       act.useractivities.some((ua) => ua.appuserid === user!.id)
     );
-    cy.get("[data-cy=activities-filter-imgoing]").click();
+    cy.scrollTo(0, 500);
+    cy.wait("@fetchmore");
 
-    for (let index = 1; index <= Math.round(selection.length / 2); index++) {
-      cy.scrollTo("bottom");
-      await cy.wait("@fetchmore").promisify();
-      await cy.wait(500).promisify(); //give react sometime to render
-    }
-    cy.scrollTo("bottom");
+    cy.get("[data-cy=activities-filter-imgoing]").click();
+    cy.wait(1000);
+    fetchSelection(selection);
     cy.get("[data-cy=activity-listitem]").should(
       "have.length",
       selection.length
     );
   });
-  it("should display the correct amount of activities for imhosting filter", async () => {
+  it("should display the correct amount of activities for imhosting filter", () => {
     const { activities, users } = ctx.seedData!;
 
     const user = users.find((user) => user.displayname === "Bob");
     const selection = activities.filter((act) =>
       act.useractivities.some((ua) => ua.appuserid === user!.id && ua.ishost)
     );
+    cy.scrollTo(0, 500);
+    cy.wait("@fetchmore");
     cy.get("[data-cy=activities-filter-ishost]").click();
 
-    for (let index = 1; index <= Math.round(selection.length / 2); index++) {
-      cy.scrollTo("bottom");
-      await cy.wait("@fetchmore").promisify();
-      await cy.wait(500).promisify(); //give react sometime to render
-    }
-    cy.scrollTo("bottom");
+    fetchSelection(selection);
     cy.get("[data-cy=activity-listitem]").should(
       "have.length",
       selection.length
     );
   });
 
-  //TODO
-  // it("should display the correct amount of activities for date filter", async () => {
-  //make fresh seedData everyday
-  //pick the date from the datepicker
-  //check for activities
-  // });
+  //   //TODO
+  //   // it("should display the correct amount of activities for date filter", async () => {
+  //   //make fresh seedData everyday
+  //   //pick the date from the datepicker
+  //   //check for activities
+  //   // });
 });
