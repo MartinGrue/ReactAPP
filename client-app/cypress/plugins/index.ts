@@ -83,9 +83,12 @@ export const formatDate = (date: string): string => {
 };
 
 export const getData = (ctx: ActivitiesContext) => {
-  cy.task<SeedData>("get:data").then((data) => {
-    ctx.seedData = data;
-    ctx.activitiesByDate = groupActivitiesByDate(ctx.seedData!.activities);
+  return new Promise((resolve) => {
+    cy.task<SeedData>("get:data").then((data) => {
+      ctx.seedData = data;
+      ctx.activitiesByDate = groupActivitiesByDate(ctx.seedData!.activities);
+      resolve(null);
+    });
   });
 };
 

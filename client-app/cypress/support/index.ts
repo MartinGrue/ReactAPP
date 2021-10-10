@@ -17,10 +17,13 @@
 import "./commands";
 import "cypress-file-upload";
 import "./formSupport";
-
+import "./intercepts";
 
 // beforeEach(() => {
 //   cy.intercept({ url: "/api", hostname:"localhost", port:5000, method:"POST" });
 // });
 // Alternatively you can use CommonJS syntax:
-require('./commands')
+
+
+//CommonJS maybe not needed here
+require("./commands");

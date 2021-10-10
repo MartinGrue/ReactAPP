@@ -3,7 +3,8 @@
 //register btn should open modal
 //if logged in redirection should work
 
-import { userToLogin } from "../../support";
+import { userToLogin } from "../../plugins";
+
 
 const user1: userToLogin = {
   email: "bob@test.com",

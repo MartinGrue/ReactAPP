@@ -1,8 +1,7 @@
 //0.
 //show FOLLOWERS/FOLLOWING correctly (in tabs and in header)--> make api calls to validate changes
 
-import { ActivitiesContext, getData } from "../../plugins";
-import { userToLogin } from "../../support";
+import { ActivitiesContext, getData, userToLogin } from "../../plugins";
 import {
   getFollowers,
   getFollowing,
@@ -37,12 +36,12 @@ describe("Check the Profile functionality", () => {
   let ctx: ActivitiesContext = {};
 
   beforeEach(function () {
-    cy.task("db:seed")
+    cy.task("db:seed");
     getData(ctx);
     cy.login(user1.email, user1.password);
     // cy.changeLogin(user2.email, user2.password);
 
-    cy.intercept("PUT", "http://localhost:5000/api/User").as("updateProfile");
+    cy.intercept("PUT", "http://localhost:5000/api/User").as("updateProfile"); //update User?
     // cy.intercept("GET", `http://localhost:5000/api/Profiles/**`).as(
     //   "userProfile"
     // );

@@ -31,5 +31,6 @@ declare namespace Cypress {
       searchString: string;
       suggestions: string[];
     }): Chainable<any>;
+    getIntercepts(): void;
   }
 }

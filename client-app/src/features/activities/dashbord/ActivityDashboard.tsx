@@ -33,11 +33,7 @@ const ActivityDashboard: React.FC<RouteComponentProps> = ({ match }) => {
   useEffect(() => {
     setPredicate("all", "true");
   }, [match.path]);
-  useEffect(() => {
-    // window.innerHeight > 1000 && loadAllActivities();
-    console.log("fetch");
-    return () => {};
-  }, []);
+
 
   return (
     <Grid stackable>
