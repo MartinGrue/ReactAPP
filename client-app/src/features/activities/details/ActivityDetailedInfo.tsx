@@ -39,7 +39,7 @@ const ActivityDetailedInfo: React.FC<{ activity: IActivity }> = ({
           <SimpleMap
             lat={activity.latitute}
             lng={activity.longitute}
-            opt={{ style: { width: '100%', height: 300 } }}>
+            props={{ style: { width: '100%', height: 300 } }}>
           </SimpleMap>
           <Grid.Column width={1}>
             <Icon name='marker' size='large' color='teal' />

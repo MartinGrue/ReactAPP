@@ -7,7 +7,7 @@ import {
   toJS,
   makeObservable,
 } from "mobx";
-import { IActivity, IAttendee } from "../models/IActivity";
+import { IActivity, IAttendee, IComment, ICommentSend } from "../models/IActivity";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
 import { RootStore } from "./rootStore";
@@ -95,7 +95,7 @@ export default class ActivityStore {
       .configureLogging(signalR.LogLevel.Information)
       .build();
     this.hubConnection.start();
-    this.hubConnection.on("ReceiveComment", (comment) => {
+    this.hubConnection.on("ReceiveComment", (comment: IComment) => {
       runInAction(() => {
         this.selectedActivity!.comments.push(comment);
       });
@@ -106,7 +106,7 @@ export default class ActivityStore {
     this.hubConnection!.stop();
   };
 
-  @action addComment = async (values: any) => {
+  @action addComment = async (values: ICommentSend) => {
     values.activityId = this.selectedActivity!.id;
     try {
       await this.hubConnection!.invoke("SendComment", values);
@@ -116,10 +116,6 @@ export default class ActivityStore {
   };
 
   @computed get activitiesByDate() {
-    //um die anzeige zu sortieren (clientseitig)
-    // return this.activities.sort(
-    //   (a, b) => Date.parse(a.date) - Date.parse(b.date)
-    // );
     return this.groupActivitiesByDate(
       Array.from(this.activityRegistry.values())
     );

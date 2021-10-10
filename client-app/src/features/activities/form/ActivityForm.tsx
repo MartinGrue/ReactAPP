@@ -255,7 +255,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
           <SimpleMap
             lat={latlng.lat}
             lng={latlng.lng}
-            opt={{ style: { width: "100%", height: 400 } }}
+            props={{ style: { width: "100%", height: 400 } }}
           ></SimpleMap>
         </Grid.Column>
       </Grid>

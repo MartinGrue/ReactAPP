@@ -91,7 +91,7 @@ const ActivityListItem: React.FC<{ activity: IActivity }> = ({ activity }) => {
               data-cy="activity-map"
               lat={activity.latitute}
               lng={activity.longitute}
-              opt={{ style: { width: "100%", height: 200 } }}
+              props={{ style: { width: "100%", height: 200 } }}
             ></SimpleMap>
           </Grid.Column>
         </Grid>

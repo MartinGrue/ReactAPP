@@ -41,6 +41,10 @@ export interface IComment {
   image: string;
   createdAt: string;
 }
+export interface ICommentSend {
+  activityId?: string;
+  body: string;
+}
 export interface IActivityFormValues extends Partial<IActivity> {
   time?: Date;
 }
