@@ -1,5 +1,7 @@
 //test functionality after redirection from manage activity
 
+import { getIntercepts } from "../../support/intercepts";
+
 describe("Create New Activity", function () {
   const user = {
     email: "bob@test.com",
@@ -40,10 +42,7 @@ describe("Create New Activity", function () {
   beforeEach(function () {
     cy.task("db:seed");
     cy.login(user.email, user.password);
-
-    cy.intercept("POST", "http://localhost:5000/api/Activities").as(
-      "createNewActivity"
-    );
+    getIntercepts("createNewActivity");
     cy.get("[data-cy=createActivity]").click(); //this is not visible on mobile
   });
 

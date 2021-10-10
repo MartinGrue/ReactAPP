@@ -4,7 +4,7 @@
 //if logged in redirection should work
 
 import { userToLogin } from "../../plugins";
-
+import { getIntercepts } from "../../support/intercepts";
 
 const user1: userToLogin = {
   email: "bob@test.com",
@@ -16,10 +16,7 @@ const user1: userToLogin = {
 describe("Should have a working home page", () => {
   beforeEach(() => {
     cy.task("db:seed");
-
-    cy.intercept("POST", `${Cypress.env("apiUrl")}/User/login`).as("loginUser");
-    cy.intercept("GET", `${Cypress.env("apiUrl")}/activities**`).as("initLoad");
-    cy.intercept("GET", `${Cypress.env("apiUrl")}/User`).as("userLoad");
+    getIntercepts(["loginUser", "initLoad", "userLoad"]);
   });
 
   it("should open the register modal", () => {

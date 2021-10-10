@@ -21,17 +21,16 @@ describe("Check the Activity Details Page functionality", () => {
   beforeEach(function () {
     cy.task("db:seed");
     cy.login(user1.email, user1.password);
-    getIntercepts(["userLoad","activityDetails"]);
+    getIntercepts(["userLoad", "activityDetails"]);
     getData(ctx).then(() => {
       const { activities } = ctx.seedData!;
       const activity = activities[indexActivity];
       cy.visit(`/activities/${activity.id}`);
-    //   cy.wait("@userLoad");
+      //   cy.wait("@userLoad");
       cy.wait("@activityDetails");
-
     });
   });
-
+  it.only("", () => {});
   it("Display the Activity details on page visit", () => {
     const { activities } = ctx.seedData!;
     const activity = activities[indexActivity];

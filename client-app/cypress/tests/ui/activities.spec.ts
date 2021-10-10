@@ -7,6 +7,7 @@ import {
   checkActivityGroup,
   fetchSelection,
 } from "../../support/activitiesSupport";
+import { getIntercepts } from "../../support/intercepts";
 
 describe("Have a working activity dashboard", () => {
   let ctx: ActivitiesContext = {};
@@ -20,10 +21,7 @@ describe("Have a working activity dashboard", () => {
     // cy.viewport(1920, 5000);
     cy.task("db:seed");
     cy.login(user.email, user.password);
-    cy.intercept("GET", "http://localhost:5000/api/activities**").as(
-      "fetchmore"
-    );
-    cy.intercept("GET", "http://localhost:5000/api/activities/").as("initLoad");
+    getIntercepts(["fetchMore", "initLoad"])
   });
   it("should display the correct amount of activities for all filter", () => {
     const { activities } = ctx.seedData!;

@@ -1,5 +1,7 @@
 //check if refresh work
 
+import { getIntercepts } from "../../support/intercepts";
+
 describe("Manage existing Activity", function () {
   const user = {
     email: "bob@test.com",
@@ -69,21 +71,7 @@ describe("Manage existing Activity", function () {
   beforeEach(function () {
     cy.task("db:seed");
     cy.login(user.email, user.password);
-
-    cy.intercept(
-      "GET",
-      `http://localhost:5000/api/activities/${activity.Id}`
-    ).as("activityDetails");
-
-    cy.intercept(
-      "OPTIONS",
-      `http://localhost:5000/api/activities/${activity.Id}`
-    ).as("editActivity");
-
-    cy.intercept(
-      "DELETE",
-      `http://localhost:5000/api/activities/${activity.Id}`
-    ).as("deleteActivity");
+    getIntercepts(["activityDetails", "editActivity", "deleteActivity"]);
 
     cy.visit(`/activities/${activity.Id}`);
     cy.get("[data-cy=manage]").should("be.visible").click();
@@ -119,7 +107,7 @@ describe("Manage existing Activity", function () {
     const newTitle = `${activity.Title}_modified`;
     cy.fillTitle(newTitle);
     cy.get("[data-cy=submit]").click();
-    cy.wait("@editActivity").its("response.statusCode").should("eq", 204);
+    cy.wait("@editActivity").its("response.statusCode").should("eq", 200);
 
     cy.visit("/activities");
     cy.visit(`/activities/${activity.Id}`);

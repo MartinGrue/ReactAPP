@@ -2,6 +2,7 @@
 //show FOLLOWERS/FOLLOWING correctly (in tabs and in header)--> make api calls to validate changes
 
 import { ActivitiesContext, getData, userToLogin } from "../../plugins";
+import { getIntercepts } from "../../support/intercepts";
 import {
   getFollowers,
   getFollowing,
@@ -40,32 +41,15 @@ describe("Check the Profile functionality", () => {
     getData(ctx);
     cy.login(user1.email, user1.password);
     // cy.changeLogin(user2.email, user2.password);
-
-    cy.intercept("PUT", "http://localhost:5000/api/User").as("updateProfile"); //update User?
-    // cy.intercept("GET", `http://localhost:5000/api/Profiles/**`).as(
-    //   "userProfile"
-    // );
-    cy.intercept({
-      method: "GET",
-      url: /^http:\/\/localhost:5000\/api\/Profiles\/[a-z]*$/,
-    }).as("userProfile");
-    cy.intercept({
-      method: "GET",
-      url: /^http:\/\/localhost:5000\/api\/Profiles\/[a-zA-Z]+\//,
-    }).as("loadUserActivities");
-
-    cy.intercept("POST", "http://localhost:5000/api/Photos/getSignature").as(
-      "getSignature"
-    );
-    cy.intercept(
-      "POST",
-      "http://api.cloudinary.com/v1_1/dvzlb9xco/image/upload"
-    ).as("directCloudUpload");
-    cy.intercept(
-      "POST",
-      "http://localhost:5000/api/Photos/postUploadResults"
-    ).as("postUploadResults");
-
+    getIntercepts([
+      "userProfile",
+      "updateProfile",
+      "getSignature",
+      "directCloudUpload",
+      "postUploadResults",
+      "loadUserActivities",
+    ]);
+    
     cy.get("[data-cy=profile-dropdown]").click();
     cy.get("[data-cy=profile]").click();
     cy.wait("@userProfile");

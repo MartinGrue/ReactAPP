@@ -1,6 +1,21 @@
-type Unknown = string | string[];
+export type Alias =
+  | "userLoad"
+  // | "activityDetails"
+  | "userProfile"
+  | "directCloudUpload"
+  | "getSignature"
+  | "postUploadResults"
+  | "updateProfile"
+  | "loadUserActivities"
+  | "fetchMore"
+  | "initLoad"
+  | "createNewActivity"
+  | "loginUser"
+  | "activityDetails"
+  | "editActivity"
+  | "deleteActivity";
 interface Interceptor {
-  alias: string;
+  alias: Alias;
   url: string | RegExp;
   method: string;
 }
@@ -12,21 +27,86 @@ const getInterceptors = (): Interceptor[] => {
       method: "GET",
     },
     {
-      alias: "activityDetails",
-      url: `${Cypress.env("apiUrl")}/activities/**`,
+      alias: "userProfile",
+      url: buildRegEx(/\/Profiles\/[a-z]*$/),
       method: "GET",
+    },
+    {
+      alias: "directCloudUpload",
+      url: "http://api.cloudinary.com/v1_1/dvzlb9xco/image/upload",
+      method: "POST",
+    },
+    {
+      alias: "getSignature",
+      url: `${Cypress.env("apiUrl")}/Photos/getSignature`,
+      method: "POST",
+    },
+    {
+      alias: "updateProfile",
+      url: `${Cypress.env("apiUrl")}/User`,
+      method: "PUT",
+    },
+    {
+      alias: "postUploadResults",
+      url: `${Cypress.env("apiUrl")}/Photos/postUploadResults`,
+      method: "POST",
+    },
+    {
+      alias: "loadUserActivities",
+      url: buildRegEx(/\/Profiles\/[a-zA-Z]+\//),
+      method: "GET",
+    },
+    {
+      alias: "fetchMore",
+      url: `${Cypress.env("apiUrl")}/activities**`,
+      method: "GET",
+    },
+    {
+      alias: "initLoad",
+      url: `${Cypress.env("apiUrl")}/activities/`,
+      method: "GET",
+    },
+    {
+      alias: "createNewActivity",
+      url: `${Cypress.env("apiUrl")}/Activities`,
+      method: "POST",
+    },
+    {
+      alias: "loginUser",
+      url: `${Cypress.env("apiUrl")}/User/login`,
+      method: "POST",
+    },
+    {
+      alias: "activityDetails",
+      url: buildRegEx(
+        /\/activities\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/
+      ),
+      method: "GET",
+    },
+    {
+      alias: "editActivity",
+      url: buildRegEx(
+        /\/activities\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/
+      ),
+      method: "PUT",
+    },
+    {
+      alias: "deleteActivity",
+      url: buildRegEx(
+        /\/activities\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/
+      ),
+      method: "DELETE",
     },
   ];
 };
-const buildRegEx = () => {
-  const regex = "~!@#$%^&*()_";
-  const base = `${Cypress.env("apiUrl")}`.replace("/", "\\/");
-  const pattern = `[^${regex}/gi]$`;
-  const result = data.replace(new RegExp(pattern, "g"), "");
+
+const buildRegEx = (regex: RegExp) => {
+  const base = `${Cypress.env("apiUrl")}`.replace(/\//g, "\\/");
+  const pattern = base.concat(regex.source);
+  return new RegExp(pattern);
 };
 
-export function getIntercepts<T>(alias: T): void;
-export function getIntercepts(alias: Unknown): void {
+export function getIntercepts(alias: Alias | Alias[]): void {
   const interceptors = getInterceptors();
   if (typeof alias === "string") {
     const i = interceptors.find((ic) => ic.alias === alias);
