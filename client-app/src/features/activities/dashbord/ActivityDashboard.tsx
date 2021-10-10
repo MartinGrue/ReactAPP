@@ -32,7 +32,7 @@ const ActivityDashboard: React.FC<RouteComponentProps> = ({ match }) => {
 
   useEffect(() => {
     setPredicate("all", "true");
-  }, [match.path]);
+  }, [match.path, setPredicate]);
 
 
   return (

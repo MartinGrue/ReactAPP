@@ -7,15 +7,18 @@ import {
   toJS,
   makeObservable,
 } from "mobx";
-import { IActivity, IAttendee, IComment, ICommentSend } from "../models/IActivity";
+import {
+  IActivity,
+  IAttendee,
+  IComment,
+  ICommentSend,
+} from "../models/IActivity";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
 import { RootStore } from "./rootStore";
 import { FillActivityProps, transformateTimeZone } from "../common/util/util";
 import * as signalR from "@microsoft/signalr";
-import { param } from "cypress/types/jquery";
 
-const PagingLimit = 2;
 // class ActivityStore {
 export default class ActivityStore {
   constructor(rootStore: RootStore) {
@@ -52,6 +55,7 @@ export default class ActivityStore {
   @observable activityCount = 0;
   @observable page = 0;
   @observable predicate = new Map();
+  @observable PagingLimit = 2;
   /*
    SignalR
   */
@@ -60,8 +64,8 @@ export default class ActivityStore {
 
   @computed get axiosParams() {
     const params = new URLSearchParams();
-    params.append("limit", String(PagingLimit));
-    params.append("offset", `${this.page ? this.page * PagingLimit : 0}`);
+    params.append("limit", String(this.PagingLimit));
+    params.append("offset", `${this.page ? this.page * this.PagingLimit : 0}`);
     this.predicate.forEach((value, key) => {
       if (key === "startDate") {
         params.append(key, value.toISOString());
@@ -73,7 +77,7 @@ export default class ActivityStore {
   }
 
   @computed get totalPages() {
-    return Math.ceil(this.activityCount / PagingLimit);
+    return Math.ceil(this.activityCount / this.PagingLimit);
   }
 
   @action setPage = (page: number) => {
@@ -163,21 +167,21 @@ export default class ActivityStore {
   @action loadAllActivities = async () => {
     this.loadingInitial = true;
     try {
-      for (let index = 0; index < 12 / 2; index++) {
-        const activitiesEnvelope = await agent.Activities.list(
-          this.axiosParams
-        );
-        this.setPage(this.page + 1);
-        const { activities, activityCount } = activitiesEnvelope;
-        runInAction(() => {
-          activities.forEach((activity) => {
-            FillActivityProps(activity, this.rootStore.userStore.user!);
-            this.activityRegistry.set(activity.id, activity);
-          });
-        });
-      }
+      const initEnvelope = await agent.Activities.list(this.axiosParams);
+      const { activityCount } = initEnvelope;
       runInAction(() => {
+        this.PagingLimit = activityCount;
+      });
+
+      const activitiesEnvelope = await agent.Activities.list(this.axiosParams);
+      const { activities } = activitiesEnvelope;
+      runInAction(() => {
+        activities.forEach((activity) => {
+          FillActivityProps(activity, this.rootStore.userStore.user!);
+          this.activityRegistry.set(activity.id, activity);
+        });
         this.loadingInitial = false;
+        this.activityRegistryHasNotChanged = true;
       });
     } catch (error) {
       runInAction(() => {
@@ -188,6 +192,8 @@ export default class ActivityStore {
     }
   };
   @action loadActivities = async () => {
+    console.log("hi");
+
     //implicity returning a promise
     this.loadingInitial = true;
     // let activities = this.activityRegistry;
@@ -354,9 +360,6 @@ export default class ActivityStore {
     this.predicate.clear();
     this.init = false;
     this.predicate.set(predicate, value);
-
-    if (predicate !== "all") {
-    }
   };
 }
 

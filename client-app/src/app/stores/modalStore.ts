@@ -1,5 +1,6 @@
 import { RootStore } from "./rootStore";
 import { observable, action, makeObservable } from "mobx";
+import { ReactNode } from "react";
 
 export default class ModalStore {
   rootStore: RootStore;
@@ -8,11 +9,11 @@ export default class ModalStore {
     makeObservable(this);
     this.rootStore = rootStore;
   }
-  @observable.shallow modal = {
+  @observable.shallow modal: { open: boolean; body: ReactNode } = {
     open: false,
     body: null,
   };
-  @action openModal = (content: any) => {
+  @action openModal = (content: ReactNode) => {
     this.modal.open = true;
     this.modal.body = content;
   };
