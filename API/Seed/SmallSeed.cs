@@ -84,6 +84,7 @@ namespace API
         public static async Task<bool> PurgeDb(DataContext context, UserManager<AppUser> userManager, IPhotoAccessor photoAccessor)
         {
             context.Photos.RemoveRange(context.Photos);
+            context.Comments.RemoveRange(context.Comments);
             context.UserActivity.RemoveRange(context.UserActivity);
             context.FollowerFollowings.RemoveRange(context.FollowerFollowings);
             context.Activities.RemoveRange(context.Activities);

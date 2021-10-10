@@ -9,12 +9,8 @@ import { formatDistance, parseISO } from "date-fns";
 
 const ActivityDetailedChat = () => {
   const rootContext = useContext(RootStoreContext);
-  const {
-    connectToSignalRHub,
-    stopSignalRHub,
-    selectedActivity,
-    addComment,
-  } = rootContext.activityStore;
+  const { connectToSignalRHub, stopSignalRHub, selectedActivity, addComment } =
+    rootContext.activityStore;
 
   useEffect(() => {
     connectToSignalRHub();
@@ -34,7 +30,7 @@ const ActivityDetailedChat = () => {
         <Header>Chat about this event</Header>
       </Segment>
       <Segment attached>
-        <Comment.Group>
+        <Comment.Group cy-data="comments">
           {selectedActivity &&
             selectedActivity.comments &&
             selectedActivity.comments.map((comment) => {
@@ -59,28 +55,30 @@ const ActivityDetailedChat = () => {
                 </Comment>
               );
             })}
-          <FinalForm
-            onSubmit={addComment}
-            render={({ handleSubmit, submitting, form, pristine, invalid }) => (
-              <Form onSubmit={() => handleSubmit()!.then(() => form.reset())}>
-                <Field
-                  name="body"
-                  component={TextAreaInput}
-                  rows={2}
-                  placeholder="Add your comment"
-                />
-                <Button
-                  disabled={invalid || pristine}
-                  loading={submitting}
-                  content="Add Reply"
-                  labelPosition="left"
-                  icon="edit"
-                  primary
-                />
-              </Form>
-            )}
-          />
         </Comment.Group>
+        <FinalForm
+          onSubmit={addComment}
+          render={({ handleSubmit, submitting, form, pristine, invalid }) => (
+            <Form onSubmit={() => handleSubmit()!.then(() => form.reset())}>
+              <Field
+                cy-data="input-chat"
+                name="body"
+                component={TextAreaInput}
+                rows={2}
+                placeholder="Add your comment"
+              />
+              <Button
+                cy-data="submit-chat"
+                disabled={invalid || pristine}
+                loading={submitting}
+                content="Add Reply"
+                labelPosition="left"
+                icon="edit"
+                primary
+              />
+            </Form>
+          )}
+        />
       </Segment>
     </Fragment>
   );

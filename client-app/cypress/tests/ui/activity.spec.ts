@@ -21,19 +21,71 @@ describe("Check the Activity Details Page functionality", () => {
   beforeEach(function () {
     cy.task("db:seed");
     cy.login(user1.email, user1.password);
-    getIntercepts(["userLoad", "activityDetails"]);
+    getIntercepts([
+      "userLoad",
+      "activityDetails",
+      "joinActivity",
+      "unjoinActivity",
+    ]);
     getData(ctx).then(() => {
       const { activities } = ctx.seedData!;
       const activity = activities[indexActivity];
-      cy.visit(`/activities/${activity.id}`);
-      //   cy.wait("@userLoad");
-      cy.wait("@activityDetails");
+      cy.visit(`/activities/${activity.id}`).wait("@activityDetails");
     });
   });
-  it.only("", () => {});
   it("Display the Activity details on page visit", () => {
     const { activities } = ctx.seedData!;
     const activity = activities[indexActivity];
     cy.location("pathname").should("equal", `/activities/${activity.id}`);
   });
+  it("should display the cancel attendance button when already joined", () => {
+    cy.get("[cy-data=cancel-attendance]").should("be.visible");
+  });
+  it("should display the join activity button when not already joined", () => {
+    const { activities, users } = ctx.seedData!;
+    const { id } = users.find((user) => user.username === user1.displayname)!;
+    const activity = activities.find(
+      (activity) =>
+        !activity.useractivities.map((ua) => ua.appuserid).includes(id)
+    );
+    cy.visit(`/activities/${activity!.id}`);
+
+    cy.get("[cy-data=join-activity]").should("be.visible");
+  });
+  it("should be able to join the activity", () => {
+    const { activities, users } = ctx.seedData!;
+    const { id } = users.find((user) => user.username === user1.displayname)!;
+    const activity = activities.find(
+      (activity) =>
+        !activity.useractivities.map((ua) => ua.appuserid).includes(id)
+    );
+    cy.visit(`/activities/${activity!.id}`).wait("@activityDetails");
+
+    cy.get("[cy-data=join-activity]").should("be.visible").click();
+    cy.get("[cy-data=cancel-attendance]").should("be.visible");
+    cy.get("[cy-data=SideBarItem]")
+      .filter(`:contains(${user1.displayname})`)
+      .should("have.length", 1);
+  });
+  it("should be able to unjoin the activity", () => {
+    const { activities, users } = ctx.seedData!;
+    const { id } = users.find((user) => user.username === user1.displayname)!;
+    const activity = activities.find(
+      (activity) =>
+        !activity.useractivities.map((ua) => ua.appuserid).includes(id)
+    );
+    cy.visit(`/activities/${activity!.id}`);
+    cy.get("[cy-data=join-activity]")
+      .should("be.visible")
+      .click()
+      .wait("@joinActivity");
+    cy.get("[cy-data=cancel-attendance]")
+      .should("be.visible")
+      .click()
+      .wait("@unjoinActivity");
+    cy.get("[cy-data=SideBarItem]")
+      .filter(`:contains(${user1.displayname})`)
+      .should("have.length", 0);
+  });
+  it.only("should have a working chat", () => {});
 });

@@ -25,8 +25,9 @@ const ActivityDetailedSidebar: React.FC<IProps> = ({ attendees }) => {
 
       <Segment attached>
         <List relaxed divided>
-          {attendees.map(attendee => (
+          {attendees.map((attendee) => (
             <List.Item
+              cy-data="SideBarItem"
               as={Link}
               to={`/profiles/${attendee.userName}`}
               key={attendee.userName}
@@ -50,11 +51,7 @@ const ActivityDetailedSidebar: React.FC<IProps> = ({ attendees }) => {
               ></Image>
 
               <Item.Content verticalAlign="middle">
-                <Item.Header as="h3">
-
-                    {attendee.userName}
-
-                </Item.Header>
+                <Item.Header as="h3">{attendee.userName}</Item.Header>
                 {attendee.following && (
                   <Item.Extra style={{ color: "orange" }}>Following</Item.Extra>
                 )}

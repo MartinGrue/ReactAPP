@@ -1,6 +1,5 @@
 export type Alias =
   | "userLoad"
-  // | "activityDetails"
   | "userProfile"
   | "directCloudUpload"
   | "getSignature"
@@ -13,7 +12,9 @@ export type Alias =
   | "loginUser"
   | "activityDetails"
   | "editActivity"
-  | "deleteActivity";
+  | "deleteActivity"
+  | "joinActivity"
+  | "unjoinActivity";
 interface Interceptor {
   alias: Alias;
   url: string | RegExp;
@@ -94,6 +95,20 @@ const getInterceptors = (): Interceptor[] => {
       alias: "deleteActivity",
       url: buildRegEx(
         /\/activities\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/
+      ),
+      method: "DELETE",
+    },
+    {
+      alias: "joinActivity",
+      url: buildRegEx(
+        /\/activities\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b\/attend/
+      ),
+      method: "POST",
+    },
+    {
+      alias: "unjoinActivity",
+      url: buildRegEx(
+        /\/activities\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b\/attend/
       ),
       method: "DELETE",
     },

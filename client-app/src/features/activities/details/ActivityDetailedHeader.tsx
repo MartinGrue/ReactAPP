@@ -56,15 +56,26 @@ const ActivityDetailedHeader: React.FC<{ activity: IActivity }> = ({
             to={`/manage/${activity.id}`}
             color="orange"
             floated="right"
+            cy-data="manage-activity"
           >
             Manage Event
           </Button>
         ) : activity.isGoing ? (
-          <Button loading={loading} onClick={unjoinActivity} color="red">
+          <Button
+            loading={loading}
+            onClick={unjoinActivity}
+            color="red"
+            cy-data="cancel-attendance"
+          >
             Cancel attendance
           </Button>
         ) : (
-          <Button loading={loading} color="teal" onClick={joinActivity}>
+          <Button
+            loading={loading}
+            color="teal"
+            onClick={joinActivity}
+            cy-data="join-activity"
+          >
             Join Activity
           </Button>
         )}
