@@ -50,7 +50,7 @@ describe("Check the Activity Details Page functionality", () => {
       (activity) =>
         !activity.useractivities.map((ua) => ua.appuserid).includes(id)
     );
-    cy.visit(`/activities/${activity!.id}`);
+    cy.visit(`/activities/${activity!.id}`).wait("@activityDetails");
 
     cy.get("[cy-data=join-activity]").should("be.visible");
   });
@@ -76,7 +76,7 @@ describe("Check the Activity Details Page functionality", () => {
       (activity) =>
         !activity.useractivities.map((ua) => ua.appuserid).includes(id)
     );
-    cy.visit(`/activities/${activity!.id}`);
+    cy.visit(`/activities/${activity!.id}`).wait("@activityDetails");
     cy.get("[cy-data=join-activity]")
       .should("be.visible")
       .click()
@@ -89,7 +89,18 @@ describe("Check the Activity Details Page functionality", () => {
       .filter(`:contains(${user1.displayname})`)
       .should("have.length", 0);
   });
-  it.only("should have a working chat", () => {
+  it("should have a manage button for hosts", () => {
+    const { activities, users } = ctx.seedData!;
+    const { id } = users.find((user) => user.username === user1.displayname)!;
+    console.log(id);
+    const activity = activities.find((activity) =>
+      activity.useractivities.find((ua) => ua.appuserid === id && ua.ishost)
+    );
+    cy.visit(`/activities/${activity!.id}`).wait("@activityDetails");
+    cy.get("[cy-data=manage-activity]").should("be.visible").click();
+    cy.location("pathname").should("equal", `/manage/${activity!.id}`);
+  });
+  it("should have a working chat", () => {
     const { activities } = ctx.seedData!;
     const activity = activities[indexActivity];
     let hubConnection: signalR.HubConnection | null = null;
