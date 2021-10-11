@@ -30,7 +30,7 @@ const ActivityDetailedChat = () => {
         <Header>Chat about this event</Header>
       </Segment>
       <Segment attached>
-        <Comment.Group cy-data="comments">
+        <Comment.Group data-cy="comments">
           {selectedActivity &&
             selectedActivity.comments &&
             selectedActivity.comments.map((comment) => {

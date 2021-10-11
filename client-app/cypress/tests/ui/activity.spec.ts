@@ -7,6 +7,8 @@
 
 import { ActivitiesContext, getData, userToLogin } from "../../plugins";
 import { getIntercepts } from "../../support/intercepts";
+import * as signalR from "@microsoft/signalr";
+
 //information should be correct
 const user1: userToLogin = {
   email: "bob@test.com",
@@ -87,5 +89,37 @@ describe("Check the Activity Details Page functionality", () => {
       .filter(`:contains(${user1.displayname})`)
       .should("have.length", 0);
   });
-  it.only("should have a working chat", () => {});
+  it.only("should have a working chat", () => {
+    const { activities } = ctx.seedData!;
+    const activity = activities[indexActivity];
+    let hubConnection: signalR.HubConnection | null = null;
+    cy.request("POST", `${Cypress.env("apiUrl")}/User/login`, {
+      email: "jane@test.com",
+      password: "Pa$$w0rd",
+    })
+      .then((respose) => {
+        const token = respose.body.token;
+        console.log(token);
+        var hubConnectionBuilder = new signalR.HubConnectionBuilder();
+        hubConnection = hubConnectionBuilder
+          .withUrl("http://localhost:5000/chat", {
+            accessTokenFactory: (): string => {
+              return token;
+            },
+          })
+          .configureLogging(signalR.LogLevel.Information)
+          .build();
+        return hubConnection.start();
+      })
+      .then(() => {
+        const comment = {
+          activityId: activity.id,
+          body: "This comment comes from cypress",
+        };
+        hubConnection!.invoke("SendComment", comment);
+      });
+    cy.get("[data-cy=comments] div.comment").contains(
+      "This comment comes from cypress"
+    );
+  });
 });

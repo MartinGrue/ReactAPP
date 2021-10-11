@@ -81,6 +81,15 @@ namespace API
                     .AllowCredentials();
                 });
             });
+            // services.AddCors(opt =>
+            //     {
+            //         opt.AddPolicy("CorsPolicy", policy =>
+            //         {
+            //             policy.AllowAnyHeader()
+            //         .AllowAnyMethod()
+            //         .AllowAnyOrigin();
+            //         });
+            //     });
             services.AddMediatR(typeof(List.Handler).Assembly);
             services.AddMediatR(typeof(CurrentUser.Handler).Assembly);
             services.AddAutoMapper(typeof(List.Handler).Assembly);
