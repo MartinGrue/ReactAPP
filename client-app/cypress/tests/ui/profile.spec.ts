@@ -49,7 +49,7 @@ describe("Check the Profile functionality", () => {
       "postUploadResults",
       "loadUserActivities",
     ]);
-    
+
     cy.get("[data-cy=profile-dropdown]").click();
     cy.get("[data-cy=profile]").click();
     cy.wait("@userProfile");
@@ -276,13 +276,12 @@ describe("Check the Profile functionality", () => {
 
     const filepath = "hqdefault.jpg";
     cy.get("[data-cy=photo-dropzone] input[type=file]").attachFile(filepath);
-    cy.wait(500).then(() => {
-      cy.get("[data-cy=upload-imagebtn]").click();
-      cy.wait("@getSignature");
-      cy.wait("@directCloudUpload");
-      cy.wait("@postUploadResults");
-      cy.location("pathname").should("equal", `/profiles/${user!.username}`); //This Profiles should be uppercase, fix in client
-    });
+    cy.wait(500);
+    cy.get("[data-cy=upload-imagebtn]").click();
+    cy.wait("@getSignature");
+    cy.wait("@directCloudUpload");
+    cy.wait("@postUploadResults");
+    cy.location("pathname").should("equal", `/profiles/${user!.username}`); //This Profiles should be uppercase, fix in client
   });
   it("should display another users Profile: Followers/Following", () => {
     const { users } = ctx.seedData!;
@@ -373,9 +372,7 @@ describe("Check the Profile functionality", () => {
     const { users } = ctx.seedData!;
     const user = users!.find((user) => user.username === user2.displayname); //this should respect upper/lowercase
 
-    cy.visit(`/profiles/${user!.username}`).wait(
-      "@userProfile"
-    );
+    cy.visit(`/profiles/${user!.username}`).wait("@userProfile");
     checkPane(user!, panes.find((pane) => pane.tabname === "About")!);
     cy.get("[data-cy=profileEditForm] div").each((el) => {
       cy.wrap(el).should("have.class", "disabled");
@@ -386,9 +383,7 @@ describe("Check the Profile functionality", () => {
     const { users } = ctx.seedData!;
     const user = users!.find((user) => user.username === user2.displayname); //this should respect upper/lowercase
 
-    cy.visit(`/profiles/${user!.username}`).wait(
-      "@userProfile"
-    );
+    cy.visit(`/profiles/${user!.username}`).wait("@userProfile");
     checkPane(user!, panes.find((pane) => pane.tabname === "Photos")!);
     cy.get("[data-cy=imagecard]")
       .should("have.length", user!.photos.length)
@@ -407,9 +402,7 @@ describe("Check the Profile functionality", () => {
     const { users, activities } = ctx.seedData!;
     const user = users!.find((user) => user.username === user2.displayname); //this should respect upper/lowercase
 
-    cy.visit(`/profiles/${user!.username}`).wait(
-      "@userProfile"
-    );
+    cy.visit(`/profiles/${user!.username}`).wait("@userProfile");
 
     const futureEvents = activities.filter(
       (act) =>

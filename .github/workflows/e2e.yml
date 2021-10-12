@@ -7,6 +7,8 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-20.04
+    env:
+      TEST: profile
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -25,9 +27,25 @@ jobs:
       - name: Pull base image from DigitalOcean Container Registry
         run: docker pull registry.digitalocean.com/imagerepo/activity:activityfrontendbase-latest
 
-      # - name: uncommend this on github
-      #   run: apt update && apt install docker-compose -y
+      - name: uncommend this on github
+        run: apt update && apt install docker-compose -y
       - name: build images
         run: docker-compose -f deployment/test/docker-compose-cypress.yml build
-      - name: Run containers
-        run: docker-compose -f deployment/test/docker-compose-cypress.yml up --abort-on-container-exit --exit-code-from cypress
+
+      - name: Run auth tests
+        run: |
+          export TEST=auth && \
+          docker-compose -f deployment/test/docker-compose-cypress.yml up \
+           --abort-on-container-exit --exit-code-from cypress
+      - name: Run profile tests
+        run: |
+          export TEST=profile && \
+          docker-compose -f deployment/test/docker-compose-cypress.yml up \
+           --abort-on-container-exit --exit-code-from cypress
+
+      - name: Run manage tests
+        run: |
+          export TEST=manage && \
+          docker-compose -f deployment/test/docker-compose-cypress.yml up \
+           --abort-on-container-exit --exit-code-from cypress
+

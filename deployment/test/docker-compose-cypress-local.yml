@@ -17,6 +17,7 @@ services:
     network_mode: "service:backendapp"
     entrypoint: "npm run start"
     environment:
+      - TEST=${TEST}
       - API_HOST=backend
 
   backendapp:

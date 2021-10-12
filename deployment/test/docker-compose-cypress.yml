@@ -5,6 +5,7 @@ networks:
 
 services:
   cypress:
+    container_name: cypress
     build:
       context: ./../..
       dockerfile: ./deployment/test/Dockerfile.cypress
@@ -18,6 +19,7 @@ services:
     network_mode: "service:backendapp"
     entrypoint: "bash /startup.sh"
     environment:
+      - TEST=${TEST}
       - API_HOST=backend
 
   backendapp:
