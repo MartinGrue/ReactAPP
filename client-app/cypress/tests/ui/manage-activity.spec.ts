@@ -119,7 +119,7 @@ describe("Manage existing Activity", function () {
   it.only("should be able to cancel the editing and redirect", () => {
     cy.get("[data-cy=cancel]").click();
     cy.wait("@activityDetails");
-    // cy.location("pathname").should("equal", `/activities/${activity.Id}`);
+    cy.location("pathname").should("equal", `/activities/${activity.Id}`);
   });
 
   it("should be able to delete the editing and redirect", () => {
