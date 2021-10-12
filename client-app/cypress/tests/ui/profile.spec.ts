@@ -373,7 +373,7 @@ describe("Check the Profile functionality", () => {
     const { users } = ctx.seedData!;
     const user = users!.find((user) => user.username === user2.displayname); //this should respect upper/lowercase
 
-    cy.visit(`http://localhost:3000/profiles/${user!.username}`).wait(
+    cy.visit(`/profiles/${user!.username}`).wait(
       "@userProfile"
     );
     checkPane(user!, panes.find((pane) => pane.tabname === "About")!);
@@ -386,7 +386,7 @@ describe("Check the Profile functionality", () => {
     const { users } = ctx.seedData!;
     const user = users!.find((user) => user.username === user2.displayname); //this should respect upper/lowercase
 
-    cy.visit(`http://localhost:3000/profiles/${user!.username}`).wait(
+    cy.visit(`/profiles/${user!.username}`).wait(
       "@userProfile"
     );
     checkPane(user!, panes.find((pane) => pane.tabname === "Photos")!);
@@ -407,7 +407,7 @@ describe("Check the Profile functionality", () => {
     const { users, activities } = ctx.seedData!;
     const user = users!.find((user) => user.username === user2.displayname); //this should respect upper/lowercase
 
-    cy.visit(`http://localhost:3000/profiles/${user!.username}`).wait(
+    cy.visit(`/profiles/${user!.username}`).wait(
       "@userProfile"
     );
 

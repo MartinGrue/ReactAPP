@@ -11,6 +11,7 @@
   "supportFile": "cypress/support/index.ts",
   "env": {
     "apiUrl": "http://localhost:5000/api",
+    "chatUrl": "http://localhost:5000/chat",
     "mobileViewportWidthBreakpoint": 414,
     "coverage": false
   }

@@ -3,6 +3,7 @@
 import "@percy/cypress";
 import cypress from "cypress";
 import jwt_decode from "jwt-decode";
+import { getIntercepts } from "./intercepts";
 
 Cypress.Commands.add("visualSnapshot", (maybeName) => {
   // @ts-ignore
@@ -26,17 +27,13 @@ Cypress.Commands.add("login", (email, password) => {
     // @ts-ignore
     autoEnd: false,
   });
-  cy.intercept("POST", "http://localhost:5000/api/User/login").as("loginUser");
-  cy.intercept("GET", "http://localhost:5000/api/activities**").as("initLoad");
-  cy.intercept("GET", "http://localhost:5000/api/User").as("userLoad");
-
+  getIntercepts(["loginUser", "initLoad", "userLoad"]);
   cy.visit("/");
   cy.get("[data-cy=login]").click();
   cy.get("[name=email]").clear().type(email);
   cy.get("[name=password]").clear().type(password);
   cy.get("[data-cy=login-submit]").click();
   cy.wait("@loginUser");
-  // cy.wait("@initLoad");
   cy.wait("@userLoad");
   log.end();
 });

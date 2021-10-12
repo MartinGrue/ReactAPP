@@ -100,7 +100,6 @@ describe("Check the Activity Details Page functionality", () => {
     const activity = activities[indexActivity];
     cy.visit(`/activities/${activity.id}`).wait("@activityDetails");
 
-    
     let hubConnection: signalR.HubConnection | null = null;
     cy.request("POST", `${Cypress.env("apiUrl")}/User/login`, {
       email: "jane@test.com",
@@ -111,7 +110,7 @@ describe("Check the Activity Details Page functionality", () => {
         console.log(token);
         var hubConnectionBuilder = new signalR.HubConnectionBuilder();
         hubConnection = hubConnectionBuilder
-          .withUrl("http://localhost:5000/chat", {
+          .withUrl(Cypress.env("chatUrl"), {
             accessTokenFactory: (): string => {
               return token;
             },
