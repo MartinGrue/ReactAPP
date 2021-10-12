@@ -125,7 +125,11 @@ describe("Manage existing Activity", function () {
     cy.wait("@editActivity").its("response.statusCode").should("eq", 200);
 
     cy.visit("/activities");
+    cy.wait(1000);
+
     cy.visit(`/activities/${activity.Id}`);
+    cy.wait(1000);
+
     cy.get("[data-cy=manage]").should("be.visible").click();
     cy.location("pathname").should("equal", `/manage/${activity.Id}`);
     cy.get("[name=title]").should("have.value", newTitle);
@@ -154,6 +158,8 @@ describe("Manage existing Activity", function () {
     cy.location("pathname").should("equal", "/activities");
 
     cy.visit(`/activities/${activity.Id}`);
+    cy.wait(1000);
+
     cy.location("pathname").should("equal", "/notfound");
   });
 });
