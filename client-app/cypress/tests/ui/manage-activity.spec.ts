@@ -72,17 +72,21 @@ describe("Manage existing Activity", function () {
     cy.task("db:seed");
     cy.login(user.email, user.password);
     getIntercepts(["activityDetails", "editActivity", "deleteActivity"]);
-
-    cy.visit(`/activities/${activity.Id}`);
-    cy.get("[data-cy=manage]").should("be.visible").click();
-    cy.location("pathname").should("equal", `/manage/${activity.Id}`);
   });
 
   it("should display the activity correctly", () => {
+    cy.visit(`/activities/${activity.Id}`);
+    cy.get("[data-cy=manage]").should("be.visible").click();
+    cy.location("pathname").should("equal", `/manage/${activity.Id}`);
+
     CheckForm();
   });
 
   it("should display the activity correctly after reload", () => {
+    cy.visit(`/activities/${activity.Id}`);
+    cy.get("[data-cy=manage]").should("be.visible").click();
+    cy.location("pathname").should("equal", `/manage/${activity.Id}`);
+    
     cy.reload();
     CheckForm();
   });
@@ -105,6 +109,11 @@ describe("Manage existing Activity", function () {
 
   it("should be able to make changes and persist the changes", () => {
     const newTitle = `${activity.Title}_modified`;
+
+    cy.visit(`/activities/${activity.Id}`);
+    cy.get("[data-cy=manage]").should("be.visible").click();
+    cy.location("pathname").should("equal", `/manage/${activity.Id}`);
+
     cy.fillTitle(newTitle);
     cy.get("[data-cy=submit]").click();
     cy.wait("@editActivity").its("response.statusCode").should("eq", 200);
@@ -117,12 +126,20 @@ describe("Manage existing Activity", function () {
   });
 
   it("should be able to cancel the editing and redirect", () => {
+    cy.visit(`/activities/${activity.Id}`);
+    cy.get("[data-cy=manage]").should("be.visible").click();
+    cy.location("pathname").should("equal", `/manage/${activity.Id}`);
+
     cy.get("[data-cy=cancel]").click();
     cy.wait("@activityDetails");
     cy.location("pathname").should("equal", `/activities/${activity.Id}`);
   });
 
   it("should be able to delete the editing and redirect", () => {
+    cy.visit(`/activities/${activity.Id}`);
+    cy.get("[data-cy=manage]").should("be.visible").click();
+    cy.location("pathname").should("equal", `/manage/${activity.Id}`);
+
     cy.get("[data-cy=delete]").click();
     cy.wait("@deleteActivity");
     cy.location("pathname").should("equal", "/activities");
