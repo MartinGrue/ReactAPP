@@ -24,18 +24,18 @@ describe("Check the Activity Details Page functionality", () => {
       "joinActivity",
       "unjoinActivity",
     ]);
-    getData(ctx).then(() => {
-      const { activities } = ctx.seedData!;
-      const activity = activities[indexActivity];
-      cy.visit(`/activities/${activity.id}`).wait("@activityDetails");
-    });
+    getData(ctx);
   });
   it("Display the Activity details on page visit", () => {
     const { activities } = ctx.seedData!;
     const activity = activities[indexActivity];
+    cy.visit(`/activities/${activity.id}`).wait("@activityDetails");
     cy.location("pathname").should("equal", `/activities/${activity.id}`);
   });
   it("should display the cancel attendance button when already joined", () => {
+    const { activities } = ctx.seedData!;
+    const activity = activities[indexActivity];
+    cy.visit(`/activities/${activity.id}`).wait("@activityDetails");
     cy.get("[cy-data=cancel-attendance]").should("be.visible");
   });
   it("should display the join activity button when not already joined", () => {
@@ -95,9 +95,12 @@ describe("Check the Activity Details Page functionality", () => {
     cy.get("[cy-data=manage-activity]").should("be.visible").click();
     cy.location("pathname").should("equal", `/manage/${activity!.id}`);
   });
-  it("should have a working chat", () => {
+  it.only("should have a working chat", () => {
     const { activities } = ctx.seedData!;
     const activity = activities[indexActivity];
+    cy.visit(`/activities/${activity.id}`).wait("@activityDetails");
+
+    
     let hubConnection: signalR.HubConnection | null = null;
     cy.request("POST", `${Cypress.env("apiUrl")}/User/login`, {
       email: "jane@test.com",
