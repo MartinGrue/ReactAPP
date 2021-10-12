@@ -15,11 +15,23 @@ case $TEST in
     (cd /e2e/client-app; npx cypress run --spec cypress/tests/ui/auth.spec.ts )
     ;;
 
- manage)
+  manage)
     (cd /e2e/client-app; npx cypress run --spec cypress/tests/ui/manage-activity.spec.ts )
     ;;
 
-#   *)
-#     echo -n "unknown"
-#     ;;
+  activities)
+    (cd /e2e/client-app; npx cypress run --spec cypress/tests/ui/activities.spec.ts )
+    ;;
+
+  activity)
+    (cd /e2e/client-app; npx cypress run --spec cypress/tests/ui/activity.spec.ts )
+    ;;
+
+  createactivity)
+    (cd /e2e/client-app; npx cypress run --spec cypress/tests/ui/create-activity.spec.ts )    
+    ;;
+
+  home)
+    (cd /e2e/client-app; npx cypress run --spec cypress/tests/ui/home.spec.ts )
+    ;;
 esac

@@ -49,3 +49,26 @@ jobs:
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
+      - name: Run activities tests
+        run: |
+          export TEST=activities && \
+          docker-compose -f deployment/test/docker-compose-cypress.yml up \
+           --abort-on-container-exit --exit-code-from cypress
+
+      - name: Run activity tests
+        run: |
+          export TEST=activity && \
+          docker-compose -f deployment/test/docker-compose-cypress.yml up \
+           --abort-on-container-exit --exit-code-from cypress
+
+      - name: Run home tests
+        run: |
+          export TEST=home && \
+          docker-compose -f deployment/test/docker-compose-cypress.yml up \
+           --abort-on-container-exit --exit-code-from cypress
+
+      - name: Run create activity tests
+        run: |
+          export TEST=createactivity && \
+          docker-compose -f deployment/test/docker-compose-cypress.yml up \
+           --abort-on-container-exit --exit-code-from cypress
