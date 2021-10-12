@@ -146,8 +146,6 @@ export default class ActivityStore {
 
   @action editActivity = async (activity: IActivity) => {
     this.submitting = true;
-    console.log("getAll");
-
     try {
       await agent.Activities.update(transformateTimeZone(activity));
       runInAction(() => {
@@ -192,11 +190,7 @@ export default class ActivityStore {
     }
   };
   @action loadActivities = async () => {
-    console.log("hi");
-
-    //implicity returning a promise
     this.loadingInitial = true;
-    // let activities = this.activityRegistry;
     try {
       const activitiesEnvelope = await agent.Activities.list(this.axiosParams);
       console.log(activitiesEnvelope);

@@ -293,7 +293,6 @@ describe("Check the Profile functionality", () => {
     const following = getFollowing(ctx, user!);
     if (followers) {
       let newProfile = followers[0];
-      console.log("newporofle", newProfile);
       let newProfilefollowers = getFollowers(ctx, newProfile!);
       let newProfilefollowing = getFollowing(ctx, newProfile!);
 

@@ -1,7 +1,3 @@
-//join should work
-//cancel should work
-//dont show manage option to non-host user
-//dont show join/unjoin option to host user
 //map should work
 //avatars loaded
 
@@ -9,7 +5,6 @@ import { ActivitiesContext, getData, userToLogin } from "../../plugins";
 import { getIntercepts } from "../../support/intercepts";
 import * as signalR from "@microsoft/signalr";
 
-//information should be correct
 const user1: userToLogin = {
   email: "bob@test.com",
   password: "Pa$$w0rd",
