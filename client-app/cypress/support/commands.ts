@@ -32,8 +32,7 @@ Cypress.Commands.add("login", (email, password) => {
   cy.get("[data-cy=login]").click();
   cy.get("[name=email]").clear().type(email);
   cy.get("[name=password]").clear().type(password);
-  cy.get("[data-cy=login-submit]").click();
-  cy.wait("@loginUser");
+  cy.get("[data-cy=login-submit]").click().wait("@loginUser");
   cy.wait("@userLoad");
   log.end();
 });
