@@ -1,16 +1,16 @@
-FROM node:14.18-bullseye as node_cache
-WORKDIR /cache/
-COPY ./client-app/package.json .
-RUN npm install --verbose
-
+# FROM cypress/base as node_cache
+# WORKDIR /cache/
+# COPY ./client-app/package.json .
+# RUN npm install --verbose
+FROM registry.digitalocean.com/imagerepo/activity:activityfrontendbase-latest as node_cache
 
 FROM cypress/browsers:node14.17.0-chrome88-ff89
 WORKDIR /e2e/client-app
 COPY --from=node_cache /root/.cache/Cypress /root/.cache/Cypress
 COPY --from=node_cache /cache/ .
 COPY ./data /e2e/data
-COPY ./client-app/package.json .
-# RUN npm install --verbose
 COPY ./client-app/ .
+COPY ./deployment/test/startup.sh /
+# RUN npm install --verbose
 # CMD ["bash", "/startup.sh"]
-CMD [ "npm","run","start" ]
+# CMD [ "npm","run","start" ]

@@ -1,0 +1,29 @@
+name: e2e
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  docker:
+    timeout-minutes: 10
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Log in to DigitalOcean Container Registry with short-lived credentials
+        run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Pull base image from DigitalOcean Container Registry
+        run: docker pull registry.digitalocean.com/imagerepo/activity:activityfrontendbase-latest
+
+      - name: uncommend this on github
+        run: apt update && apt install docker-compose -y
+      - name: build images
+        run: docker-compose -f deployment/test/docker-compose-cypress.yml build
+      - name: Run containers
+        run: docker-compose -f deployment/test/docker-compose-cypress.yml up --abort-on-container-exit --exit-code-from cypress

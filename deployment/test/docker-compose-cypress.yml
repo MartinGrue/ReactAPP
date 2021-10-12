@@ -4,31 +4,19 @@ networks:
   frontend:
 
 services:
-  # cypress:
-  #   build:
-  #     context: ./../..
-  #     dockerfile: ./deployment/test/Dockerfile.cypress
-  #   volumes:
-  #     - ./../../client-app:/e2e/client-app
-  #     - ./../../data:/e2e/data
-  #   working_dir: /e2e
-  #   stdin_open: true # docker run -i
-  #   tty: true # docker run -t
-  #   network_mode: "service:backendapp"
-  #   environment:
-  #     - API_HOST=backend
   cypress:
     build:
       context: ./../..
       dockerfile: ./deployment/test/Dockerfile.cypress
-    volumes:
-      - ./../../client-app:/e2e/client-app
-      - ./../../data:/e2e/data
+    # volumes:
+    #   - ./../../client-app:/e2e/client-app
+    #   - /dev/null:/e2e/client-app/build
+    #   - ./../../data:/e2e/data
     working_dir: /e2e/client-app
-    stdin_open: true # docker run -i
-    tty: true # docker run -t
+    stdin_open: true
+    tty: true
     network_mode: "service:backendapp"
-    # entrypoint: "cypress --spec=/e2e/client-app/"
+    entrypoint: "bash /startup.sh"
     environment:
       - API_HOST=backend
 
@@ -57,8 +45,8 @@ services:
     ports:
       - "5000:5000"
       - "3000:3000"
-    stdin_open: true # docker run -i
-    tty: true # docker run -t
+    logging:
+      driver: "none"
   activitydb:
     image: mysql
     container_name: activitydb
@@ -73,3 +61,5 @@ services:
       # - ./../databaseBackUps/backup.sql:/docker-entrypoint-initdb.d/backup.sql
     environment:
       MYSQL_ROOT_PASSWORD: example
+    logging:
+      driver: "none"
