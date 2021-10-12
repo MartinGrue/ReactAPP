@@ -76,6 +76,8 @@ describe("Manage existing Activity", function () {
 
   it("should display the activity correctly", () => {
     cy.visit(`/activities/${activity.Id}`);
+    cy.wait(1000);
+
     cy.get("[data-cy=manage]").should("be.visible").click();
     cy.location("pathname").should("equal", `/manage/${activity.Id}`);
 
@@ -84,9 +86,11 @@ describe("Manage existing Activity", function () {
 
   it("should display the activity correctly after reload", () => {
     cy.visit(`/activities/${activity.Id}`);
+    cy.wait(1000);
+
     cy.get("[data-cy=manage]").should("be.visible").click();
     cy.location("pathname").should("equal", `/manage/${activity.Id}`);
-    
+
     cy.reload();
     CheckForm();
   });
@@ -111,6 +115,8 @@ describe("Manage existing Activity", function () {
     const newTitle = `${activity.Title}_modified`;
 
     cy.visit(`/activities/${activity.Id}`);
+    cy.wait(1000);
+
     cy.get("[data-cy=manage]").should("be.visible").click();
     cy.location("pathname").should("equal", `/manage/${activity.Id}`);
 
@@ -127,6 +133,7 @@ describe("Manage existing Activity", function () {
 
   it("should be able to cancel the editing and redirect", () => {
     cy.visit(`/activities/${activity.Id}`);
+    cy.wait(1000);
     cy.get("[data-cy=manage]").should("be.visible").click();
     cy.location("pathname").should("equal", `/manage/${activity.Id}`);
 
@@ -137,6 +144,8 @@ describe("Manage existing Activity", function () {
 
   it("should be able to delete the editing and redirect", () => {
     cy.visit(`/activities/${activity.Id}`);
+    cy.wait(1000);
+
     cy.get("[data-cy=manage]").should("be.visible").click();
     cy.location("pathname").should("equal", `/manage/${activity.Id}`);
 
