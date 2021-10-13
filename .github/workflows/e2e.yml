@@ -10,8 +10,8 @@ jobs:
     container:
       image: repo.treescale.com/gruema/testrunner:withdocker
       credentials:
-        username: ${{ TREESCALE_USERNAME }}
-        password: ${{ TREESCALE_PASSWORD }}
+        username: ${{ secrets.TREESCALE_USERNAME }}
+        password: ${{ secrets.TREESCALE_PASSWORD }}
     steps:
       - name: info
         run: docker load < /activityfrontendbase-latest.tar
