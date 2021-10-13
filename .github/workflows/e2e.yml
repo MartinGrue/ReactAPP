@@ -32,12 +32,12 @@ jobs:
       - name: build images
         run: docker-compose -f deployment/test/docker-compose-cypress.yml build
       - name: save images
-        run: mkdir /root/artifacts && docker save test_cypress  > /root/artifacts/cypress.tar
+        run: mkdir /root/artifacts && docker save test_cypress  > cypress.tar
       - name: upload image
         uses: actions/upload-artifact@v2
         with:
           name: cypress
-          path: /root/artifacts
+          path: cypress.tar
           retention-days: 1
   # dockerrun:
   #   runs-on: ubuntu-20.04
