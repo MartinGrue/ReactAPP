@@ -8,8 +8,8 @@ jobs:
   HomeTest:
     runs-on: ubuntu-20.04
     steps:
-      - name: uncommend this on github
-        run: apt update && apt install docker-compose -y
+      # - name: uncommend this on github
+      #   run: apt update && apt install docker-compose -y
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v1
       # - name: Set up Docker Buildx
@@ -52,8 +52,8 @@ jobs:
   CreateNewTest:
     runs-on: ubuntu-20.04
     steps:
-      - name: uncommend this on github
-        run: apt update && apt install docker-compose -y
+      # - name: uncommend this on github
+      #   run: apt update && apt install docker-compose -y
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v1
       # - name: Set up Docker Buildx
@@ -96,8 +96,8 @@ jobs:
   ActivityTest:
     runs-on: ubuntu-20.04
     steps:
-      - name: uncommend this on github
-        run: apt update && apt install docker-compose -y
+      # - name: uncommend this on github
+      #   run: apt update && apt install docker-compose -y
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v1
       # - name: Set up Docker Buildx
@@ -140,8 +140,8 @@ jobs:
   ActivitiesTest:
     runs-on: ubuntu-20.04
     steps:
-      - name: uncommend this on github
-        run: apt update && apt install docker-compose -y
+      # - name: uncommend this on github
+      #   run: apt update && apt install docker-compose -y
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v1
       # - name: Set up Docker Buildx
@@ -184,8 +184,8 @@ jobs:
   ManageTest:
     runs-on: ubuntu-20.04
     steps:
-      - name: uncommend this on github
-        run: apt update && apt install docker-compose -y
+      # - name: uncommend this on github
+      #   run: apt update && apt install docker-compose -y
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v1
       # - name: Set up Docker Buildx
@@ -228,8 +228,8 @@ jobs:
   ProfileTest:
     runs-on: ubuntu-20.04
     steps:
-      - name: uncommend this on github
-        run: apt update && apt install docker-compose -y
+      # - name: uncommend this on github
+      #   run: apt update && apt install docker-compose -y
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v1
       # - name: Set up Docker Buildx
@@ -272,8 +272,8 @@ jobs:
   AuthTest:
     runs-on: ubuntu-20.04
     steps:
-      - name: uncommend this on github
-        run: apt update && apt install docker-compose -y
+      # - name: uncommend this on github
+      #   run: apt update && apt install docker-compose -y
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v1
       # - name: Set up Docker Buildx
