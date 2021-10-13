@@ -13,8 +13,12 @@ jobs:
         username: ${{ secrets.TREESCALE_USERNAME }}
         password: ${{ secrets.TREESCALE_PASSWORD }}
     steps:
-      - name: info
+      - name: load frontendbase image
         run: docker load < /activityfrontendbase-latest.tar
+      - name: load cypress browser image
+        run: docker load < /cypress_browser.tar
+
+
     # runs-on: ubuntu-20.04
     # env:
     #   TEST: profile
