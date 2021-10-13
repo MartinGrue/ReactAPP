@@ -32,7 +32,7 @@ jobs:
       - name: build images
         run: docker-compose -f deployment/test/docker-compose-cypress.yml build
       - name: save images
-        run: mkdir /root/artifacts && docker save test_cypress  > cypress.tar
+        run: docker save test_cypress  > cypress.tar
       - name: upload image
         uses: actions/upload-artifact@v2
         with:
