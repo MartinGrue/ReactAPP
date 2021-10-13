@@ -47,8 +47,7 @@ services:
     ports:
       - "5000:5000"
       - "3000:3000"
-    logging:
-      driver: "none"
+
   activitydb:
     image: mysql
     container_name: activitydb
