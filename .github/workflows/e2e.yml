@@ -47,14 +47,21 @@ jobs:
       # #   run: apt update && apt install docker-compose -y
       - name: build images
         run: docker-compose -f deployment/test/docker-compose-cypress.yml build
-      - name: save images
-        run: docker save test_cypress  > cypress.tar
-      - name: upload image
-        uses: actions/upload-artifact@v2
-        with:
-          name: cypress
-          path: cypress.tar
-          retention-days: 1
+
+      - name: Run auth tests
+        run: |
+          export TEST=auth && \
+          docker-compose -f deployment/test/docker-compose-cypress.yml up \
+           --abort-on-container-exit --exit-code-from cypress
+
+      # - name: save images
+      #   run: docker save test_cypress  > cypress.tar
+      # - name: upload image
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: cypress
+      #     path: cypress.tar
+      #     retention-days: 1
   # dockerrun:
   #   runs-on: ubuntu-20.04
   #   needs: dockerbuild
@@ -67,11 +74,7 @@ jobs:
   #         name: cypress
   #         path: /path/to/artifacts
 
-  #     - name: Run auth tests
-  #       run: |
-  #         export TEST=auth && \
-  #         docker-compose -f deployment/test/docker-compose-cypress.yml up \
-  #          --abort-on-container-exit --exit-code-from cypress
+
       # - name: Run profile tests
       #   run: |
       #     export TEST=profile && \
