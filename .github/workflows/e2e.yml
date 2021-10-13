@@ -23,10 +23,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       
-      # - name: load frontendbase image
-      #   run: docker load < /activityfrontendbase-latest.tar
-      # - name: load cypress browser image
-      #   run: docker load < /cypress_browser.tar
+      - name: load frontendbase image
+        run: docker load < /activityfrontendbase-latest.tar
+      - name: load cypress browser image
+        run: docker load < /cypress_browser.tar
 
 
     # runs-on: ubuntu-20.04
