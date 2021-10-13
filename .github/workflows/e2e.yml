@@ -45,7 +45,7 @@ jobs:
 
       # # - name: uncommend this on github
       # #   run: apt update && apt install docker-compose -y
-      # - name: build images
+      - name: build images
         run: docker-compose -f deployment/test/docker-compose-cypress.yml build
       - name: save images
         run: docker save test_cypress  > cypress.tar
