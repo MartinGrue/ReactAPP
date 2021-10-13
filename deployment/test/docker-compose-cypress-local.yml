@@ -47,8 +47,10 @@ services:
       - "3000:3000"
 
   activitydb:
-    image: mysql
     container_name: activitydb
+    build:
+      context: ./../..
+      dockerfile: ./deployment/dev/Dockerfile.dev.database
     networks:
       - frontend
     ports:

@@ -267,7 +267,7 @@ describe("Check the Profile functionality", () => {
     //test follow
     // const user = users.find((user) => user.username === "bob");
   });
-  it("should be able to upload an image directly to cloudinary", () => {
+  it.only("should be able to upload an image directly to cloudinary", () => {
     const { users } = ctx.seedData!;
     const user = users.find((user) => user.username === user1.displayname);
     checkPane(user!, panes.find((pane) => pane.tabname === "Photos")!);
@@ -278,6 +278,7 @@ describe("Check the Profile functionality", () => {
     cy.get("[data-cy=photo-dropzone] input[type=file]").attachFile(filepath);
     cy.wait(500);
     cy.get("[data-cy=upload-imagebtn]").click();
+    cy.wait(1000);
     cy.wait("@getSignature");
     cy.wait("@directCloudUpload");
     cy.wait("@postUploadResults");
