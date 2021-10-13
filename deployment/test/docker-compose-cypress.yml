@@ -15,6 +15,7 @@ services:
     network_mode: "service:backendapp"
     entrypoint: "bash /startup.sh"
     environment:
+      - BROWSER=${BROWSER}
       - TEST=${TEST}
       - API_HOST=backend
 
