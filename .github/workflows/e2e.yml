@@ -23,13 +23,13 @@ jobs:
     # env:
     #   TEST: profile
     # steps:
-    #   - name: Set up QEMU
-    #     uses: docker/setup-qemu-action@v1
-    #   - name: Set up Docker Buildx
-    #     uses: docker/setup-buildx-action@v1
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
-    #   - name: Checkout
-    #     uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v1
       
     #   - name: login at treeScale
     #     run: docker login repo.treescale.com/gruema/testrunner
@@ -46,15 +46,15 @@ jobs:
       # # - name: uncommend this on github
       # #   run: apt update && apt install docker-compose -y
       # - name: build images
-      #   run: docker-compose -f deployment/test/docker-compose-cypress.yml build
-      # - name: save images
-      #   run: docker save test_cypress  > cypress.tar
-      # - name: upload image
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: cypress
-      #     path: cypress.tar
-      #     retention-days: 1
+        run: docker-compose -f deployment/test/docker-compose-cypress.yml build
+      - name: save images
+        run: docker save test_cypress  > cypress.tar
+      - name: upload image
+        uses: actions/upload-artifact@v2
+        with:
+          name: cypress
+          path: cypress.tar
+          retention-days: 1
   # dockerrun:
   #   runs-on: ubuntu-20.04
   #   needs: dockerbuild
