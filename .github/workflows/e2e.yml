@@ -52,11 +52,11 @@ jobs:
       # - name: build images
       #   run: docker-compose -f deployment/test/docker-compose-cypress.yml build
 
-      # - name: Run auth tests
-      #   run: |
-      #     export TEST=auth && \
-      #     docker-compose -f deployment/test/docker-compose-cypress.yml up \
-      #      --abort-on-container-exit --exit-code-from cypress
+      - name: Run auth tests
+        run: |
+          export TEST=auth && \
+          docker-compose -f deployment/test/docker-compose-cypress.yml up \
+           --abort-on-container-exit --exit-code-from cypress
 
       # - name: save images
       #   run: docker save test_cypress  > cypress.tar
