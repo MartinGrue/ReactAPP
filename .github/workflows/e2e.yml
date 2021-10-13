@@ -34,7 +34,7 @@ jobs:
       - name: save images
         run: mkdir /root/artifacts && docker save test_cypress  > /root/artifacts/cypress.tar
       - name: upload image
-        uses: action/upload-artifact@v2
+        uses: actions/upload-artifact@v2
         with:
           name: cypress
           path: /root/artifacts
