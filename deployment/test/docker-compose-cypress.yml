@@ -33,17 +33,16 @@ services:
       - "3000:3000"
 
   activitydb:
-    image: mysql
     container_name: activitydb
+    build:
+      context: ./../..
+      dockerfile: ./deployment/dev/Dockerfile.dev.database
     networks:
       - frontend
     ports:
       - "3306:3306"
     command: --default-authentication-plugin=mysql_native_password
     restart: always
-    volumes:
-      - ./../database_setup.sql:/docker-entrypoint-initdb.d/database_setup.sql
-      # - ./../databaseBackUps/backup.sql:/docker-entrypoint-initdb.d/backup.sql
     environment:
       MYSQL_ROOT_PASSWORD: example
     logging:

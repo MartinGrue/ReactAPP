@@ -47,8 +47,8 @@ jobs:
       #   run: docker pull registry.digitalocean.com/imagerepo/activity:activityfrontendbase-latest
 
 
-      # - name: build images
-      #   run: docker-compose -f deployment/test/docker-compose-cypress.yml build
+      - name: build images
+        run: docker-compose -f deployment/test/docker-compose-cypress.yml build
 
       - name: Run auth tests
         run: |

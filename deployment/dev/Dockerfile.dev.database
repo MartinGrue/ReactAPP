@@ -1,0 +1,2 @@
+FROM mysql
+COPY deployment/database_setup.sql /docker-entrypoint-initdb.d/database_setup.sql
