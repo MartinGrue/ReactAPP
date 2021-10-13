@@ -5,8 +5,15 @@ on:
       - master
 
 jobs:
-  HomeTest:
+  Matrix:
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        test: ["auth", "home"]
+        browser: ["chrome", "firefox"]
+    env:
+      TEST: ${{ matrix.test }}
+      BRO: ${{ matrix.browser }}
     steps:
       # - name: uncommend this on github
       #   run: apt update && apt install docker-compose -y
@@ -39,276 +46,317 @@ jobs:
 
       - name: Run home tests on chrome
         run: |
-          export TEST=home && export BRO=chrome && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
       - name: Run home tests on firefox
         run: |
-          export TEST=home && export BRO=firefox && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
+    # HomeTest:
+    #   runs-on: ubuntu-20.04
+    #   steps:
+    #     # - name: uncommend this on github
+    #     #   run: apt update && apt install docker-compose -y
+    #     # - name: Set up QEMU
+    #     #   uses: docker/setup-qemu-action@v1
+    #     # - name: Set up Docker Buildx
+    #     #   uses: docker/setup-buildx-action@v1
 
-  CreateNewTest:
-    runs-on: ubuntu-20.04
-    steps:
-      # - name: uncommend this on github
-      #   run: apt update && apt install docker-compose -y
-      # - name: Set up QEMU
-      #   uses: docker/setup-qemu-action@v1
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v1
+    #     - name: Checkout
+    #       uses: actions/checkout@v2
 
-      - name: Checkout
-        uses: actions/checkout@v2
+    #     - name: Install doctl
+    #       uses: digitalocean/action-doctl@v2
+    #       with:
+    #         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: Log in to DigitalOcean Container Registry with short-lived credentials
+    #       run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: build images
+    #       run: docker-compose -f deployment/test/docker-compose-cypress.yml build
 
-      - name: build images
-        run: docker-compose -f deployment/test/docker-compose-cypress.yml build
+    #     - name: Install doctl
+    #       uses: digitalocean/action-doctl@v2
+    #       with:
+    #         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: Log in to DigitalOcean Container Registry with short-lived credentials
+    #       run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: Run home tests on chrome
+    #       run: |
+    #         export TEST=home && export BRO=chrome && \
+    #         docker-compose -f deployment/test/docker-compose-cypress.yml up \
+    #          --abort-on-container-exit --exit-code-from cypress
 
-      - name: Run activities tests chrome
-        run: |
-          export TEST=activities BRO=chrome && \
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
+    #     - name: Run home tests on firefox
+    #       run: |
+    #         export TEST=home && export BRO=firefox && \
+    #         docker-compose -f deployment/test/docker-compose-cypress.yml up \
+    #          --abort-on-container-exit --exit-code-from cypress
 
-      - name: Run activities tests firefox
-        run: |
-          export TEST=activities BRO=firefox && \
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
+    # CreateNewTest:
+    #   runs-on: ubuntu-20.04
+    #   steps:
+    #     # - name: uncommend this on github
+    #     #   run: apt update && apt install docker-compose -y
+    #     # - name: Set up QEMU
+    #     #   uses: docker/setup-qemu-action@v1
+    #     # - name: Set up Docker Buildx
+    #     #   uses: docker/setup-buildx-action@v1
 
-  ActivityTest:
-    runs-on: ubuntu-20.04
-    steps:
-      # - name: uncommend this on github
-      #   run: apt update && apt install docker-compose -y
-      # - name: Set up QEMU
-      #   uses: docker/setup-qemu-action@v1
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v1
+    #     - name: Checkout
+    #       uses: actions/checkout@v2
 
-      - name: Checkout
-        uses: actions/checkout@v2
+    #     - name: Install doctl
+    #       uses: digitalocean/action-doctl@v2
+    #       with:
+    #         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: Log in to DigitalOcean Container Registry with short-lived credentials
+    #       run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: build images
+    #       run: docker-compose -f deployment/test/docker-compose-cypress.yml build
 
-      - name: build images
-        run: docker-compose -f deployment/test/docker-compose-cypress.yml build
+    #     - name: Install doctl
+    #       uses: digitalocean/action-doctl@v2
+    #       with:
+    #         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: Log in to DigitalOcean Container Registry with short-lived credentials
+    #       run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: Run activities tests chrome
+    #       run: |
+    #         export TEST=activities BRO=chrome && \
+    #         docker-compose -f deployment/test/docker-compose-cypress.yml up \
+    #          --abort-on-container-exit --exit-code-from cypress
 
-      - name: Run create activity tests chrome
-        run: |
-          export TEST=createactivity BRO=chrome && \
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
+    #     - name: Run activities tests firefox
+    #       run: |
+    #         export TEST=activities BRO=firefox && \
+    #         docker-compose -f deployment/test/docker-compose-cypress.yml up \
+    #          --abort-on-container-exit --exit-code-from cypress
 
-      - name: Run create activity tests firefox
-        run: |
-          export TEST=createactivity BRO=firefox && \
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
+    # ActivityTest:
+    #   runs-on: ubuntu-20.04
+    #   steps:
+    #     # - name: uncommend this on github
+    #     #   run: apt update && apt install docker-compose -y
+    #     # - name: Set up QEMU
+    #     #   uses: docker/setup-qemu-action@v1
+    #     # - name: Set up Docker Buildx
+    #     #   uses: docker/setup-buildx-action@v1
 
-  ActivitiesTest:
-    runs-on: ubuntu-20.04
-    steps:
-      # - name: uncommend this on github
-      #   run: apt update && apt install docker-compose -y
-      # - name: Set up QEMU
-      #   uses: docker/setup-qemu-action@v1
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v1
+    #     - name: Checkout
+    #       uses: actions/checkout@v2
 
-      - name: Checkout
-        uses: actions/checkout@v2
+    #     - name: Install doctl
+    #       uses: digitalocean/action-doctl@v2
+    #       with:
+    #         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: Log in to DigitalOcean Container Registry with short-lived credentials
+    #       run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: build images
+    #       run: docker-compose -f deployment/test/docker-compose-cypress.yml build
 
-      - name: build images
-        run: docker-compose -f deployment/test/docker-compose-cypress.yml build
+    #     - name: Install doctl
+    #       uses: digitalocean/action-doctl@v2
+    #       with:
+    #         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: Log in to DigitalOcean Container Registry with short-lived credentials
+    #       run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: Run create activity tests chrome
+    #       run: |
+    #         export TEST=createactivity BRO=chrome && \
+    #         docker-compose -f deployment/test/docker-compose-cypress.yml up \
+    #          --abort-on-container-exit --exit-code-from cypress
 
-      - name: Run activity tests chrome
-        run: |
-          export TEST=activity BRO=chrome && \
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
+    #     - name: Run create activity tests firefox
+    #       run: |
+    #         export TEST=createactivity BRO=firefox && \
+    #         docker-compose -f deployment/test/docker-compose-cypress.yml up \
+    #          --abort-on-container-exit --exit-code-from cypress
 
-      - name: Run activity tests firefox
-        run: |
-          export TEST=activity BRO=firefox && \
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
+    # ActivitiesTest:
+    #   runs-on: ubuntu-20.04
+    #   steps:
+    #     # - name: uncommend this on github
+    #     #   run: apt update && apt install docker-compose -y
+    #     # - name: Set up QEMU
+    #     #   uses: docker/setup-qemu-action@v1
+    #     # - name: Set up Docker Buildx
+    #     #   uses: docker/setup-buildx-action@v1
 
-  ManageTest:
-    runs-on: ubuntu-20.04
-    steps:
-      # - name: uncommend this on github
-      #   run: apt update && apt install docker-compose -y
-      # - name: Set up QEMU
-      #   uses: docker/setup-qemu-action@v1
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v1
+    #     - name: Checkout
+    #       uses: actions/checkout@v2
 
-      - name: Checkout
-        uses: actions/checkout@v2
+    #     - name: Install doctl
+    #       uses: digitalocean/action-doctl@v2
+    #       with:
+    #         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: Log in to DigitalOcean Container Registry with short-lived credentials
+    #       run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: build images
+    #       run: docker-compose -f deployment/test/docker-compose-cypress.yml build
 
-      - name: build images
-        run: docker-compose -f deployment/test/docker-compose-cypress.yml build
+    #     - name: Install doctl
+    #       uses: digitalocean/action-doctl@v2
+    #       with:
+    #         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: Log in to DigitalOcean Container Registry with short-lived credentials
+    #       run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: Run activity tests chrome
+    #       run: |
+    #         export TEST=activity BRO=chrome && \
+    #         docker-compose -f deployment/test/docker-compose-cypress.yml up \
+    #          --abort-on-container-exit --exit-code-from cypress
 
-      - name: Run manage tests chrome
-        run: |
-          export TEST=manage BRO=chrome && \
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
+    #     - name: Run activity tests firefox
+    #       run: |
+    #         export TEST=activity BRO=firefox && \
+    #         docker-compose -f deployment/test/docker-compose-cypress.yml up \
+    #          --abort-on-container-exit --exit-code-from cypress
 
-      - name: Run manage tests firefox
-        run: |
-          export TEST=manage BRO=firefox && \
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
+    # ManageTest:
+    #   runs-on: ubuntu-20.04
+    #   steps:
+    #     # - name: uncommend this on github
+    #     #   run: apt update && apt install docker-compose -y
+    #     # - name: Set up QEMU
+    #     #   uses: docker/setup-qemu-action@v1
+    #     # - name: Set up Docker Buildx
+    #     #   uses: docker/setup-buildx-action@v1
 
-  ProfileTest:
-    runs-on: ubuntu-20.04
-    steps:
-      # - name: uncommend this on github
-      #   run: apt update && apt install docker-compose -y
-      # - name: Set up QEMU
-      #   uses: docker/setup-qemu-action@v1
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v1
+    #     - name: Checkout
+    #       uses: actions/checkout@v2
 
-      - name: Checkout
-        uses: actions/checkout@v2
+    #     - name: Install doctl
+    #       uses: digitalocean/action-doctl@v2
+    #       with:
+    #         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: Log in to DigitalOcean Container Registry with short-lived credentials
+    #       run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: build images
+    #       run: docker-compose -f deployment/test/docker-compose-cypress.yml build
 
-      - name: build images
-        run: docker-compose -f deployment/test/docker-compose-cypress.yml build
+    #     - name: Install doctl
+    #       uses: digitalocean/action-doctl@v2
+    #       with:
+    #         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: Log in to DigitalOcean Container Registry with short-lived credentials
+    #       run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: Run manage tests chrome
+    #       run: |
+    #         export TEST=manage BRO=chrome && \
+    #         docker-compose -f deployment/test/docker-compose-cypress.yml up \
+    #          --abort-on-container-exit --exit-code-from cypress
 
-      - name: Run profile tests chrome
-        run: |
-          export TEST=profile BRO=chrome && \
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
+    #     - name: Run manage tests firefox
+    #       run: |
+    #         export TEST=manage BRO=firefox && \
+    #         docker-compose -f deployment/test/docker-compose-cypress.yml up \
+    #          --abort-on-container-exit --exit-code-from cypress
 
-      - name: Run profile tests firefox
-        run: |
-          export TEST=profile BRO=firefox && \
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
+    # ProfileTest:
+    #   runs-on: ubuntu-20.04
+    #   steps:
+    #     # - name: uncommend this on github
+    #     #   run: apt update && apt install docker-compose -y
+    #     # - name: Set up QEMU
+    #     #   uses: docker/setup-qemu-action@v1
+    #     # - name: Set up Docker Buildx
+    #     #   uses: docker/setup-buildx-action@v1
 
-  AuthTest:
-    runs-on: ubuntu-20.04
-    steps:
-      # - name: uncommend this on github
-      #   run: apt update && apt install docker-compose -y
-      # - name: Set up QEMU
-      #   uses: docker/setup-qemu-action@v1
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v1
+    #     - name: Checkout
+    #       uses: actions/checkout@v2
 
-      - name: Checkout
-        uses: actions/checkout@v2
+    #     - name: Install doctl
+    #       uses: digitalocean/action-doctl@v2
+    #       with:
+    #         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: Log in to DigitalOcean Container Registry with short-lived credentials
+    #       run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: build images
+    #       run: docker-compose -f deployment/test/docker-compose-cypress.yml build
 
-      - name: build images
-        run: docker-compose -f deployment/test/docker-compose-cypress.yml build
+    #     - name: Install doctl
+    #       uses: digitalocean/action-doctl@v2
+    #       with:
+    #         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: Log in to DigitalOcean Container Registry with short-lived credentials
+    #       run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    #     - name: Run profile tests chrome
+    #       run: |
+    #         export TEST=profile BRO=chrome && \
+    #         docker-compose -f deployment/test/docker-compose-cypress.yml up \
+    #          --abort-on-container-exit --exit-code-from cypress
 
-      - name: Run auth tests chrome
-        run: |
-          export TEST=auth BRO=chrome && \
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
+    #     - name: Run profile tests firefox
+    #       run: |
+    #         export TEST=profile BRO=firefox && \
+    #         docker-compose -f deployment/test/docker-compose-cypress.yml up \
+    #          --abort-on-container-exit --exit-code-from cypress
 
-      - name: Run auth tests firefox
-        run: |
-          export TEST=auth BRO=firefox && \
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
+    # AuthTest:
+    #   runs-on: ubuntu-20.04
+    #   steps:
+    #     # - name: uncommend this on github
+    #     #   run: apt update && apt install docker-compose -y
+    #     # - name: Set up QEMU
+    #     #   uses: docker/setup-qemu-action@v1
+    #     # - name: Set up Docker Buildx
+    #     #   uses: docker/setup-buildx-action@v1
+
+    #     - name: Checkout
+    #       uses: actions/checkout@v2
+
+    #     - name: Install doctl
+    #       uses: digitalocean/action-doctl@v2
+    #       with:
+    #         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+    #     - name: Log in to DigitalOcean Container Registry with short-lived credentials
+    #       run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+    #     - name: build images
+    #       run: docker-compose -f deployment/test/docker-compose-cypress.yml build
+
+    #     - name: Install doctl
+    #       uses: digitalocean/action-doctl@v2
+    #       with:
+    #         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+    #     - name: Log in to DigitalOcean Container Registry with short-lived credentials
+    #       run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+    #     - name: Run auth tests chrome
+    #       run: |
+    #         export TEST=auth BRO=chrome && \
+    #         docker-compose -f deployment/test/docker-compose-cypress.yml up \
+    #          --abort-on-container-exit --exit-code-from cypress
+
+    #     - name: Run auth tests firefox
+    #       run: |
+    #         export TEST=auth BRO=firefox && \
+    #         docker-compose -f deployment/test/docker-compose-cypress.yml up \
+    #          --abort-on-container-exit --exit-code-from cypress
