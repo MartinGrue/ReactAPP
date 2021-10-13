@@ -5,7 +5,7 @@ on:
       - master
 
 jobs:
-  docker:
+  dockerbuild:
     runs-on: ubuntu-20.04
     env:
       TEST: profile
@@ -31,44 +31,63 @@ jobs:
       #   run: apt update && apt install docker-compose -y
       - name: build images
         run: docker-compose -f deployment/test/docker-compose-cypress.yml build
+      - name: save images
+        run: mkdir /root/artifacts && docker save test_cypress  > /root/artifacts/cypress.tar
+      - name: upload image
+        uses: action/upload-artifact@v2
+        with:
+          name: cypress
+          path: /root/artifacts
+          retention-days: 1
+  # dockerrun:
+  #   runs-on: ubuntu-20.04
+  #   needs: dockerbuild
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #     - name: Download artifact
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: cypress
+  #         path: /path/to/artifacts
 
-      - name: Run auth tests
-        run: |
-          export TEST=auth && \
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
-      - name: Run profile tests
-        run: |
-          export TEST=profile && \
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
+  #     - name: Run auth tests
+  #       run: |
+  #         export TEST=auth && \
+  #         docker-compose -f deployment/test/docker-compose-cypress.yml up \
+  #          --abort-on-container-exit --exit-code-from cypress
+      # - name: Run profile tests
+      #   run: |
+      #     export TEST=profile && \
+      #     docker-compose -f deployment/test/docker-compose-cypress.yml up \
+      #      --abort-on-container-exit --exit-code-from cypress
 
-      - name: Run manage tests
-        run: |
-          export TEST=manage && \
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
+      # - name: Run manage tests
+      #   run: |
+      #     export TEST=manage && \
+      #     docker-compose -f deployment/test/docker-compose-cypress.yml up \
+      #      --abort-on-container-exit --exit-code-from cypress
 
-      - name: Run activities tests
-        run: |
-          export TEST=activities && \
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
+      # - name: Run activities tests
+      #   run: |
+      #     export TEST=activities && \
+      #     docker-compose -f deployment/test/docker-compose-cypress.yml up \
+      #      --abort-on-container-exit --exit-code-from cypress
 
-      - name: Run activity tests
-        run: |
-          export TEST=activity && \
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
+      # - name: Run activity tests
+      #   run: |
+      #     export TEST=activity && \
+      #     docker-compose -f deployment/test/docker-compose-cypress.yml up \
+      #      --abort-on-container-exit --exit-code-from cypress
 
-      - name: Run home tests
-        run: |
-          export TEST=home && \
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
+      # - name: Run home tests
+      #   run: |
+      #     export TEST=home && \
+      #     docker-compose -f deployment/test/docker-compose-cypress.yml up \
+      #      --abort-on-container-exit --exit-code-from cypress
 
-      - name: Run create activity tests
-        run: |
-          export TEST=createactivity && \
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
+      # - name: Run create activity tests
+      #   run: |
+      #     export TEST=createactivity && \
+      #     docker-compose -f deployment/test/docker-compose-cypress.yml up \
+      #      --abort-on-container-exit --exit-code-from cypress

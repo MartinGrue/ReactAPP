@@ -80,6 +80,7 @@ namespace API
             {
                 await SeedFollowerFollowings(context, userManager, photoAccessor);
             }
+            await context.SaveChangesAsync();
         }
         public static async Task<bool> PurgeDb(DataContext context, UserManager<AppUser> userManager, IPhotoAccessor photoAccessor)
         {
