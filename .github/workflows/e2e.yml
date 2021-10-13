@@ -8,8 +8,8 @@ jobs:
   HomeTest:
     runs-on: ubuntu-20.04
     steps:
-      # - name: uncommend this on github
-      #   run: apt update && apt install docker-compose -y
+      - name: uncommend this on github
+        run: apt update && apt install docker-compose -y
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v1
       # - name: Set up Docker Buildx
@@ -39,21 +39,21 @@ jobs:
 
       - name: Run home tests on chrome
         run: |
-          export TEST=home BROWSER=chrome && \
+          export TEST=home && export BRO=chrome && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
       - name: Run home tests on firefox
         run: |
-          export TEST=home BROWSER=firefox && \
+          export TEST=home && export BRO=firefox && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
   CreateNewTest:
     runs-on: ubuntu-20.04
     steps:
-      # - name: uncommend this on github
-      #   run: apt update && apt install docker-compose -y
+      - name: uncommend this on github
+        run: apt update && apt install docker-compose -y
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v1
       # - name: Set up Docker Buildx
@@ -83,21 +83,21 @@ jobs:
 
       - name: Run activities tests chrome
         run: |
-          export TEST=activities BROWSER=chrome && \
+          export TEST=activities BRO=chrome && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
       - name: Run activities tests firefox
         run: |
-          export TEST=activities BROWSER=firefox && \
+          export TEST=activities BRO=firefox && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
   ActivityTest:
     runs-on: ubuntu-20.04
     steps:
-      # - name: uncommend this on github
-      #   run: apt update && apt install docker-compose -y
+      - name: uncommend this on github
+        run: apt update && apt install docker-compose -y
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v1
       # - name: Set up Docker Buildx
@@ -127,21 +127,21 @@ jobs:
 
       - name: Run create activity tests chrome
         run: |
-          export TEST=createactivity BROWSER=chrome && \
+          export TEST=createactivity BRO=chrome && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
       - name: Run create activity tests firefox
         run: |
-          export TEST=createactivity BROWSER=firefox && \
+          export TEST=createactivity BRO=firefox && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
   ActivitiesTest:
     runs-on: ubuntu-20.04
     steps:
-      # - name: uncommend this on github
-      #   run: apt update && apt install docker-compose -y
+      - name: uncommend this on github
+        run: apt update && apt install docker-compose -y
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v1
       # - name: Set up Docker Buildx
@@ -171,21 +171,21 @@ jobs:
 
       - name: Run activity tests chrome
         run: |
-          export TEST=activity BROWSER=chrome && \
+          export TEST=activity BRO=chrome && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
       - name: Run activity tests firefox
         run: |
-          export TEST=activity BROWSER=firefox && \
+          export TEST=activity BRO=firefox && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
   ManageTest:
     runs-on: ubuntu-20.04
     steps:
-      # - name: uncommend this on github
-      #   run: apt update && apt install docker-compose -y
+      - name: uncommend this on github
+        run: apt update && apt install docker-compose -y
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v1
       # - name: Set up Docker Buildx
@@ -215,21 +215,21 @@ jobs:
 
       - name: Run manage tests chrome
         run: |
-          export TEST=manage BROWSER=chrome && \
+          export TEST=manage BRO=chrome && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
       - name: Run manage tests firefox
         run: |
-          export TEST=manage BROWSER=firefox && \
+          export TEST=manage BRO=firefox && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
   ProfileTest:
     runs-on: ubuntu-20.04
     steps:
-      # - name: uncommend this on github
-      #   run: apt update && apt install docker-compose -y
+      - name: uncommend this on github
+        run: apt update && apt install docker-compose -y
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v1
       # - name: Set up Docker Buildx
@@ -259,21 +259,21 @@ jobs:
 
       - name: Run profile tests chrome
         run: |
-          export TEST=profile BROWSER=chrome && \
+          export TEST=profile BRO=chrome && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
       - name: Run profile tests firefox
         run: |
-          export TEST=profile BROWSER=firefox && \
+          export TEST=profile BRO=firefox && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
   AuthTest:
     runs-on: ubuntu-20.04
     steps:
-      # - name: uncommend this on github
-      #   run: apt update && apt install docker-compose -y
+      - name: uncommend this on github
+        run: apt update && apt install docker-compose -y
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v1
       # - name: Set up Docker Buildx
@@ -303,12 +303,12 @@ jobs:
 
       - name: Run auth tests chrome
         run: |
-          export TEST=auth BROWSER=chrome && \
+          export TEST=auth BRO=chrome && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
       - name: Run auth tests firefox
         run: |
-          export TEST=auth BROWSER=firefox && \
+          export TEST=auth BRO=firefox && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
