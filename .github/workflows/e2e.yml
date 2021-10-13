@@ -5,11 +5,20 @@ on:
       - master
 
 jobs:
-  Matrix:
+  EndToEnd:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        test: ["auth", "home"]
+        test:
+          [
+            "auth",
+            "home",
+            "profile",
+            "manage",
+            "activity",
+            "activities",
+            "createactivity",
+          ]
         browser: ["chrome", "firefox"]
     env:
       TEST: ${{ matrix.test }}
@@ -49,10 +58,6 @@ jobs:
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
-      - name: Run home tests on firefox
-        run: |
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
     # HomeTest:
     #   runs-on: ubuntu-20.04
     #   steps:
