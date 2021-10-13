@@ -37,9 +37,15 @@ jobs:
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Run home tests
+      - name: Run home tests on chrome
         run: |
-          export TEST=home && \
+          export TEST=home BROWSER=chrome && \
+          docker-compose -f deployment/test/docker-compose-cypress.yml up \
+           --abort-on-container-exit --exit-code-from cypress
+
+      - name: Run home tests on firefox
+        run: |
+          export TEST=home BROWSER=firefox && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
@@ -75,9 +81,15 @@ jobs:
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Run activities tests
+      - name: Run activities tests chrome
         run: |
-          export TEST=activities && \
+          export TEST=activities BROWSER=chrome && \
+          docker-compose -f deployment/test/docker-compose-cypress.yml up \
+           --abort-on-container-exit --exit-code-from cypress
+
+      - name: Run activities tests firefox
+        run: |
+          export TEST=activities BROWSER=firefox && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
@@ -113,9 +125,15 @@ jobs:
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Run create activity tests
+      - name: Run create activity tests chrome
         run: |
-          export TEST=createactivity && \
+          export TEST=createactivity BROWSER=chrome && \
+          docker-compose -f deployment/test/docker-compose-cypress.yml up \
+           --abort-on-container-exit --exit-code-from cypress
+
+      - name: Run create activity tests firefox
+        run: |
+          export TEST=createactivity BROWSER=firefox && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
@@ -151,9 +169,15 @@ jobs:
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Run activity tests
+      - name: Run activity tests chrome
         run: |
-          export TEST=activity && \
+          export TEST=activity BROWSER=chrome && \
+          docker-compose -f deployment/test/docker-compose-cypress.yml up \
+           --abort-on-container-exit --exit-code-from cypress
+
+      - name: Run activity tests firefox
+        run: |
+          export TEST=activity BROWSER=firefox && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
@@ -189,9 +213,15 @@ jobs:
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Run manage tests
+      - name: Run manage tests chrome
         run: |
-          export TEST=manage && \
+          export TEST=manage BROWSER=chrome && \
+          docker-compose -f deployment/test/docker-compose-cypress.yml up \
+           --abort-on-container-exit --exit-code-from cypress
+
+      - name: Run manage tests firefox
+        run: |
+          export TEST=manage BROWSER=firefox && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
@@ -227,9 +257,15 @@ jobs:
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Run profile tests
+      - name: Run profile tests chrome
         run: |
-          export TEST=profile && \
+          export TEST=profile BROWSER=chrome && \
+          docker-compose -f deployment/test/docker-compose-cypress.yml up \
+           --abort-on-container-exit --exit-code-from cypress
+
+      - name: Run profile tests firefox
+        run: |
+          export TEST=profile BROWSER=firefox && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress
 
@@ -265,8 +301,14 @@ jobs:
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Run auth tests
+      - name: Run auth tests chrome
         run: |
-          export TEST=auth && \
+          export TEST=auth BROWSER=chrome && \
+          docker-compose -f deployment/test/docker-compose-cypress.yml up \
+           --abort-on-container-exit --exit-code-from cypress
+
+      - name: Run auth tests firefox
+        run: |
+          export TEST=auth BROWSER=firefox && \
           docker-compose -f deployment/test/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress

@@ -267,7 +267,7 @@ describe("Check the Profile functionality", () => {
     //test follow
     // const user = users.find((user) => user.username === "bob");
   });
-  it.only("should be able to upload an image directly to cloudinary", () => {
+  it("should be able to upload an image directly to cloudinary", () => {
     const { users } = ctx.seedData!;
     const user = users.find((user) => user.username === user1.displayname);
     checkPane(user!, panes.find((pane) => pane.tabname === "Photos")!);
