@@ -50,8 +50,8 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Log in to DigitalOcean Container Registry
+        run: doctl registry login --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Run ${{ matrix.test }} test on ${{ matrix.browser }}
         run: |
