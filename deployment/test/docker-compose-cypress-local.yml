@@ -15,10 +15,10 @@ services:
     stdin_open: true
     tty: true
     network_mode: "service:backendapp"
-    entrypoint: "npm run start"
+    entrypoint: "bash /startup.sh"
     environment:
-      - TEST=${TEST}
-      - API_HOST=backend
+      - TEST=auth
+      - BRO=chrome
 
   backendapp:
     environment:
@@ -45,6 +45,8 @@ services:
     ports:
       - "5000:5000"
       - "3000:3000"
+    logging:
+      driver: "none"
 
   activitydb:
     container_name: activitydb

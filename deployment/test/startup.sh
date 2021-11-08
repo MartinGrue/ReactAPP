@@ -1,6 +1,6 @@
 # #!/bin/bash
 # # Start the first process
-(cd /e2e/client-app; nohup npm run start &)
+(cd /e2e/client-app; nohup npm run dev >/dev/null 2>&1 &)
 # # Start the second process
 sleep 10
 # (cd /e2e/client-app; npx cypress run --spec cypress/tests/ui/profile.spec.ts --spec cypress/tests/ui/manage-activity.spec.ts)
