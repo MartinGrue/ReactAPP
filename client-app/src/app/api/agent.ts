@@ -23,7 +23,9 @@ axios.interceptors.request.use(
   }
 );
 
-var apiHost = process.env.API_HOST || process.env.REACT_APP_API_URL;
+var apiHost = process.env.API_HOST
+  ? process.env.NEXT_PUBLIC_API_HOST
+  : process.env.NEXT_PUBLIC_API_URL;
 
 axios.defaults.baseURL = apiHost;
 

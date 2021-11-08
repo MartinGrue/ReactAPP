@@ -5,7 +5,7 @@ services:
   frontendapp:
     build:
       context: ./../../client-app
-      dockerfile: ./../deployment/dev/Dockerfile.dev.client
+      dockerfile: ./../deployment/dev/Dockerfile.dev.frontend
     volumes:
       - type: bind
         source: ./../../client-app
@@ -14,8 +14,6 @@ services:
       - frontend
     ports:
       - "3000:3000"
-    environment:
-      - API_HOST=backend
     stdin_open: true # docker run -i
     tty: true        # docker run -t
   backendapp:

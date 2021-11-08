@@ -96,7 +96,7 @@ export default class ProfileStore {
     this.loadingPhoto = true;
 
     this.timeStampForUpload = Math.round(new Date().getTime() / 1000);
-    const api_key = process.env.REACT_APP_CLOUDINARY_PUP_KEY;
+    const api_key = process.env.NEXT_PUBLIC_CLOUDINARY_PUP_KEY;
     const formData = new FormData();
     try {
       // let file = files![i];
