@@ -43,7 +43,6 @@ const App = () => {
         path={"/(.+)"}
         render={() => (
           <Fragment>
-            <Nav></Nav>
             <Routes />
           </Fragment>
         )}
