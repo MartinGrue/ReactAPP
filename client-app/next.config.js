@@ -10,7 +10,7 @@ module.exports = {
           destination: "/",
         },
         {
-          source: "/(\\activities|profiles)/:slug",
+          source: "/(\\activities|profiles|manage)/:slug",
           destination: "/",
         },
       ],
