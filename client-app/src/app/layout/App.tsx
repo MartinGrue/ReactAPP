@@ -33,7 +33,7 @@ const App = () => {
   if (!appLoaded) {
     return <LoadingComponent content="Loading app"></LoadingComponent>;
   }
-
+  //test
   return (
     <Fragment>
       <ModalContainer></ModalContainer>

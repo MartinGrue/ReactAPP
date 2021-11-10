@@ -18,3 +18,4 @@ build
 **/.devcontainer
 
 .dockerignore
+**/.next
