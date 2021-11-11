@@ -95,7 +95,7 @@ describe("Check the Activity Details Page functionality", () => {
     cy.get("[cy-data=manage-activity]").should("be.visible").click();
     cy.location("pathname").should("equal", `/manage/${activity!.id}`);
   });
-  it.only("should have a working chat", () => {
+  it("should have a working chat", () => {
     const { activities } = ctx.seedData!;
     const activity = activities[indexActivity];
     cy.visit(`/activities/${activity.id}`).wait("@activityDetails");
