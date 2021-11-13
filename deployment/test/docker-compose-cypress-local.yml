@@ -16,7 +16,7 @@ services:
     network_mode: "service:backendapp"
     entrypoint: "bash /startup.sh"
     environment:
-      - TEST=auth
+      # - TEST=auth
       - BRO=chrome
 
   backendapp:

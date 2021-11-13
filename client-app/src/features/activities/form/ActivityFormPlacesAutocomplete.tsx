@@ -9,6 +9,7 @@ import { Form, Label, List, Segment } from "semantic-ui-react";
 import { FieldRenderProps } from "react-final-form";
 
 import { Loader } from "@googlemaps/js-api-loader";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 interface IProps extends FieldRenderProps<string, HTMLInputElement> {
   setLatlng: React.Dispatch<React.SetStateAction<google.maps.LatLngLiteral>>;
@@ -29,14 +30,19 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
     placeholder: placeholder,
     className: "location-search-input",
   };
+
+  const loadGoogleAPI = () => {
+    const loader = new Loader({
+      apiKey: "AIzaSyCHYvacLxG7odfjovNDb1GpTHon3BMIXlw",
+      libraries: ["places"],
+    });
+    return loader.load();
+  };
+
   useEffect(() => {
-    if (!window?.google?.maps?.places) {
-      const loader = new Loader({
-        apiKey: "AIzaSyCHYvacLxG7odfjovNDb1GpTHon3BMIXlw",
-        libraries: ["places"],
-      });
-      loader.load().then(() => setisloaded(true));
-    }
+    !window?.google?.maps?.places
+      ? loadGoogleAPI().then(() => setisloaded(true))
+      : setisloaded(true);
   }, [setisloaded]);
 
   useEffect(() => {
@@ -73,90 +79,85 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
     },
     [input]
   );
-  if (isloaded) {
-    return (
-      <Form.Field error={touched && !!error}>
-        <PlacesAutocomplete
-          value={input.value}
-          onChange={() => {}}
-          searchOptions={Options}
-        >
-          {({
-            getInputProps,
-            suggestions,
-            getSuggestionItemProps,
-            loading,
-          }) => (
-            <div>
-              <input
-                // {...input}
-                name={input.name}
-                onBlur={onBlur}
-                onFocus={input.onFocus}
-                onKeyUp={handleKeyUp}
-                onChange={(e) => {
-                  getInputProps().onChange(e); //trigger PlacesAutocomplete search
-                  input.onChange(e); //trigger validation to work
-                }}
-                value={getInputProps().value}
-                placeholder={getInputProps(FieldProps).placeholder}
-                className={getInputProps(FieldProps).className}
-                autoComplete="off"
-              ></input>
-              {touched && !!error && (
-                <Label basic color="red" data-cy="error-label">
-                  {error}
-                </Label>
-              )}
 
-              {loading && <Segment>Loading...</Segment>}
-
-              {dropdownIsOpen && (
-                <Segment>
-                  <List>
-                    {suggestions.map((suggestion) => {
-                      const className = suggestion.active
-                        ? "suggestion-item--active"
-                        : "suggestion-item";
-
-                      const style = suggestion.active
-                        ? {
-                            backgroundColor: "rgb(234, 234, 234)",
-                            cursor: "pointer",
-                          }
-                        : { backgroundColor: "#ffffff", cursor: "pointer" };
-                      return (
-                        <List.Item
-                          key={suggestion.description}
-                          data-cy="suggestion-item"
-                        >
-                          <div
-                            {...getSuggestionItemProps(suggestion, {
-                              className,
-                              style,
-                            })}
-                            onClick={() => {
-                              input.onChange(suggestion.description);
-                              handleSelect(suggestion.description);
-                            }}
-                          >
-                            <span>{suggestion.description}</span>
-                          </div>
-                        </List.Item>
-                      );
-                    })}
-                  </List>
-                </Segment>
-              )}
-            </div>
-            // </div>
-          )}
-        </PlacesAutocomplete>
-      </Form.Field>
-    );
-  } else {
-    return null;
+  if (!isloaded) {
+    return <LoadingComponent></LoadingComponent>;
   }
+
+  return (
+    <Form.Field error={touched && !!error}>
+      <PlacesAutocomplete
+        value={input.value}
+        onChange={() => {}}
+        searchOptions={Options}
+      >
+        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+          <div>
+            <input
+              // {...input}
+              name={input.name}
+              onBlur={onBlur}
+              onFocus={input.onFocus}
+              onKeyUp={handleKeyUp}
+              onChange={(e) => {
+                getInputProps().onChange(e); //trigger PlacesAutocomplete search
+                input.onChange(e); //trigger validation to work
+              }}
+              value={getInputProps().value}
+              placeholder={getInputProps(FieldProps).placeholder}
+              className={getInputProps(FieldProps).className}
+              autoComplete="off"
+            ></input>
+            {touched && !!error && (
+              <Label basic color="red" data-cy="error-label">
+                {error}
+              </Label>
+            )}
+
+            {loading && <Segment>Loading...</Segment>}
+
+            {dropdownIsOpen && (
+              <Segment>
+                <List>
+                  {suggestions.map((suggestion) => {
+                    const className = suggestion.active
+                      ? "suggestion-item--active"
+                      : "suggestion-item";
+
+                    const style = suggestion.active
+                      ? {
+                          backgroundColor: "rgb(234, 234, 234)",
+                          cursor: "pointer",
+                        }
+                      : { backgroundColor: "#ffffff", cursor: "pointer" };
+                    return (
+                      <List.Item
+                        key={suggestion.description}
+                        data-cy="suggestion-item"
+                      >
+                        <div
+                          {...getSuggestionItemProps(suggestion, {
+                            className,
+                            style,
+                          })}
+                          onClick={() => {
+                            input.onChange(suggestion.description);
+                            handleSelect(suggestion.description);
+                          }}
+                        >
+                          <span>{suggestion.description}</span>
+                        </div>
+                      </List.Item>
+                    );
+                  })}
+                </List>
+              </Segment>
+            )}
+          </div>
+        )}
+      </PlacesAutocomplete>
+    </Form.Field>
+  );
 };
 
 export default observer(ActivityFormPlacesAutocomplete);

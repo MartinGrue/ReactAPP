@@ -32,7 +32,7 @@ describe("User Sign-up and Login", function () {
     cy.location("pathname").should("equal", "/");
 
     cy.visit("/randomstringhere");
-    cy.location("pathname").should("equal", "/");
+    cy.get("[data-cy=NotFound]").should("be.visible");
   });
   it("should redirect to the activitydashboard page after login", function () {
     cy.login("bob@test.com", "Pa$$w0rd");

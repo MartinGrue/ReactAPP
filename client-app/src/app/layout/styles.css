@@ -138,3 +138,6 @@ div.ui.basic.segment {
 .dateTimePicker-Container > input {
   vertical-align: baseline !important;
 }
+.show-scroll {
+  overflow-y: scroll !important;
+}

@@ -132,7 +132,7 @@ const ActivityForm: React.FC = () => {
       })
     )(),
     city: isRequired("City"),
-    venue: isRequired("Venue"),
+    venue: isRequired("Street"),
     date: isRequired("Date"),
     time: isRequired("Time"),
   });
@@ -203,7 +203,7 @@ const ActivityForm: React.FC = () => {
                     render={({ input, meta }) => (
                       <ActivityFormPlacesAutocomplete
                         {...{ input, meta, setLatlng }}
-                        placeholder={"venue"}
+                        placeholder={"street"}
                         Options={{
                           types: ["address"],
                         }}

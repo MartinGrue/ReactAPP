@@ -19,7 +19,7 @@ const ActivityDetails: React.FC = () => {
   const { id } = useParams();
   useEffect(() => {
     loadActivity(id!);
-    window.scrollTo(0, 0);
+    window && window.scrollTo(0, 0);
   }, [id, loadActivity]);
 
   if (loadingInitial || !selectedActivity) {

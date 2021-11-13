@@ -111,7 +111,7 @@ describe("Create New Activity", function () {
     cy.get("[name=venue]").focus().click().blur();
     cy.get("[data-cy=error-label]")
       .should("be.visible")
-      .and("contain", "Venue is required");
+      .and("contain", "Street is required");
     cy.fillVenue(validActivity.venue);
 
     cy.get("[data-cy=cancel]").click();

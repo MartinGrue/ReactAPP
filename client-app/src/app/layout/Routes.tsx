@@ -13,6 +13,7 @@ import ProfilePage from "../../features/profile/ProfilePage";
 import NotFound from "./NotFound";
 
 const WithNav: React.FC = ({ children }) => {
+  document.body.classList.add("show-scroll");
   return (
     <React.Fragment>
       <Nav></Nav>
@@ -86,7 +87,8 @@ const Routes: React.FC = () => {
           </RequireAuth>
         }
       ></Route>
-      <Route path="*" element={<NotFound />}></Route>
+      <Route path="*" element={<NotFound />}>
+      </Route>
     </ReactRoutes>
   );
 };

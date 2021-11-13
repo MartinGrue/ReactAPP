@@ -3,7 +3,7 @@ import * as React from "react";
 import ProfileHeader from "./ProfileHeader";
 import { ProfileContent } from "./ProfileContent";
 import { Grid, GridColumn } from "semantic-ui-react";
-import {  useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { RootStoreContext } from "../../app/stores/rootStore";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { observer } from "mobx-react-lite";
@@ -21,7 +21,7 @@ const ProfilePage: React.FC = () => {
   const { userName } = useParams();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window && window.scrollTo(0, 0);
     getProfile(userName!);
   }, [getProfile, userName, user]);
 

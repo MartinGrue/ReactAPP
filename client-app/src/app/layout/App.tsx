@@ -1,20 +1,10 @@
 import React, { Fragment, useContext, useEffect } from "react";
-import Nav from "../../features/nav/Nav";
 import { observer } from "mobx-react-lite";
-import {
-  Route,
-  RouteObject,
-  Routes as RouterRoutes,
-  useRoutes,
-} from "react-router-dom";
-import HomePage from "../../features/home/homepage";
 import { ToastContainer } from "react-toastify";
 import { RootStore, RootStoreContext } from "../stores/rootStore";
 import LoadingComponent from "./LoadingComponent";
 import ModalContainer from "../common/modals/modalContainer";
 import Routes from "./Routes";
-import ActivityDashboard from "../../features/activities/dashbord/ActivityDashboard";
-// import ActivityDashboard from "../../features/activities/dashbord/ActivityDashboard";
 
 const Layout = observer(() => {
   const rootStore = useContext(RootStoreContext);
@@ -48,6 +38,7 @@ const Layout = observer(() => {
     </Fragment>
   );
 });
+
 const App = () => {
   return (
     <RootStoreContext.Provider value={new RootStore()}>
@@ -55,4 +46,5 @@ const App = () => {
     </RootStoreContext.Provider>
   );
 };
+
 export default observer(App);
