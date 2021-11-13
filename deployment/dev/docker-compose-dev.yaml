@@ -13,13 +13,17 @@ services:
         target: /app/
     networks:
       - frontend
+    environment:
+      - UNAMEUSER=gruma
+      - UID=1000
+      - GID=1000
     ports:
       - "3000:3000"
     stdin_open: true # docker run -i
-    tty: true        # docker run -t
-  
+    tty: true # docker run -t
+
   backendapp:
-    environment: 
+    environment:
       - ASPNETCORE_ENVIRONMENT=development
       - DOTNET_ENVIRONMENT=development
     container_name: backend
@@ -27,24 +31,24 @@ services:
       context: ./../..
       dockerfile: ./deployment/dev/Dockerfile.dev.backend
     volumes:
-        - ./../..:/app
-        - /app/API/bin/
-        - /app/API/obj/
-        - /app/Application/bin/
-        - /app/Application/obj/
-        - /app/Domain/bin/
-        - /app/Domain/obj/
-        - /Infrastructure/bin/
-        - /Infrastructure/obj/
-        - /Persistence/bin/
-        - /Persistence/obj/
+      - ./../..:/app
+      - /app/API/bin/
+      - /app/API/obj/
+      - /app/Application/bin/
+      - /app/Application/obj/
+      - /app/Domain/bin/
+      - /app/Domain/obj/
+      - /Infrastructure/bin/
+      - /Infrastructure/obj/
+      - /Persistence/bin/
+      - /Persistence/obj/
     networks:
       - frontend
     ports:
       - "5000:5000"
     stdin_open: true # docker run -i
     tty: true # docker run -t
-  
+
   activitydb:
     image: mysql
     container_name: activitydb

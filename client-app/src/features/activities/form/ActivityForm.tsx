@@ -8,7 +8,7 @@ import {
 } from "../../../app/models/IActivity";
 import { v4 as uuid } from "uuid";
 import { observer } from "mobx-react-lite";
-import { RouteComponentProps } from "react-router";
+import { useParams } from "react-router";
 import { Form as FinalForm, Field } from "react-final-form";
 import TextInput from "../../../app/common/form/TextInput";
 import TextAreaInput from "../../../app/common/form/TextAreaInput";
@@ -28,15 +28,9 @@ import { RootStoreContext } from "../../../app/stores/rootStore";
 import { SimpleMap } from "../../../app/common/maps/SimpleMap";
 import { ActivityFormPlacesAutocomplete } from "./ActivityFormPlacesAutocomplete";
 import TimeInput from "../../../app/common/form/TimeInput";
+import { useNavigate } from "react-router-dom";
 
-interface DetailsParams {
-  id: string;
-}
-
-const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
-  match,
-  history,
-}) => {
+const ActivityForm: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
   const {
     createActivity,
@@ -47,6 +41,9 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
     selectedActivity,
     cancelSelectedActivity,
   } = rootStore.activityStore;
+
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const [activity, setActivity] = useState<IActivityFormValues>(
     new ActivityFormValues(undefined)
@@ -59,10 +56,10 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
   });
   const [done, setdone] = useState(false);
   useEffect(() => {
-    if (match.params.id) {
+    if (id) {
       if (!selectedActivity) {
         setloading(true);
-        loadActivity(match.params.id).finally(() => setloading(false));
+        loadActivity(id).finally(() => setloading(false));
       } else {
         setActivity(new ActivityFormValues(selectedActivity));
         setLatlng({
@@ -74,11 +71,11 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
       setActivity(new ActivityFormValues(undefined));
       cancelSelectedActivity();
     }
-  }, [match.params.id, loadActivity, selectedActivity, cancelSelectedActivity]);
+  }, [id, loadActivity, selectedActivity, cancelSelectedActivity]);
 
   const handleFinalFormSubmit = (values: IActivityFormValues) => {
     const dateAndTime = combineDateAndTime(values.date, values.time);
-    if (match.params.id) {
+    if (id) {
       const editedActivity: IActivity = {
         ...selectedActivity!,
         ...values,
@@ -87,7 +84,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
         latitute: latlng.lat,
       };
       editActivity(editedActivity).then(() =>
-        history.push(`/activities/${selectedActivity!.id}`)
+        navigate(`/activities/${selectedActivity!.id}`)
       );
     } else {
       const newActivity: IActivity = {
@@ -101,27 +98,27 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
         latitute: latlng.lat,
       };
       createActivity(newActivity).then(() => {
-        history.push(`/activities/${newActivity.id}`);
+        navigate(`/activities/${newActivity.id}`);
       });
     }
   };
 
   const handleDelete = () => {
     deleteActivity(selectedActivity!.id).then(() => {
-      history.push(`/activities`);
+      navigate(`/activities`);
     });
   };
   useEffect(() => {
     if (done) {
-      if (match.params.id) {
-        history.push(`/activities/${selectedActivity!.id}`);
+      if (id) {
+        navigate(`/activities/${selectedActivity!.id}`);
       } else {
-        history.push("/activities");
+        navigate("/activities");
       }
     }
 
     return () => {};
-  }, [match.params.id, done, selectedActivity, history]);
+  }, [id, done, selectedActivity, history]);
   const handleCancel = () => {
     setdone(true);
   };
@@ -222,7 +219,7 @@ const ActivityForm: React.FC<RouteComponentProps<DetailsParams>> = ({
                     type="submit"
                     content="submit"
                   ></Button>
-                  {match.params.id && (
+                  {id && (
                     <Button
                       data-cy="delete"
                       disabled={loading}

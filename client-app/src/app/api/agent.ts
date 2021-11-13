@@ -5,7 +5,7 @@ import {
   IUserActivity,
   PhotoUploadResult,
 } from "../models/IActivity";
-import { history } from "../..";
+import { history } from "../../pages/_app";
 import { toast } from "react-toastify";
 import { IUser, IUserFormValues, IExternalLoginInfo } from "../models/user";
 import { IProfile, IPhoto, IProfileFormValues } from "../models/IProfile";

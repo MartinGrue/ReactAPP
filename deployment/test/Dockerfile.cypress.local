@@ -6,10 +6,11 @@ FROM registry.digitalocean.com/imagerepo/activity:activityfrontendbase-latest as
 
 FROM cypress/browsers:node14.17.0-chrome88-ff89
 WORKDIR /e2e/client-app
+COPY --from=node_cache /e2e/client-app/node_modules ./node_modules
 COPY --from=node_cache /root/.cache/Cypress /root/.cache/Cypress
 # COPY --from=node_cache /cache/ .
+# RUN chown -R node /e2e/client-app/node_modules
+# USER node
 COPY ./data /e2e/data
-COPY ./client-app/ .
 COPY ./deployment/test/startup.sh /
-RUN npm install
-RUN npx cypress install
+# RUN npm install

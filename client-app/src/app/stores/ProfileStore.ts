@@ -8,7 +8,7 @@ import {
 } from "mobx";
 import { IProfile } from "../models/IProfile";
 import agent from "../api/agent";
-import { history } from "../..";
+import { history } from "../../pages/_app";
 import { IUserActivity } from "../models/IActivity";
 
 export default class ProfileStore {
@@ -134,7 +134,7 @@ export default class ProfileStore {
         runInAction(() => {
           this.profile!.photos.push(photo);
           this.loadingPhoto = false;
-          this.toggleaddPhotoOpen()
+          this.toggleaddPhotoOpen();
           // history.push(`/profiles/${this.user!.userName}`);
         });
       };
