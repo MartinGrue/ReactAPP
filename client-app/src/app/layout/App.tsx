@@ -22,8 +22,6 @@ const Layout = observer(() => {
     rootStore.commonStore;
   const { getUser } = rootStore.userStore;
 
-  const routes = useRoutes(Routes);
-
   useEffect(() => {
     if (isLogedIn) {
       getUser().then(() => {
@@ -46,7 +44,7 @@ const Layout = observer(() => {
     <Fragment>
       <ModalContainer></ModalContainer>
       <ToastContainer position="bottom-right"></ToastContainer>
-      {routes}
+      <Routes></Routes>
     </Fragment>
   );
 });
