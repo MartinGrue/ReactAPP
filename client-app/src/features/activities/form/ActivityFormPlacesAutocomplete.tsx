@@ -1,10 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
 import * as React from "react";
 import { observer } from "mobx-react-lite";
-import PlacesAutocomplete from "react-places-autocomplete";
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from "react-places-autocomplete";
 import { Form, Label, List, Segment } from "semantic-ui-react";
 import { FieldRenderProps } from "react-final-form";
-import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
+
+import { Loader } from "@googlemaps/js-api-loader";
 
 interface IProps extends FieldRenderProps<string, HTMLInputElement> {
   setLatlng: React.Dispatch<React.SetStateAction<google.maps.LatLngLiteral>>;
@@ -20,10 +24,20 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
 }) => {
   const [dropdownIsOpen, setdropdownIsOpen] = useState(false);
   const [address, setaddress] = useState("");
+  const [isloaded, setisloaded] = useState(false);
   const FieldProps = {
     placeholder: placeholder,
     className: "location-search-input",
   };
+  useEffect(() => {
+    if (!window?.google?.maps?.places) {
+      const loader = new Loader({
+        apiKey: "AIzaSyCHYvacLxG7odfjovNDb1GpTHon3BMIXlw",
+        libraries: ["places"],
+      });
+      loader.load().then(() => setisloaded(true));
+    }
+  }, [setisloaded]);
 
   useEffect(() => {
     address &&
@@ -35,15 +49,18 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
         .catch((error) => console.error("Error", error));
     return () => {};
   }, [address, setLatlng]);
+
   const handleSelect = (address: string) => {
     setdropdownIsOpen(false);
     setaddress(address);
   };
+
   const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     input.onBlur();
     setdropdownIsOpen(false);
     handleSelect(e.currentTarget.value);
   };
+
   const handleKeyUp = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       e.currentTarget.value.length > 0
@@ -56,81 +73,90 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
     },
     [input]
   );
-  return (
-    <Form.Field error={touched && !!error}>
-      <PlacesAutocomplete
-        value={input.value}
-        onChange={() => {}}
-        searchOptions={Options}
-      >
-        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div>
-            <input
-              // {...input}
-              name={input.name}
-              onBlur={onBlur}
-              onFocus={input.onFocus}
-              onKeyUp={handleKeyUp}
-              onChange={(e) => {
-                getInputProps().onChange(e); //trigger PlacesAutocomplete search
-                input.onChange(e); //trigger validation to work
-              }}
-              value={getInputProps().value}
-              placeholder={getInputProps(FieldProps).placeholder}
-              className={getInputProps(FieldProps).className}
-              autoComplete="off"
-            ></input>
-            {touched && !!error && (
-              <Label basic color="red" data-cy="error-label">
-                {error}
-              </Label>
-            )}
+  if (isloaded) {
+    return (
+      <Form.Field error={touched && !!error}>
+        <PlacesAutocomplete
+          value={input.value}
+          onChange={() => {}}
+          searchOptions={Options}
+        >
+          {({
+            getInputProps,
+            suggestions,
+            getSuggestionItemProps,
+            loading,
+          }) => (
+            <div>
+              <input
+                // {...input}
+                name={input.name}
+                onBlur={onBlur}
+                onFocus={input.onFocus}
+                onKeyUp={handleKeyUp}
+                onChange={(e) => {
+                  getInputProps().onChange(e); //trigger PlacesAutocomplete search
+                  input.onChange(e); //trigger validation to work
+                }}
+                value={getInputProps().value}
+                placeholder={getInputProps(FieldProps).placeholder}
+                className={getInputProps(FieldProps).className}
+                autoComplete="off"
+              ></input>
+              {touched && !!error && (
+                <Label basic color="red" data-cy="error-label">
+                  {error}
+                </Label>
+              )}
 
-            {loading && <Segment>Loading...</Segment>}
+              {loading && <Segment>Loading...</Segment>}
 
-            {dropdownIsOpen && (
-              <Segment>
-                <List>
-                  {suggestions.map((suggestion) => {
-                    const className = suggestion.active
-                      ? "suggestion-item--active"
-                      : "suggestion-item";
+              {dropdownIsOpen && (
+                <Segment>
+                  <List>
+                    {suggestions.map((suggestion) => {
+                      const className = suggestion.active
+                        ? "suggestion-item--active"
+                        : "suggestion-item";
 
-                    const style = suggestion.active
-                      ? {
-                          backgroundColor: "rgb(234, 234, 234)",
-                          cursor: "pointer",
-                        }
-                      : { backgroundColor: "#ffffff", cursor: "pointer" };
-                    return (
-                      <List.Item
-                        key={suggestion.description}
-                        data-cy="suggestion-item"
-                      >
-                        <div
-                          {...getSuggestionItemProps(suggestion, {
-                            className,
-                            style,
-                          })}
-                          onClick={() => {
-                            input.onChange(suggestion.description);
-                            handleSelect(suggestion.description);
-                          }}
+                      const style = suggestion.active
+                        ? {
+                            backgroundColor: "rgb(234, 234, 234)",
+                            cursor: "pointer",
+                          }
+                        : { backgroundColor: "#ffffff", cursor: "pointer" };
+                      return (
+                        <List.Item
+                          key={suggestion.description}
+                          data-cy="suggestion-item"
                         >
-                          <span>{suggestion.description}</span>
-                        </div>
-                      </List.Item>
-                    );
-                  })}
-                </List>
-              </Segment>
-            )}
-          </div>
-          // </div>
-        )}
-      </PlacesAutocomplete>
-    </Form.Field>
-  );
+                          <div
+                            {...getSuggestionItemProps(suggestion, {
+                              className,
+                              style,
+                            })}
+                            onClick={() => {
+                              input.onChange(suggestion.description);
+                              handleSelect(suggestion.description);
+                            }}
+                          >
+                            <span>{suggestion.description}</span>
+                          </div>
+                        </List.Item>
+                      );
+                    })}
+                  </List>
+                </Segment>
+              )}
+            </div>
+            // </div>
+          )}
+        </PlacesAutocomplete>
+      </Form.Field>
+    );
+  } else {
+    return null;
+  }
 };
 
 export default observer(ActivityFormPlacesAutocomplete);

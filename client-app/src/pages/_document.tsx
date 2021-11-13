@@ -18,7 +18,7 @@ class MyDocument extends Document {
       <Html lang="en" dir="ltr">
         <Head>
           <link rel="shortcut icon" href="/favicon.ico" />
-          <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHYvacLxG7odfjovNDb1GpTHon3BMIXlw&libraries=places"></script>
+          {/* <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHYvacLxG7odfjovNDb1GpTHon3BMIXlw&libraries=places"></script> */}
           {/* fonts */}
           <link
             rel="stylesheet"
