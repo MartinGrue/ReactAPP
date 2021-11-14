@@ -4,7 +4,7 @@
  */
 declare namespace Cypress {
   interface Chainable {
-    clickOutside(): Chainable<any>;
+    clickOutside(): void;
     task(
       event: "get:data",
       arg: dbQueryArg,
@@ -13,23 +13,19 @@ declare namespace Cypress {
 
     getData(): any;
     login(email: string, password: string): void;
+    logout(): void;
+
     changeLogin(email: string, password: string): void;
-    visualSnapshot(maybeName?): Chainable<any>;
-    fillTitle(title: string): Chainable<any>;
-    fillDesctiption(description: string): Chainable<any>;
-    fillCategory(categories: string[], category: string): Chainable<any>;
-    fillDate(): Chainable<any>;
+    visualSnapshot(maybeName?): void;
+    fillTitle(title: string): void;
+    fillDesctiption(description: string): void;
+    fillCategory(categories: string[], category: string): void;
+    fillDate(): void;
     fillTime(
       timeHours: { firstDigit: string; secondDigit: string },
       timeMinutes: { firstDigit: string; secondDigit: string }
-    ): Chainable<any>;
-    fillCity(city: {
-      searchString: string;
-      suggestions: string[];
-    }): Chainable<any>;
-    fillVenue(venue: {
-      searchString: string;
-      suggestions: string[];
-    }): Chainable<any>;
+    ): void;
+    fillCity(city: { searchString: string; suggestions: string[] }): void;
+    fillVenue(venue: { searchString: string; suggestions: string[] }): void;
   }
 }

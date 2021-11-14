@@ -1,10 +1,6 @@
-#This file should be called frontend
 FROM node:alpine
-# RUN adduser -u 1000 gruma
-# RUN useradd -m -u $UID -g $GID -o -s /bin/bash $UNAMEUSER
-USER 1000:1000
+#Node user
+USER 1000:1000 
 WORKDIR /app
 COPY package.json .
-# RUN npm install --verbose 
-COPY . .
 CMD ["npm", "run", "dev"]

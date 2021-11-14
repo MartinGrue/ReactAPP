@@ -18,5 +18,5 @@ build
 **/.devcontainer
 
 .dockerignore
-**/.next
+**/.next/*
 **/out
