@@ -4,7 +4,7 @@ const DynamicComponentWithNoSSR = dynamic(() => import("../app/layout/App"), {
   ssr: false,
 });
 const NextApp = () => {
-  return <DynamicComponentWithNoSSR />;
+  return (<DynamicComponentWithNoSSR />);
 };
 
 export default NextApp;

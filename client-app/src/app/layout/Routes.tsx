@@ -1,23 +1,57 @@
 import * as React from "react";
 import { Navigate, Route, Routes as ReactRoutes } from "react-router-dom";
-import ActivityDashboard from "../../features/activities/dashbord/ActivityDashboard";
-import ActivityDetails from "../../features/activities/details/ActivityDetails";
-import ActivityForm from "../../features/activities/form/ActivityForm";
-import Nav from "../../features/nav/Nav";
 import { Container } from "semantic-ui-react";
 import { useContext } from "react";
 import { RootStoreContext } from "../stores/rootStore";
 import { observer } from "mobx-react-lite";
-import HomePage from "../../features/home/homepage";
-import ProfilePage from "../../features/profile/ProfilePage";
-import NotFound from "./NotFound";
+import dynamic from "next/dynamic";
+
+const HomePage = dynamic(() => import("../../features/home/homepage"), {
+  ssr: false,
+});
+
+const ProfilePage = dynamic(
+  () => import("../../features/profile/ProfilePage"),
+  {
+    ssr: false,
+  }
+);
+const Nav = dynamic(() => import("../../features/nav/Nav"), {
+  ssr: false,
+});
+
+const NotFound = dynamic(() => import("./NotFound"), {
+  ssr: false,
+});
+
+const ActivityDashboard = dynamic(
+  () => import("../../features/activities/dashbord/ActivityDashboard"),
+  {
+    ssr: false,
+  }
+);
+
+const ActivityDetails = dynamic(
+  () => import("../../features/activities/details/ActivityDetails"),
+  {
+    ssr: false,
+  }
+);
+
+const ActivityForm = dynamic(
+  () => import("../../features/activities/form/ActivityForm"),
+  {
+    ssr: false,
+  }
+);
 
 const WithNav: React.FC = ({ children }) => {
   document.body.classList.add("show-scroll");
   return (
     <React.Fragment>
-      <Nav></Nav>
-      <Container style={{ marginTop: "6rem" }}>{children}</Container>
+      <Nav>
+        <Container style={{ marginTop: "6rem" }}>{children}</Container>
+      </Nav>
     </React.Fragment>
   );
 };
@@ -87,8 +121,7 @@ const Routes: React.FC = () => {
           </RequireAuth>
         }
       ></Route>
-      <Route path="*" element={<NotFound />}>
-      </Route>
+      <Route path="*" element={<NotFound />}></Route>
     </ReactRoutes>
   );
 };

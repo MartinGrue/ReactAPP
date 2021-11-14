@@ -38,7 +38,6 @@ const Layout = observer(() => {
     </Fragment>
   );
 });
-
 const App = () => {
   return (
     <RootStoreContext.Provider value={new RootStore()}>
@@ -46,5 +45,4 @@ const App = () => {
     </RootStoreContext.Provider>
   );
 };
-
 export default observer(App);

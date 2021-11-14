@@ -6,8 +6,9 @@ import { createBrowserHistory, BrowserHistory } from "history";
 import "../app/layout/styles.css";
 import "react-toastify/dist/ReactToastify.min.css";
 import "react-widgets/styles.css";
-import "semantic-ui-css/semantic.min.css";
-import LoadingComponent from "../app/layout/LoadingComponent";
+import "semantic-ui-css/semantic.css";
+import 'cropperjs/dist/cropper.min.css';
+
 
 export let history = {} as BrowserHistory;
 if (typeof window !== "undefined") {
