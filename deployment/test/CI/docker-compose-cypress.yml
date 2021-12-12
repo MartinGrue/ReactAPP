@@ -4,20 +4,19 @@ networks:
 
 services:
   cypress:
+    container_name: cypress
     build:
-      context: ./../..
-      dockerfile: ./deployment/test/Dockerfile.cypress.local
-    volumes:
-      - ./../../client-app:/e2e/client-app
-      - ./../../data:/e2e/data
+      context: ./../../..
+      dockerfile: ./deployment/test/CI/Dockerfile.cypress
     working_dir: /e2e/client-app
     stdin_open: true
     tty: true
     network_mode: "service:backendapp"
     entrypoint: "bash /startup.sh"
-    environment:
-      # - TEST=auth
-      - BRO=chrome
+    # environment:
+      # - BRO=${BRO}
+      # - TEST=${TEST}
+      # - API_HOST=backend
 
   backendapp:
     environment:
@@ -25,20 +24,8 @@ services:
       - DOTNET_ENVIRONMENT=development
     container_name: backend
     build:
-      context: ./../..
+      context: ./../../..
       dockerfile: ./deployment/dev/Dockerfile.dev.backend
-    volumes:
-      - ./../..:/app
-      - /app/API/bin/
-      - /app/API/obj/
-      - /app/Application/bin/
-      - /app/Application/obj/
-      - /app/Domain/bin/
-      - /app/Domain/obj/
-      - /Infrastructure/bin/
-      - /Infrastructure/obj/
-      - /Persistence/bin/
-      - /Persistence/obj/
     networks:
       - frontend
     ports:
@@ -50,7 +37,7 @@ services:
   activitydb:
     container_name: activitydb
     build:
-      context: ./../..
+      context: ./../../..
       dockerfile: ./deployment/dev/Dockerfile.dev.database
     networks:
       - frontend
@@ -58,8 +45,6 @@ services:
       - "3306:3306"
     command: --default-authentication-plugin=mysql_native_password
     restart: always
-    volumes:
-      - ./../database_setup.sql:/docker-entrypoint-initdb.d/database_setup.sql
     environment:
       MYSQL_ROOT_PASSWORD: example
     logging:

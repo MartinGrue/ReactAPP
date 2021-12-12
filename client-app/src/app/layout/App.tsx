@@ -8,8 +8,7 @@ import Routes from "./Routes";
 
 const Layout = observer(() => {
   const rootStore = useContext(RootStoreContext);
-  const { setApploaded, isLogedIn, appLoaded, mobilePusherOpen } =
-    rootStore.commonStore;
+  const { setApploaded, isLogedIn, appLoaded } = rootStore.commonStore;
   const { getUser } = rootStore.userStore;
 
   useEffect(() => {
@@ -21,11 +20,6 @@ const Layout = observer(() => {
       setApploaded();
     }
   }, [isLogedIn, setApploaded, getUser]);
-
-  useEffect(() => {
-    document.body.classList.toggle("modal-open", mobilePusherOpen);
-    return () => {};
-  }, [mobilePusherOpen]);
 
   if (!appLoaded) {
     return <LoadingComponent content="Loading app"></LoadingComponent>;

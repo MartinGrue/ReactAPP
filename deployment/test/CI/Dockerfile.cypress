@@ -1,0 +1,14 @@
+FROM cypressbase as node_cache
+FROM cypress/browsers:node14.17.0-chrome88-ff89
+USER node
+COPY --from=node_cache --chown=node /e2e/client-app/node_modules /e2e/client-app/node_modules
+COPY --from=node_cache --chown=node /e2e/client-app/package.json /e2e/client-app/package.json
+COPY --from=node_cache --chown=node /e2e/client-app/package-lock.json /e2e/client-app/package-lock.json
+
+COPY --from=node_cache --chown=node /root/.cache/Cypress /home/node/.cache/Cypress
+
+COPY --chown=node ./deployment/test/startup.sh /
+COPY --chown=node ./data /e2e/data
+
+WORKDIR /e2e/client-app
+COPY --chown=node  ./client-app/ .

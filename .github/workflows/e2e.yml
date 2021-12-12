@@ -55,5 +55,5 @@ jobs:
 
       - name: Run ${{ matrix.test }} test on ${{ matrix.browser }}
         run: |
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
+          docker-compose -f deployment/test/CI/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress

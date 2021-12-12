@@ -1,0 +1,17 @@
+
+FROM cypress/browsers:node14.17.0-chrome88-ff89
+USER node
+COPY --chown=node ./deployment/test/startup.sh /
+COPY --chown=node ./data /e2e/data
+
+WORKDIR /e2e/client-app
+COPY --chown=node  ./client-app/ .
+# RUN bash
+
+
+# RUN chown -R 1000:1000 /root
+# COPY --from=node_cache /cache/ .
+# RUN chown -R node /e2e/client-app/node_modules
+# USER node
+
+# RUN npm install

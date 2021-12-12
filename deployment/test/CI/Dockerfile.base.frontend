@@ -1,0 +1,6 @@
+FROM cypress/base as node_cache
+WORKDIR /e2e/client-app
+COPY ./client-app/package.json .
+COPY ./client-app/package-lock.json .
+RUN npm install --verbose
+
