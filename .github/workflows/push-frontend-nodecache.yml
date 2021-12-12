@@ -1,4 +1,4 @@
-name: push-base-frontend-image
+name: push-frontend-nodecache
 on:
   push:
     paths:

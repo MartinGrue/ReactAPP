@@ -1,11 +1,21 @@
+# FROM registry.digitalocean.com/imagerepo/activity:activityfrontendbase-latest as node_cache
 FROM cypressbase as node_cache
+
+FROM cypress/base as cypressbase
+USER node
+WORKDIR /e2e/client-app
+COPY --from=node_cache --chown=node /e2e/client-app/node_modules /e2e/client-app/node_modules
+COPY --from=node_cache --chown=node /e2e/client-app/package.json /e2e/client-app/package.json
+COPY --from=node_cache --chown=node /e2e/client-app/package-lock.json /e2e/client-app/package-lock.json
+RUN npx cypress install
+
 FROM cypress/browsers:node14.17.0-chrome88-ff89
 USER node
 COPY --from=node_cache --chown=node /e2e/client-app/node_modules /e2e/client-app/node_modules
 COPY --from=node_cache --chown=node /e2e/client-app/package.json /e2e/client-app/package.json
 COPY --from=node_cache --chown=node /e2e/client-app/package-lock.json /e2e/client-app/package-lock.json
 
-COPY --from=node_cache --chown=node /root/.cache/Cypress /home/node/.cache/Cypress
+COPY --from=cypressbase --chown=node /home/node/.cache/Cypress /home/node/.cache/Cypress
 
 COPY --chown=node ./deployment/test/startup.sh /
 COPY --chown=node ./data /e2e/data

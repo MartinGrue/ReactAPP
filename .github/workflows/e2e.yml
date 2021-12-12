@@ -12,14 +12,14 @@ jobs:
         test:
           [
             "auth",
-            "home",
-            "profile",
-            "manage",
-            "activity",
-            "activities",
-            "createactivity",
+            # "home",
+            # "profile",
+            # "manage",
+            # "activity",
+            # "activities",
+            # "createactivity",
           ]
-        browser: ["chrome", "firefox"]
+        browser: ["chrome"]
     env:
       TEST: ${{ matrix.test }}
       BRO: ${{ matrix.browser }}
@@ -41,17 +41,6 @@ jobs:
 
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-
-      - name: build images
-        run: docker-compose -f deployment/test/docker-compose-cypress.yml build
-
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-
-      - name: Log in to DigitalOcean Container Registry
-        run: doctl registry login --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Run ${{ matrix.test }} test on ${{ matrix.browser }}
         run: |
