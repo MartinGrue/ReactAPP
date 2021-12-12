@@ -30,8 +30,8 @@ services:
       - frontend
     expose:
       - "5000"
-    logging:
-      driver: "none"
+    # logging:
+    #   driver: "none"
 
   activitydb:
     container_name: activitydb
@@ -40,8 +40,6 @@ services:
       dockerfile: ./deployment/dev/Dockerfile.dev.database
     networks:
       - frontend
-    expose:
-      - "3306"
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:

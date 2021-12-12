@@ -55,6 +55,5 @@ services:
     restart: always
     volumes:
       - ./../database_setup.sql:/docker-entrypoint-initdb.d/database_setup.sql
-      # - ./../databaseBackUps/backup.sql:/docker-entrypoint-initdb.d/backup.sql
     environment:
       MYSQL_ROOT_PASSWORD: example

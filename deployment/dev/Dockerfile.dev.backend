@@ -19,7 +19,7 @@ COPY data ./data
 
 RUN dotnet restore
 WORKDIR /app/API
-
+EXPOSE 5000
 ENTRYPOINT ["dotnet", "watch", "run", "environment=development"]
 
 # # Copy everything else and build

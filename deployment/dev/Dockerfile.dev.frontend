@@ -1,6 +1,6 @@
 FROM node:alpine
 #Node user
-USER 1000:1000 
+USER node
 WORKDIR /app
-COPY package.json .
+EXPOSE 3000
 CMD ["npm", "run", "dev"]
