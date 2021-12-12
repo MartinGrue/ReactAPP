@@ -1,18 +1,20 @@
+**/.git
 **/.devcontainer
 **/.github
 **/.vs
 **/.vscode
+**/.github
 
 **/node_modules
-
+**/build
+**/.next
+**/cypress
 
 **/API
 **/Application
-**/databaseBackUps
 **/Domain
 **/Infrastructure
 **/Persistence
 
 **/docker-compose*
 **/Dockerfile*
-**/cypress
