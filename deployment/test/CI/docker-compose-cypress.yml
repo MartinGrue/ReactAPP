@@ -12,10 +12,8 @@ services:
     working_dir: /e2e/client-app
     stdin_open: true
     tty: true
+    network_mode: "service:backendapp"
     entrypoint: "bash /startup.sh"
-    network_mode: "host"
-    ports:
-      - "3000:3000"
     environment:
       - BROWSER=${BROWSER}
       - TEST=${TEST}
@@ -29,7 +27,8 @@ services:
     build:
       context: ./../../..
       dockerfile: ./deployment/dev/Dockerfile.dev.backend
-
+    networks:
+      - frontend
     #Dont make this expose, this container needs to be on frontend AND host n
     ports:
       - "5000:5000"
@@ -41,8 +40,8 @@ services:
     build:
       context: ./../../..
       dockerfile: ./deployment/dev/Dockerfile.dev.database
-    ports:
-      - "3306:3306"
+    networks:
+      - frontend
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
