@@ -24,9 +24,6 @@ jobs:
       TEST: ${{ matrix.test }}
       BRO: ${{ matrix.browser }}
     steps:
-      - name: uncommend this on github
-        run: apt update && apt install docker-compose -y
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
         
