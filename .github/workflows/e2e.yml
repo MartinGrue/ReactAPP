@@ -12,22 +12,24 @@ jobs:
         test:
           [
             "auth",
-            # "home",
-            # "profile",
-            # "manage",
-            # "activity",
-            # "activities",
-            # "createactivity",
+            "home",
+            "profile",
+            "manage",
+            "activity",
+            "activities",
+            "createactivity",
           ]
-        browser: ["chrome"]
+        browser: ["chrome", "firefox"]
     env:
       TEST: ${{ matrix.test }}
       BRO: ${{ matrix.browser }}
     steps:
       - name: uncommend this on github
         run: apt update && apt install docker-compose -y
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
+        
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 

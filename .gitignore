@@ -11,7 +11,6 @@ obj
 node_modules
 
 # production
-wwwroot
 build
 
 # development in docker container
@@ -20,3 +19,6 @@ build
 .dockerignore
 **/.next/*
 **/out
+
+# local testing
+.github/workflows/local
