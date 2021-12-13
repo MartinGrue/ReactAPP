@@ -1,7 +1,7 @@
 import * as React from "react";
 import { observer } from "mobx-react-lite";
 import { Segment, Icon } from "semantic-ui-react";
-import GoogleMapReact, {Props} from "google-map-react";
+import GoogleMapReact, { Props } from "google-map-react";
 
 const Marker: React.FC = () => <Icon name="marker" size="big" color="red" />;
 
@@ -15,6 +15,7 @@ export const SimpleMap: React.FC<IProps> = ({ lat, lng, props }) => {
     defaultZoom: 14,
     bootstrapURLKeys: {
       key: "AIzaSyCHYvacLxG7odfjovNDb1GpTHon3BMIXlw",
+      libraries: "places",
     },
   };
   return (

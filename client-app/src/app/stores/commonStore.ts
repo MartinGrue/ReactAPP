@@ -3,9 +3,6 @@ import { observable, action, reaction, makeObservable } from "mobx";
 
 export default class CommonStore {
   rootStore: RootStore;
-  /**
-   *
-   */
   constructor(rootStore: RootStore) {
     makeObservable(this);
     this.rootStore = rootStore;
@@ -24,7 +21,6 @@ export default class CommonStore {
   @observable token: string | null = window.localStorage.getItem("jwt");
   @observable google_id_token: string | null = null;
   @observable appLoaded = false;
-  @observable mobilePusherOpen = false;
 
   @action logIn = (token: string | null) => {
     this.setToken(token);
@@ -41,7 +37,4 @@ export default class CommonStore {
     window.localStorage.setItem("google_id_token", id_token);
   };
 
-  @action setmobilePusherOpen = (open: boolean) => {
-    this.mobilePusherOpen = open;
-  };
 }

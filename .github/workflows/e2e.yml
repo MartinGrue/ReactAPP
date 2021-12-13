@@ -24,12 +24,14 @@ jobs:
       TEST: ${{ matrix.test }}
       BRO: ${{ matrix.browser }}
     steps:
-      # - name: uncommend this on github
-      #   run: apt update && apt install docker-compose -y
-      # - name: Set up QEMU
-      #   uses: docker/setup-qemu-action@v1
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v1
+      - name: uncommend this on github
+        run: apt update && apt install docker-compose -y
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+        
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -42,18 +44,7 @@ jobs:
       - name: Log in to DigitalOcean Container Registry with short-lived credentials
         run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: build images
-        run: docker-compose -f deployment/test/docker-compose-cypress.yml build
-
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-
-      - name: Log in to DigitalOcean Container Registry
-        run: doctl registry login --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-
       - name: Run ${{ matrix.test }} test on ${{ matrix.browser }}
         run: |
-          docker-compose -f deployment/test/docker-compose-cypress.yml up \
+          docker-compose -f deployment/test/CI/docker-compose-cypress.yml up \
            --abort-on-container-exit --exit-code-from cypress

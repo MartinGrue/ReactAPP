@@ -1,10 +1,15 @@
 import { useState, useEffect, useCallback } from "react";
 import * as React from "react";
 import { observer } from "mobx-react-lite";
-import PlacesAutocomplete from "react-places-autocomplete";
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from "react-places-autocomplete";
 import { Form, Label, List, Segment } from "semantic-ui-react";
 import { FieldRenderProps } from "react-final-form";
-import { geocodeByAddress, getLatLng } from "react-places-autocomplete";
+
+import { Loader } from "@googlemaps/js-api-loader";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 interface IProps extends FieldRenderProps<string, HTMLInputElement> {
   setLatlng: React.Dispatch<React.SetStateAction<google.maps.LatLngLiteral>>;
@@ -20,10 +25,25 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
 }) => {
   const [dropdownIsOpen, setdropdownIsOpen] = useState(false);
   const [address, setaddress] = useState("");
+  const [isloaded, setisloaded] = useState(false);
   const FieldProps = {
     placeholder: placeholder,
     className: "location-search-input",
   };
+
+  const loadGoogleAPI = () => {
+    const loader = new Loader({
+      apiKey: "AIzaSyCHYvacLxG7odfjovNDb1GpTHon3BMIXlw",
+      libraries: ["places"],
+    });
+    return loader.load();
+  };
+
+  useEffect(() => {
+    !window?.google?.maps?.places
+      ? loadGoogleAPI().then(() => setisloaded(true))
+      : setisloaded(true);
+  }, [setisloaded]);
 
   useEffect(() => {
     address &&
@@ -35,15 +55,18 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
         .catch((error) => console.error("Error", error));
     return () => {};
   }, [address, setLatlng]);
+
   const handleSelect = (address: string) => {
     setdropdownIsOpen(false);
     setaddress(address);
   };
+
   const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     input.onBlur();
     setdropdownIsOpen(false);
     handleSelect(e.currentTarget.value);
   };
+
   const handleKeyUp = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       e.currentTarget.value.length > 0
@@ -56,6 +79,11 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
     },
     [input]
   );
+
+  if (!isloaded) {
+    return <LoadingComponent></LoadingComponent>;
+  }
+
   return (
     <Form.Field error={touched && !!error}>
       <PlacesAutocomplete
@@ -126,7 +154,6 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
               </Segment>
             )}
           </div>
-          // </div>
         )}
       </PlacesAutocomplete>
     </Form.Field>

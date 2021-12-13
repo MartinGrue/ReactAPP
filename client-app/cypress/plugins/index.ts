@@ -1,5 +1,4 @@
 import axios, { AxiosResponse } from "axios";
-import { resolve } from "cypress/types/bluebird";
 import * as data from "../../../data/Database.json";
 import Cypress from "cypress";
 export interface userToLogin {

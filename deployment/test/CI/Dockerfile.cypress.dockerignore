@@ -5,7 +5,11 @@
 **/.vscode
 **/.github
 
-**/client-app
+**/node_modules
+**/build
+**/package.json
+**/package-lock.json
+**/.next
 
 **/API
 **/Application

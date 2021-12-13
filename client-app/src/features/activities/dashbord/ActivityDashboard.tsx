@@ -7,11 +7,11 @@ import { RootStoreContext } from "../../../app/stores/rootStore";
 import ActivityFilters from "./ActivityFilters";
 import ActivityListItemPlaceholder from "./ActivityListItemPlaceholder";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { RouteComponentProps } from "react-router-dom";
+import { useLocation } from "react-router";
 
-const ActivityDashboard: React.FC<RouteComponentProps> = ({ match }) => {
+const ActivityDashboard: React.FC = () => {
   const rootStore = useContext(RootStoreContext);
-
+  const { pathname } = useLocation();
   const {
     loadActivities,
     loadingInitial,
@@ -32,8 +32,7 @@ const ActivityDashboard: React.FC<RouteComponentProps> = ({ match }) => {
 
   useEffect(() => {
     setPredicate("all", "true");
-  }, [match.path, setPredicate]);
-
+  }, [pathname, setPredicate]);
 
   return (
     <Grid stackable>

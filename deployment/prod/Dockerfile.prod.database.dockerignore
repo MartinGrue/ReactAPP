@@ -1,17 +1,17 @@
+**/.git
 **/.devcontainer
 **/.github
 **/.vs
 **/.vscode
+**/.github
 
-**/node_modules
-
+**/client-app
 
 **/API
 **/Application
-**/client-app
 **/Domain
 **/Infrastructure
 **/Persistence
-**/src
+
 **/docker-compose*
 **/Dockerfile*

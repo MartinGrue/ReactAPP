@@ -1,23 +1,25 @@
 version: "3.2"
-
 networks:
   frontend:
 
+    null
 services:
   cypress:
     container_name: cypress
     build:
-      context: ./../..
-      dockerfile: ./deployment/test/Dockerfile.cypress
+      context: ./../../..
+      dockerfile: ./deployment/test/CI/Dockerfile.cypress
     working_dir: /e2e/client-app
     stdin_open: true
     tty: true
-    network_mode: "service:backendapp"
     entrypoint: "bash /startup.sh"
+    network_mode: "host"
+    ports:
+      - "3000:3000"
     environment:
-      - BRO=${BRO}
+      - BROWSER=${BROWSER}
       - TEST=${TEST}
-      - API_HOST=backend
+      # - API_HOST=backend
 
   backendapp:
     environment:
@@ -25,23 +27,20 @@ services:
       - DOTNET_ENVIRONMENT=development
     container_name: backend
     build:
-      context: ./../..
+      context: ./../../..
       dockerfile: ./deployment/dev/Dockerfile.dev.backend
-    networks:
-      - frontend
+
+    #Dont make this expose, this container needs to be on frontend AND host n
     ports:
       - "5000:5000"
-      - "3000:3000"
     logging:
       driver: "none"
 
   activitydb:
     container_name: activitydb
     build:
-      context: ./../..
+      context: ./../../..
       dockerfile: ./deployment/dev/Dockerfile.dev.database
-    networks:
-      - frontend
     ports:
       - "3306:3306"
     command: --default-authentication-plugin=mysql_native_password

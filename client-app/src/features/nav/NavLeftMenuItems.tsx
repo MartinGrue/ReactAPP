@@ -8,12 +8,7 @@ interface IProps {
 export const NavLeftMenuItems: React.FC<IProps> = ({ onPusherClick }) => {
   return (
     <Container>
-      <Menu.Item
-        header
-        exact
-        as={NavLink}
-        to="/"
-      >
+      <Menu.Item header as={NavLink} to="/">
         <img
           src="/assets/logo.png"
           alt="logo"

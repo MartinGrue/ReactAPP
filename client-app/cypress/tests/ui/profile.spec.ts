@@ -54,6 +54,26 @@ describe("Check the Profile functionality", () => {
     cy.get("[data-cy=profile]").click();
     cy.wait("@userProfile");
   });
+  it("should be able to upload an image directly to cloudinary", () => {
+    const { users } = ctx.seedData!;
+    const user = users.find((user) => user.username === user1.displayname);
+    checkPane(user!, panes.find((pane) => pane.tabname === "Photos")!);
+    cy.get("[data-cy=addphoto-btn]").click();
+
+    const filepath = "hqdefault.jpg";
+    cy.get("[data-cy=photo-dropzone] input[type=file]").attachFile(filepath);
+    cy.wait(500);
+    cy.get("[data-cy=upload-imagebtn]").click();
+
+    cy.wait("@directCloudUpload", { timeout: 10000 });
+    cy.wait("@postUploadResults", { timeout: 10000 });
+    cy.wait("@getSignature", { timeout: 10000 });
+    cy.location("pathname").should("equal", `/profiles/${user!.username}`); //This Profiles should be uppercase, fix in client
+
+    cy.get("[data-cy=imagecard]")
+      .should("have.length", user!.photos.length + 1)
+      .should("be.visible");
+  });
   it("should display the default route correctly", () => {
     //HEADER
     const { users } = ctx.seedData!;
@@ -195,6 +215,7 @@ describe("Check the Profile functionality", () => {
     // .contains("Trash")
     // .click();
   });
+  
   //CONTENT -- ACTIVITIES
   it("should display the Activities Tab correctly", () => {
     const { users, activities } = ctx.seedData!;
@@ -267,23 +288,7 @@ describe("Check the Profile functionality", () => {
     //test follow
     // const user = users.find((user) => user.username === "bob");
   });
-  it("should be able to upload an image directly to cloudinary", () => {
-    const { users } = ctx.seedData!;
-    const user = users.find((user) => user.username === user1.displayname);
-    checkPane(user!, panes.find((pane) => pane.tabname === "Photos")!);
 
-    cy.get("[data-cy=addphoto-btn]").click();
-
-    const filepath = "hqdefault.jpg";
-    cy.get("[data-cy=photo-dropzone] input[type=file]").attachFile(filepath);
-    cy.wait(500);
-    cy.get("[data-cy=upload-imagebtn]").click();
-    cy.wait(1000);
-    cy.wait("@getSignature");
-    cy.wait("@directCloudUpload");
-    cy.wait("@postUploadResults");
-    cy.location("pathname").should("equal", `/profiles/${user!.username}`); //This Profiles should be uppercase, fix in client
-  });
   it("should display another users Profile: Followers/Following", () => {
     const { users } = ctx.seedData!;
     const user = users.find((user) => user.username === user1.displayname);

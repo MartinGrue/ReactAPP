@@ -18,12 +18,17 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "noFallthroughCasesInSwitch": true
+    "jsx": "preserve",
+    "noFallthroughCasesInSwitch": true,
+    "incremental": true
   },
   "include": [
+    "next-env.d.ts",
     "cypress",
     "src",
     "./typing-custom/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

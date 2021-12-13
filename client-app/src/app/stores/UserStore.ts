@@ -8,7 +8,7 @@ import {
 import { IUser, IUserFormValues, IExternalLoginInfo } from "../models/user";
 import agent from "../api/agent";
 import { RootStore } from "./rootStore";
-import { history } from "../..";
+import { history } from "../../pages/_app";
 import { IProfileFormValues } from "../models/IProfile";
 import { toast } from "react-toastify";
 

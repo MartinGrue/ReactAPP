@@ -34,24 +34,6 @@ namespace API.Controllers
             _photoAccessor = photoAccessor;
             _mapper = mapper;
         }
-        // [HttpGet("purge")]
-        // public async Task<IActionResult> Purge()
-        // {
-        //     if (_hostEnvironment.IsDevelopment())
-        //     {
-        //         if (_userManager.Users.Any())
-        //         {
-        //             if (await SmallSeed.PurgeDb(_context, _userManager, _photoAccessor))
-        //             {
-
-        //                 return Ok();
-        //             }
-        //             return BadRequest("Failed to purge Database user");
-        //         }
-        //     }
-        //     return NotFound();
-        // }
-        // POST api/seed
         [HttpGet("reseed")]
         public async Task<IActionResult> Reseed()
         {
@@ -65,10 +47,10 @@ namespace API.Controllers
                         {
                             return Ok();
                         }
-                        return BadRequest("Failed to reseed Database after purge");
+                        return BadRequest("Failed to reseed database after purge");
                         // }
                     }
-                    return BadRequest("Failed to reseed Database while purging");
+                    return BadRequest("Failed to purge database");
                 }
                 if (await SmallSeed.ReSeedData(_context, _userManager, _photoAccessor, _mapper))
                 {

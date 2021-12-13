@@ -1,0 +1,6 @@
+FROM node:alpine as node_cache
+ENV CYPRESS_INSTALL_BINARY=0
+WORKDIR /e2e/client-app
+COPY ./client-app/package.json .
+COPY ./client-app/package-lock.json .
+RUN npm install --verbose

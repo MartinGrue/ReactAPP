@@ -1,9 +1,0 @@
-#This file should be called frontend
-FROM node:alpine
-ENV NODE_OPTIONS "--openssl-legacy-provider"
-WORKDIR /app
-COPY package.json .
-RUN npm install --verbose
-RUN npm install -g react-scripts
-COPY . .
-CMD ["npm", "run", "start"]

@@ -1,6 +1,0 @@
-FROM registry.digitalocean.com/imagerepo/activity:cypressbase
-WORKDIR /e2e/client-app
-
-COPY ./data /e2e/data
-COPY ./client-app/ .
-COPY ./deployment/test/startup.sh /

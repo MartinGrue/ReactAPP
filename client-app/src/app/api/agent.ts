@@ -5,7 +5,7 @@ import {
   IUserActivity,
   PhotoUploadResult,
 } from "../models/IActivity";
-import { history } from "../..";
+import { history } from "../../pages/_app";
 import { toast } from "react-toastify";
 import { IUser, IUserFormValues, IExternalLoginInfo } from "../models/user";
 import { IProfile, IPhoto, IProfileFormValues } from "../models/IProfile";
@@ -14,7 +14,7 @@ axios.interceptors.request.use(
   (config) => {
     const token = window.localStorage.getItem("jwt");
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config!.headers!.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -23,7 +23,9 @@ axios.interceptors.request.use(
   }
 );
 
-var apiHost = process.env.API_HOST || process.env.REACT_APP_API_URL;
+var apiHost = process.env.API_HOST
+  ? process.env.NEXT_PUBLIC_API_HOST
+  : process.env.NEXT_PUBLIC_API_URL;
 
 axios.defaults.baseURL = apiHost;
 

@@ -91,7 +91,7 @@ export default class ActivityStore {
   @action connectToSignalRHub = () => {
     var hubConnectionBuilder = new signalR.HubConnectionBuilder();
     this.hubConnection = hubConnectionBuilder
-      .withUrl(process.env.REACT_APP_CHAT_URL!, {
+      .withUrl(process.env.NEXT_PUBLIC_CHAT_URL!, {
         accessTokenFactory: (): string => {
           return this.rootStore.commonStore.token!;
         },

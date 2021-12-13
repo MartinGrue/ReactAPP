@@ -5,7 +5,9 @@
 **/.vscode
 **/.github
 
-**/client-app
+**/node_modules
+**/build
+**/.next
 
 **/API
 **/Application

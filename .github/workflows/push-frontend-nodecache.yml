@@ -1,4 +1,4 @@
-name: push-base-frontend-image
+name: push-frontend-nodecache
 on:
   push:
     paths:
@@ -23,7 +23,7 @@ jobs:
       - name: Build container image
         run: |
           docker image build \
-          -f ./deployment/test/Dockerfile.base.frontend \
+          -f ./deployment/test/CI/Dockerfile.base.frontend \
           -t registry.digitalocean.com/imagerepo/$(echo $REPO_NAME):$(echo $IMAGE_NAME)-latest \
           -t registry.digitalocean.com/imagerepo/$(echo $REPO_NAME):$(echo $IMAGE_NAME)-$(echo $GITHUB_SHA | head -c7) .
 

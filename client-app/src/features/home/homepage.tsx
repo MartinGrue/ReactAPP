@@ -18,6 +18,7 @@ import { GoogleLogin } from "react-google-login";
 import { IExternalLoginInfo } from "../../app/models/user";
 
 const HomePage: React.FC = () => {
+  document.body.classList.remove("show-scroll");
   const token = window.localStorage.getItem("jwt");
   const rootStore = useContext(RootStoreContext);
   const { isLoggedIn, user, loginExternal } = rootStore.userStore;

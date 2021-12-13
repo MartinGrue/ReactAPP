@@ -19,7 +19,7 @@ const NavRightMenuItems: React.FC = () => {
         >
           <Image
             avatar
-            size="tiny"
+            size="mini"
             spaced="right"
             src={user.image || "/assets/user.png"}
           />
