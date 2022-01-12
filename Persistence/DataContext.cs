@@ -25,7 +25,7 @@ namespace Persistence
             .HasData(
                 new Value() { Id = 1, Name = "Value01" },
                 new Value() { Id = 2, Name = "Value02" },
-                new Value() { Id = 3, Name = "Value03" }
+                new Value() { Id = 3,  Name = "Value03" }
             );
             builder.Entity<UserActivity>(x => x.HasKey(ua => new { ua.AppUserId, ua.ActivityId }));
 

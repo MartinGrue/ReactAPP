@@ -29,7 +29,6 @@ services:
       dockerfile: ./deployment/dev/Dockerfile.dev.backend
     networks:
       - frontend
-    #Dont make this expose, this container needs to be on frontend AND host n
     ports:
       - "5000:5000"
     logging:

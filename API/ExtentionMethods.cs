@@ -19,10 +19,20 @@ namespace ExtensionMethods
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
+                var context = services.GetRequiredService<DataContext>();
+
                 try
                 {
-                    var context = services.GetRequiredService<DataContext>();
                     context.Database.Migrate();
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error occurred during Database migration");
+                }
+
+                try
+                {
                     var userManager = services.GetRequiredService<UserManager<AppUser>>();
                     var photoAccessor = services.GetRequiredService<IPhotoAccessor>();
                     var mapper = services.GetRequiredService<IMapper>();
@@ -31,8 +41,9 @@ namespace ExtensionMethods
                 catch (Exception ex)
                 {
                     var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occured during Database migration");
+                    logger.LogError(ex, "An error occurred during Database seed");
                 }
+
             }
             return host;
         }

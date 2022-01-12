@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Application.Photos;
-using Microsoft.AspNetCore.Identity;
 
 namespace Domain
 {
