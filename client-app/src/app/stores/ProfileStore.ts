@@ -97,6 +97,7 @@ export default class ProfileStore {
 
     this.timeStampForUpload = Math.round(new Date().getTime() / 1000);
     const api_key = process.env.NEXT_PUBLIC_CLOUDINARY_PUP_KEY;
+    const folder = "Reactivities";
     const formData = new FormData();
     try {
       // let file = files![i];
@@ -106,7 +107,7 @@ export default class ProfileStore {
         let file = reader.result as string;
 
         let appendData: { [k: string]: any } = {
-          folder: "Reactivities",
+          folder,
           timestamp: this.timeStampForUpload.toString(),
           transformation: "w_500,h_500,c_fill",
         };
@@ -128,7 +129,7 @@ export default class ProfileStore {
         );
         const data = await response.json();
         const photo = await agent.Profile.UploadResults({
-          PublicId: data.public_id,
+          PublicId: String(data.public_id).replace(folder.concat("/"), ""),
           Url: data.secure_url,
         });
         runInAction(() => {

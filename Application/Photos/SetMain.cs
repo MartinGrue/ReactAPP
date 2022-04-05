@@ -33,7 +33,7 @@ namespace Application.Photos
             {
                 var user = await _context.Users
                 .SingleOrDefaultAsync(p => p.UserName == userAccessor.GetCurrentUsername());
-
+                Console.WriteLine("request id" + request.Id);
                 var photo = user.Photos.FirstOrDefault(p => p.Id == request.Id);
                 if (photo == null)
                 {
