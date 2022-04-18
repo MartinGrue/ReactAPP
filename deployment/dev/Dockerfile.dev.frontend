@@ -2,5 +2,6 @@ FROM node:alpine
 #Node user
 USER node
 WORKDIR /app
+RUN ls -la
 EXPOSE 3000
-CMD ["npm", "run", "dev"]
+CMD $([ ! -d "${PWD}/node_modules" ] && yarn;); npm run dev
