@@ -1,4 +1,4 @@
-FROM registry.digitalocean.com/imagerepo/activity:activityfrontendbase-latest as node_cache
+FROM registry.digitalocean.com/imagerepo/activity:activityfrontendbase as node_cache
 
 FROM cypress/base:14.7.0 as cypressbase
 USER root

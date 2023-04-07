@@ -1,11 +1,11 @@
-import * as React from "react";
+import {PropsWithChildren} from "react";
 import { observer } from "mobx-react-lite";
 import { Segment, Icon } from "semantic-ui-react";
 import GoogleMapReact, { Props } from "google-map-react";
 
 const Marker: React.FC = () => <Icon name="marker" size="big" color="red" />;
 
-interface IProps {
+interface IProps extends PropsWithChildren  {
   lat: number;
   lng: number;
   props: Props;

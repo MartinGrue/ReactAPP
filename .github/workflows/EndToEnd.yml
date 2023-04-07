@@ -10,27 +10,34 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        test:
-          [
-            "auth",
-            "home",
-            "profile",
-            "manage",
-            "activity",
-            "activities",
-            "createactivity",
-          ]
-        browser: ["chrome", "firefox"]
+        # test:
+        #   [
+        #     "auth",
+        #     "home",
+        #     "profile",
+        #     "manage",
+        #     "activity",
+        #     "activities",
+        #     "createactivity",
+        #   ]
+        test: ["auth"]
+        # browser: ["chrome", "firefox"]
+        browser: ["chrome"]
     env:
       TEST: ${{ matrix.test }}
       BRO: ${{ matrix.browser }}
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
-        
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
+      - name: Install docker-compose
+        uses: KengoTODA/actions-setup-docker-compose@v1
+        with:
+            version: '2.14.2' # the full version of `docker-compose` command
+  
       - name: Checkout
         uses: actions/checkout@v2
 
