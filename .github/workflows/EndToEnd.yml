@@ -10,19 +10,17 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        # test:
-        #   [
-        #     "auth",
-        #     "home",
-        #     "profile",
-        #     "manage",
-        #     "activity",
-        #     "activities",
-        #     "createactivity",
-        #   ]
-        test: ["auth"]
-        # browser: ["chrome", "firefox"]
-        browser: ["chrome"]
+        test:
+          [
+            "auth",
+            "home",
+            "profile",
+            "manage",
+            "activity",
+            "activities",
+            "createactivity",
+          ]
+        browser: ["chrome", "firefox"]
     env:
       TEST: ${{ matrix.test }}
       BRO: ${{ matrix.browser }}
