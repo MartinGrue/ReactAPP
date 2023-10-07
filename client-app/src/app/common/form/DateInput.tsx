@@ -13,7 +13,7 @@ const DateInput: React.FC<IProps> = ({
   time = false,
   placeholder,
   meta: { touched, error },
-  ...rest
+  // ...rest
 }) => {
   return (
     <Localization
@@ -29,7 +29,7 @@ const DateInput: React.FC<IProps> = ({
           onChange={input.onChange}
           value={input.value || null}
           placeholder={placeholder}
-          {...rest}
+          // {...rest}
           id="id"
         />
         {touched && !!error && (

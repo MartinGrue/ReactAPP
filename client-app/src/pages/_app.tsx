@@ -1,5 +1,5 @@
 import { AppProps } from "next/app";
-import React, { useEffect } from "react";
+import React, { useEffect, PropsWithChildren } from "react";
 import { Router as ReactRouter } from "react-router-dom";
 import { createBrowserHistory, BrowserHistory } from "history";
 
@@ -15,7 +15,7 @@ if (typeof window !== "undefined") {
   history = createBrowserHistory();
 }
 
-const SafeHydrate: React.FC = ({ children }) => {
+const SafeHydrate: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <div suppressHydrationWarning>
       {typeof window === "undefined" ? null : children}
@@ -23,7 +23,7 @@ const SafeHydrate: React.FC = ({ children }) => {
   );
 };
 
-const Router: React.FC = ({ children }) => {
+const Router: React.FC<PropsWithChildren> = ({ children }) => {
   let [state, setState] = React.useState({
     action: history.action,
     location: history.location,

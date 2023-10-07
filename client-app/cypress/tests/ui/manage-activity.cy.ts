@@ -1,5 +1,6 @@
 //check if refresh work
 
+import { dbSeed } from "../../support/helper";
 import { getIntercepts } from "../../support/intercepts";
 
 describe("Manage existing Activity", function () {
@@ -68,10 +69,12 @@ describe("Manage existing Activity", function () {
     cy.get("[name=venue]").should("have.value", activity.Venue);
   };
 
-  beforeEach(function () {
-    cy.task("db:seed");
+  beforeEach(() => {
+    getIntercepts(["reseed","activityDetails", "editActivity", "deleteActivity"]);
+    cy.wrap(dbSeed());
+    cy.wait("@reseed").its("response.statusCode").should("eq", 200);
     cy.login(user.email, user.password);
-    getIntercepts(["activityDetails", "editActivity", "deleteActivity"]);
+
   });
 
   it("should display the activity correctly", () => {

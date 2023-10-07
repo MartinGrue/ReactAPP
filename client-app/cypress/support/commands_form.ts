@@ -16,7 +16,6 @@ Cypress.Commands.add(
     cy.get("[name=category] .menu").contains(category).click();
   }
 );
-
 Cypress.Commands.add("fillDate", () => {
   cy.get(
     "[data-cy=datepicker] button.rw-input-addon.rw-picker-btn.rw-btn"

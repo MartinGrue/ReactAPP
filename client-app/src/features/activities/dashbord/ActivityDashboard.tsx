@@ -55,7 +55,9 @@ const ActivityDashboard: React.FC = () => {
             endMessage={
               <Fragment>
                 <Divider></Divider>
-                <div style={{ textAlign: "center" }}>This is the End</div>
+                <div style={{ textAlign: "center" }} data-cy="ThisistheEnd">
+                  This is the End
+                </div>
               </Fragment>
             }
           >

@@ -22,8 +22,8 @@ const ProfileHeader: React.FC<IProps> = ({ profile }) => {
   const rootContext = useContext(RootStoreContext);
   const { loadingFollow, unfollowUser, followUser } = rootContext.profileStore;
   const { user } = rootContext.userStore;
+  console.log("profile: ", profile);
 
-  
   return (
     <Segment padded>
       <Grid relaxed stackable container>

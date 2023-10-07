@@ -1,5 +1,6 @@
 //test functionality after redirection from manage activity
 
+import { dbSeed } from "../../support/helper";
 import { getIntercepts } from "../../support/intercepts";
 
 describe("Create New Activity", function () {
@@ -39,10 +40,11 @@ describe("Create New Activity", function () {
     venueDescription: "Berliner Tor, Hamburg, Germany",
   };
 
-  beforeEach(function () {
-    cy.task("db:seed");
+  beforeEach(() => {
+    getIntercepts(["reseed", "createNewActivity"]);
+    cy.wrap(dbSeed());
+    cy.wait("@reseed").its("response.statusCode").should("eq", 200);
     cy.login(user.email, user.password);
-    getIntercepts("createNewActivity");
     cy.get("[data-cy=createActivity]").click(); //this is not visible on mobile
   });
 

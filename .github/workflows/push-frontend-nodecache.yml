@@ -24,9 +24,7 @@ jobs:
         run: |
           docker image build \
           -f ./deployment/test/CI/Dockerfile.base.frontend \
-          -t registry.digitalocean.com/imagerepo/$(echo $REPO_NAME):$(echo $IMAGE_NAME)-latest \
-          -t registry.digitalocean.com/imagerepo/$(echo $REPO_NAME):$(echo $IMAGE_NAME)-$(echo $GITHUB_SHA | head -c7) .
-
+          -t registry.digitalocean.com/imagerepo/$(echo $REPO_NAME):$(echo $IMAGE_NAME) .
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
@@ -36,4 +34,4 @@ jobs:
         run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Push image to DigitalOcean Container Registry
-        run: docker push registry.digitalocean.com/imagerepo/$(echo $REPO_NAME):$(echo $IMAGE_NAME)-latest
+        run: docker push registry.digitalocean.com/imagerepo/$(echo $REPO_NAME):$(echo $IMAGE_NAME)

@@ -1,7 +1,6 @@
 version: "3.2"
 networks:
   frontend:
-
     null
 services:
   cypress:
@@ -9,15 +8,14 @@ services:
     build:
       context: ./../../..
       dockerfile: ./deployment/test/CI/Dockerfile.cypress
-    working_dir: /e2e/client-app
-    stdin_open: true
-    tty: true
+
     network_mode: "service:backendapp"
-    entrypoint: "bash /startup.sh"
+    entrypoint: "sh /home/node/startup.sh"
     environment:
       - BROWSER=${BROWSER}
-      - TEST=${TEST}
-      # - API_HOST=backend
+      # - TEST=${TEST}
+      - TEST=activities
+      - API_HOST=backend
 
   backendapp:
     environment:
@@ -30,8 +28,8 @@ services:
     networks:
       - frontend
     #Dont make this expose, this container needs to be on frontend AND host n
-    ports:
-      - "5000:5000"
+    expose:
+      - "5000"
     logging:
       driver: "none"
 

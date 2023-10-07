@@ -1,5 +1,4 @@
-﻿
-using API.Middleware;
+﻿using API.Middleware;
 using Application.Activities;
 using Domain;
 using FluentValidation.AspNetCore;
@@ -43,43 +42,61 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var serverVersion = new MySqlServerVersion(new Version(8, 0, 32));
             services.AddDbContext<DataContext>(opt =>
             {
                 opt.UseLazyLoadingProxies();
-                opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
-                mySqlOptions =>
-                {
-                    mySqlOptions.EnableRetryOnFailure(
-                    maxRetryCount: 10,
-                    maxRetryDelay: TimeSpan.FromSeconds(10),
-                    errorNumbersToAdd: null);
-                });
+                opt.UseMySql(
+                    Configuration.GetConnectionString("DefaultConnection"),
+                    serverVersion,
+                    mySqlOptions =>
+                    {
+                        mySqlOptions.EnableRetryOnFailure(
+                            maxRetryCount: 10,
+                            maxRetryDelay: TimeSpan.FromSeconds(10),
+                            errorNumbersToAdd: null
+                        );
+                    }
+                );
             });
 
             services.AddAuthorization(authopt =>
             {
-                authopt.AddPolicy("IsActivityHost", authpolbuilder =>
-               {
-                   authpolbuilder.Requirements.Add(new IsHostRequirement());
-               });
+                authopt.AddPolicy(
+                    "IsActivityHost",
+                    authpolbuilder =>
+                    {
+                        authpolbuilder.Requirements.Add(new IsHostRequirement());
+                    }
+                );
             });
             services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 
-            services.AddControllers(opt =>
-            {
-                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-                opt.Filters.Add(new AuthorizeFilter(policy));
-            })
-            .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Application.Activities.Create>());
+            services
+                .AddControllers(opt =>
+                {
+                    var policy = new AuthorizationPolicyBuilder()
+                        .RequireAuthenticatedUser()
+                        .Build();
+                    opt.Filters.Add(new AuthorizeFilter(policy));
+                })
+                .AddFluentValidation(
+                    cfg =>
+                        cfg.RegisterValidatorsFromAssemblyContaining<Application.Activities.Create>()
+                );
             services.AddCors(opt =>
             {
-                opt.AddPolicy("CorsPolicy", policy =>
-                {
-                    policy.AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .WithOrigins("http://localhost:3000")
-                    .AllowCredentials();
-                });
+                opt.AddPolicy(
+                    "CorsPolicy",
+                    policy =>
+                    {
+                        policy
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .WithOrigins("http://localhost:3000")
+                            .AllowCredentials();
+                    }
+                );
             });
             // services.AddCors(opt =>
             //     {
@@ -94,6 +111,12 @@ namespace API
             services.AddMediatR(typeof(CurrentUser.Handler).Assembly);
             services.AddAutoMapper(typeof(List.Handler).Assembly);
 
+            // Auto Mapper Configurations
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.AllowNullCollections = true;
+            });
+
             var builder = services.AddDefaultIdentity<AppUser>();
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
             identityBuilder.AddEntityFrameworkStores<DataContext>();
@@ -101,9 +124,9 @@ namespace API
 
             services.AddSignalR();
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.
-            GetBytes("Super secret key"));
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Super secret key"));
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(Options =>
                 {
                     Options.TokenValidationParameters = new TokenValidationParameters
@@ -117,21 +140,22 @@ namespace API
                     };
                     Options.Events = new JwtBearerEvents()
                     {
-                        OnMessageReceived =
-                         (MessageReceivedContext) =>
-                         {
-                             var accessToken = MessageReceivedContext.Request.Query["access_token"];
-                             var path = MessageReceivedContext.Request.Path;
-                             if (!string.IsNullOrEmpty(accessToken)
-                                && path.StartsWithSegments("/chat"))
-                             {
-                                 MessageReceivedContext.Token = accessToken;
-                             };
-                             return Task.CompletedTask;
-                         }
+                        OnMessageReceived = (MessageReceivedContext) =>
+                        {
+                            var accessToken = MessageReceivedContext.Request.Query["access_token"];
+                            var path = MessageReceivedContext.Request.Path;
+                            if (
+                                !string.IsNullOrEmpty(accessToken)
+                                && path.StartsWithSegments("/chat")
+                            )
+                            {
+                                MessageReceivedContext.Token = accessToken;
+                            }
+                            ;
+                            return Task.CompletedTask;
+                        }
                     };
-                }
-               );
+                });
 
             services.AddScoped<IJwtGenerator, JwtGenerator>();
             services.AddScoped<IUserAccessor, UserAccessor>();
@@ -166,7 +190,9 @@ namespace API
             // app.UseMvc();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers(); endpoints.MapHub<ChatHub>("/chat"); endpoints.MapFallbackToController("Index", "Fallback");
+                endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chat");
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }

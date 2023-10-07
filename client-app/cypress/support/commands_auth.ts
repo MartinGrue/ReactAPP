@@ -4,20 +4,6 @@ import "@percy/cypress";
 import jwt_decode from "jwt-decode";
 import { getIntercepts } from "./intercepts";
 
-Cypress.Commands.add("visualSnapshot", (maybeName) => {
-  // @ts-ignore
-  let snapshotTitle = cy.state("runnable").fullTitle();
-  if (maybeName) {
-    snapshotTitle = snapshotTitle + " - " + maybeName;
-  }
-  cy.percySnapshot(snapshotTitle, {
-    // @ts-ignore
-    widths: [cy.state("viewportWidth")],
-    // @ts-ignore
-    minHeight: cy.state("viewportHeight"),
-  });
-});
-
 Cypress.Commands.add("login", (email, password) => {
   const log = Cypress.log({
     name: "login",
@@ -26,14 +12,16 @@ Cypress.Commands.add("login", (email, password) => {
     // @ts-ignore
     autoEnd: false,
   });
-  getIntercepts(["loginUser", "initLoad", "userLoad"]);
+  getIntercepts(["loginUser",  "userLoad"]);
   cy.visit("/");
   cy.get("[data-cy=login]").click();
   cy.get("[name=email]").clear().type(email);
   cy.get("[name=password]").clear().type(password);
+
   cy.get("[data-cy=login-submit]").click();
-  // cy.wait("@loginUser");
-  // cy.wait("@userLoad");
+  cy.wait("@loginUser");
+  cy.wait("@userLoad");
+  cy.location("pathname").should("equal", "/activities");
   log.end();
 });
 Cypress.Commands.add("logout", () => {

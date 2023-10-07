@@ -1,0 +1,5 @@
+FROM  cypress/browsers
+USER root
+RUN apt update && apt install netcat -y
+RUN npm install -g check-engine
+USER node

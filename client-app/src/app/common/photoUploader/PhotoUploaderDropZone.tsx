@@ -27,8 +27,7 @@ export const PhotoUploaderDropZone: React.FC<IProps> = ({
     (acceptedFiles: File[]) => {
       setfiles(
         acceptedFiles.map((file: File) => {
-          // return Object.assign(file, { preview: URL.createObjectURL(file) });
-          return { ...file, preview: URL.createObjectURL(file) };
+          return Object.assign(file, { preview: URL.createObjectURL(file) });
         })
       );
     },

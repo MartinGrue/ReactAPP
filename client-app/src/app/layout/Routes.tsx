@@ -1,4 +1,4 @@
-import * as React from "react";
+import { PropsWithChildren, Fragment } from "react";
 import { Navigate, Route, Routes as ReactRoutes } from "react-router-dom";
 import { Container } from "semantic-ui-react";
 import { useContext } from "react";
@@ -16,7 +16,7 @@ const ProfilePage = dynamic(
     ssr: false,
   }
 );
-const Nav = dynamic(() => import("../../features/nav/Nav"), {
+const Nav = dynamic<PropsWithChildren>(() => import("../../features/nav/Nav"), {
   ssr: false,
 });
 
@@ -45,23 +45,23 @@ const ActivityForm = dynamic(
   }
 );
 
-const WithNav: React.FC = ({ children }) => {
+const WithNav: React.FC<PropsWithChildren> = ({ children }) => {
   document.body.classList.add("show-scroll");
   return (
-    <React.Fragment>
+    <Fragment>
       <Nav>
         <Container style={{ marginTop: "6rem" }}>{children}</Container>
       </Nav>
-    </React.Fragment>
+    </Fragment>
   );
 };
 
-const RequireAuth: React.FC = ({ children }) => {
+const RequireAuth: React.FC<PropsWithChildren>= ({ children }) => {
   const rootStore = useContext(RootStoreContext);
   const { isLoggedIn } = rootStore.userStore;
 
   return isLoggedIn ? (
-    <React.Fragment>{children}</React.Fragment>
+    <Fragment>{children}</Fragment>
   ) : (
     <Navigate to="/" />
   );
