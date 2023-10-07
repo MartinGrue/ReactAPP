@@ -42,7 +42,7 @@ namespace API
             foreach (var user in userManager.Users)
             {
                 var fromMapper = mapper.Map<AppUser, UserJSON>(user);
-                fromMapper.Photos.ForEach((photo) => { photo.AppUserId = user.Id; });
+                // fromMapper.Photos.ForEach((photo) => { photo.AppUserId = user.Id; });
                 users.Add(fromMapper);
             }
             foreach (var activity in context.Activities)

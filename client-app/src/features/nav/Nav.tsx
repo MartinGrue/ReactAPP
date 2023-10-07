@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState,PropsWithChildren } from "react";
 import React from "react";
 import { Menu, Sidebar, Icon } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
@@ -7,7 +7,7 @@ import NavRightMenuItems from "./NavRightMenuItems";
 import { useMediaQuery } from "react-responsive";
 import { RootStoreContext } from "../../app/stores/rootStore";
 
-const NavBarMobile: React.FC = ({ children }) => {
+const NavBarMobile: React.FC<PropsWithChildren> = ({ children }) => {
   const [visible, setVisible] = useState(false);
 
   const onPusherClick = () => {
@@ -60,7 +60,7 @@ const NavBarMobile: React.FC = ({ children }) => {
   );
 };
 
-const NavBarDesktop: React.FC = ({ children }) => {
+const NavBarDesktop: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <Fragment>
       <Menu fixed="top" inverted>
@@ -74,7 +74,7 @@ const NavBarDesktop: React.FC = ({ children }) => {
   );
 };
 
-const Nav: React.FC = ({ children }) => {
+const Nav: React.FC<PropsWithChildren> = ({ children }) => {
   const isDesktopOrtablet = useMediaQuery({
     query: "(min-device-width: 600px)",
   });

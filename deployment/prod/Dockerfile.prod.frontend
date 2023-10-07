@@ -2,7 +2,8 @@
 FROM node:alpine as build-stage
 WORKDIR /app
 COPY ./client-app/package.json .
-RUN npm install --verbose 
+# RUN npm install --verbose 
+RUN yarn install
 COPY ./client-app/ .
 RUN  npm run nextbuild
 RUN  npm run nextexport

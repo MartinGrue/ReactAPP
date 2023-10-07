@@ -16,9 +16,14 @@ namespace Application.Activities
     {
         public class ActivitiesEnvelope
         {
-            public List<ActivityDTO> Activities { get; set; }
             public int ActivityCount { get; set; }
         }
+
+       public class ActivitiesEnvelopeGeneric<T> :ActivitiesEnvelope
+        {
+            public List<T> Activities { get; set; }
+        }
+
         public class Query : IRequest<ActivitiesEnvelope>
         {
             public int? Limit { get; set; }
@@ -70,11 +75,21 @@ namespace Application.Activities
                 var activities = await queryable.ToListAsync();
                 List<Activity> list = activities.Skip(request.Offset ?? 0).Take(request.Limit ?? 3).ToList();
 
-                return new ActivitiesEnvelope
-                {
-                    Activities = _mapper.Map<List<Activity>, List<ActivityDTO>>(list),
+                if(user != null){
+                return new ActivitiesEnvelopeGeneric<ActivityDTOBig>
+                {                    
+                    Activities = _mapper.Map<List<Activity>, List<ActivityDTOBig>>(list),
                     ActivityCount = queryable.Count()
                 };
+                }
+
+                return new ActivitiesEnvelopeGeneric<ActivityDTO>
+                {    
+                    Activities = _mapper.Map<List<Activity>, List<ActivityDTO>>(list),  
+                    // Activities = new List<ActivityDTO>(),                  
+                    ActivityCount = queryable.Count()
+                };
+
 
             }
         }

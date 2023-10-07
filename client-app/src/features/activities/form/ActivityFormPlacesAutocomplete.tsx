@@ -33,7 +33,8 @@ export const ActivityFormPlacesAutocomplete: React.FC<IProps> = ({
 
   const loadGoogleAPI = () => {
     const loader = new Loader({
-      apiKey: "AIzaSyCHYvacLxG7odfjovNDb1GpTHon3BMIXlw",
+      // apiKey: "AIzaSyCHYvacLxG7odfjovNDb1GpTHon3BMIXlw",
+      apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY!,
       libraries: ["places"],
     });
     return loader.load();

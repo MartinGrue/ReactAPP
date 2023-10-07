@@ -90,8 +90,8 @@ const HomePage: React.FC = () => {
             </Button>
           </Fragment>
         )}
-        <Divider hidden />
-        {/* {!isLoggedIn && (
+        {/* <Divider hidden />
+        {!isLoggedIn && (
           <GoogleLogin
             clientId="1084577743891-l4thqbo5qkbr1lo3mmple5vu0od5oktn.apps.googleusercontent.com"
             buttonText="Login"
