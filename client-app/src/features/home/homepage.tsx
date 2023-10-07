@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import { RootStoreContext } from "../../app/stores/rootStore";
 import LoginForm from "../User/LoginForm";
 import RegisterForm from "../User/RegisterForm";
-import { GoogleLogin } from "react-google-login";
+// import { GoogleLogin } from "react-google-login";
 import { IExternalLoginInfo } from "../../app/models/user";
 
 const HomePage: React.FC = () => {
@@ -91,7 +91,7 @@ const HomePage: React.FC = () => {
           </Fragment>
         )}
         <Divider hidden />
-        {!isLoggedIn && (
+        {/* {!isLoggedIn && (
           <GoogleLogin
             clientId="1084577743891-l4thqbo5qkbr1lo3mmple5vu0od5oktn.apps.googleusercontent.com"
             buttonText="Login"
@@ -109,7 +109,7 @@ const HomePage: React.FC = () => {
               </Button>
             )}
           ></GoogleLogin>
-        )}
+        )} */}
 
         <Divider hidden />
         <div>
