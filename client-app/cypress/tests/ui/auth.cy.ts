@@ -1,4 +1,6 @@
 import jwt_decode from "jwt-decode";
+import { dbSeed } from "../../support/helper";
+import { getIntercepts } from "../../support/intercepts";
 
 // describe("User Sign-up and Login"
 // it("should redirect unauthenticated user to signin page"
@@ -12,7 +14,9 @@ import jwt_decode from "jwt-decode";
 // display toast (error, success)
 describe("User Sign-up and Login", function () {
   beforeEach(() => {
-    cy.task("db:seed");
+    getIntercepts(["reseed"]);
+    cy.wrap(dbSeed());
+    cy.wait("@reseed").its("response.statusCode").should("eq", 200);
   });
 
   it("should redirect unauthenticated user to home page", function () {

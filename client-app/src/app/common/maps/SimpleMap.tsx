@@ -14,7 +14,7 @@ export const SimpleMap: React.FC<IProps> = ({ lat, lng, props }) => {
   const baseOpt = {
     defaultZoom: 14,
     bootstrapURLKeys: {
-      key: "AIzaSyCHYvacLxG7odfjovNDb1GpTHon3BMIXlw",
+      key: process.env.NEXT_PUBLIC_GOOGLE_API_KEY!,
       libraries: "places",
     },
   };

@@ -6,6 +6,7 @@ using Domain;
 namespace Application.Activities
 {
     public class MappingProfile : Profile
+    // AutoMapper.Profile
     {
         public MappingProfile()
         {
@@ -13,10 +14,12 @@ namespace Application.Activities
             CreateMap<UserActivity, UserActivityJSON>();
 
             CreateMap<AppUser, UserJSON>();
-            CreateMap<Photo, PhotoJSON>().ForMember(d => d.AppUserId, o => o.Equals("a"));
+            CreateMap<Photo, PhotoJSON>();
 
             CreateMap<FollowerFollowings, FollowerFollowingsJSON>();
             CreateMap<Activity, ActivityDTO>();
+            CreateMap<Activity, ActivityDTOBig>();
+
             CreateMap<UserActivity, AttendeeDTO>()
             .ForMember(d => d.UserName, o => o.MapFrom(s => s.AppUser.UserName))
             .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.AppUser.DisplayName))

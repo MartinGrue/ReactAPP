@@ -1,4 +1,5 @@
 export type Alias =
+  | "reseed"
   | "userLoad"
   | "userProfile"
   | "directCloudUpload"
@@ -22,6 +23,12 @@ interface Interceptor {
 }
 const getInterceptors = (): Interceptor[] => {
   return [
+    {
+      alias: "reseed",
+      url: `${Cypress.env("apiUrl")}/seed/reseed`,
+      method: "GET",
+    },
+
     {
       alias: "userLoad",
       url: `${Cypress.env("apiUrl")}/User`,

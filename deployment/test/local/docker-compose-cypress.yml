@@ -1,27 +1,26 @@
-version: "3.2"
+version: "3.9"
 networks:
   frontend:
-
     null
 services:
   cypress:
     container_name: cypress
-    image: cypress/browsers:node14.17.0-chrome88-ff89
-    user: node
+    build:
+      context: .
+      dockerfile: Dockerfile.cypress
     working_dir: /e2e/client-app
-    stdin_open: true
-    tty: true
     network_mode: "service:backendapp"
     volumes:
       - ./../../../client-app:/e2e/client-app:rw
       - ./../../../data:/e2e/data
-      - ./../startup.sh:/home/node/startup.sh
-      - ~/.cache/Cypress:/home/node/.cache/Cypress
-    entrypoint: "bash /home/node/startup.sh"
-    # environment:
-    # - BRO=${BRO}
-    # - TEST=${TEST}
-    # - API_HOST=backend
+      - ./../startup.sh:/root/node/startup.sh
+      - ~/.cache/Cypress:/root/.cache/Cypress
+    entrypoint: "bash /root/node/startup.sh"
+    # entrypoint: tail -F /dev/null
+    environment:
+    - BRO=${BRO}
+    - TEST=${TEST}
+    - API_HOST=backend
 
   backendapp:
     environment:
@@ -53,3 +52,5 @@ services:
       MYSQL_ROOT_PASSWORD: example
     logging:
       driver: "none"
+    stdin_open: false # docker run -i
+    tty: false # docker run -t

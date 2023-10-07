@@ -193,7 +193,7 @@ export default class ActivityStore {
     this.loadingInitial = true;
     try {
       const activitiesEnvelope = await agent.Activities.list(this.axiosParams);
-      console.log(activitiesEnvelope);
+      // console.log(activitiesEnvelope);
       const { activities, activityCount } = activitiesEnvelope;
       runInAction(() => {
         activities.forEach((activity) => {

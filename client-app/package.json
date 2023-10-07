@@ -2,6 +2,9 @@
   "name": "client-app",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.15.1",
     "@microsoft/signalr": "^7.0.4",
@@ -26,7 +29,6 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-final-form": "^6.5.9",
-    "react-google-login": "^5.2.2",
     "react-infinite-scroll-component": "^6.1.0",
     "react-places-autocomplete": "^7.3.0",
     "react-responsive": "^9.0.2",

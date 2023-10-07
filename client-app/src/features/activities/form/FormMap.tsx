@@ -29,7 +29,7 @@ export const FormMap: React.FC<IProps> = ({ lat, lng }) => {
       <div style={{ height: "300px", width: "100%" }}>
         <GoogleMapReact
           key={lat}
-          bootstrapURLKeys={{ key: "AIzaSyCHYvacLxG7odfjovNDb1GpTHon3BMIXlw" }}
+          bootstrapURLKeys={{ key: process.env.NEXT_PUBLIC_GOOGLE_API_KEY! }}
           defaultCenter={center}
           defaultZoom={zoom}
         >
