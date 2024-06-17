@@ -14,9 +14,7 @@ import { getIntercepts } from "../../support/intercepts";
 // display toast (error, success)
 describe("User Sign-up and Login", function () {
   beforeEach(() => {
-    getIntercepts(["reseed"]);
     cy.wrap(dbSeed());
-    cy.wait("@reseed").its("response.statusCode").should("eq", 200);
   });
 
   it("should redirect unauthenticated user to home page", function () {

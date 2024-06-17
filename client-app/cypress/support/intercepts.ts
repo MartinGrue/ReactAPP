@@ -25,7 +25,7 @@ const getInterceptors = (): Interceptor[] => {
   return [
     {
       alias: "reseed",
-      url: `${Cypress.env("apiUrl")}/seed/reseed`,
+      url: `${Cypress.env("apiUrl")}/seed/reseed/`,
       method: "GET",
     },
 

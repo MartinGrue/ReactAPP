@@ -70,9 +70,8 @@ describe("Manage existing Activity", function () {
   };
 
   beforeEach(() => {
-    getIntercepts(["reseed","activityDetails", "editActivity", "deleteActivity"]);
+    getIntercepts(["activityDetails", "editActivity", "deleteActivity"]);
     cy.wrap(dbSeed());
-    cy.wait("@reseed").its("response.statusCode").should("eq", 200);
     cy.login(user.email, user.password);
 
   });

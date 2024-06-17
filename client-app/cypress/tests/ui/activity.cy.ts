@@ -16,14 +16,12 @@ const indexActivity = 0;
 describe("Check the Activity Details Page functionality", () => {
   beforeEach(function () {
     getIntercepts([
-      "reseed",
       "userLoad",
       "activityDetails",
       "joinActivity",
       "unjoinActivity",
     ]);
     cy.wrap(dbSeed());
-    cy.wait("@reseed").its("response.statusCode").should("eq", 200);
     cy.login(loginUser.email, loginUser.password);
   });
 

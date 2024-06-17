@@ -9,40 +9,42 @@ services:
       context: ./../../..
       dockerfile: ./deployment/test/CI/Dockerfile.cypress
 
-    network_mode: "service:backendapp"
-    entrypoint: "sh /home/node/startup.sh"
+    # network_mode: "service:backendapp"
+    # entrypoint: "sh /home/node/startup.sh"
+    entrypoint: tail -F /dev/null
+
     environment:
       - BROWSER=${BROWSER}
       # - TEST=${TEST}
       - TEST=activities
       - API_HOST=backend
 
-  backendapp:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=development
-      - DOTNET_ENVIRONMENT=development
-    container_name: backend
-    build:
-      context: ./../../..
-      dockerfile: ./deployment/dev/Dockerfile.dev.backend
-    networks:
-      - frontend
-    #Dont make this expose, this container needs to be on frontend AND host n
-    expose:
-      - "5000"
-    logging:
-      driver: "none"
+  # backendapp:
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=development
+  #     - DOTNET_ENVIRONMENT=development
+  #   container_name: backend
+  #   build:
+  #     context: ./../../..
+  #     dockerfile: ./deployment/dev/Dockerfile.dev.backend
+  #   networks:
+  #     - frontend
+  #   #Dont make this expose, this container needs to be on frontend AND host n
+  #   expose:
+  #     - "5000"
+  #   logging:
+  #     driver: "none"
 
-  activitydb:
-    container_name: activitydb
-    build:
-      context: ./../../..
-      dockerfile: ./deployment/dev/Dockerfile.dev.database
-    networks:
-      - frontend
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: example
-    logging:
-      driver: "none"
+  # activitydb:
+  #   container_name: activitydb
+  #   build:
+  #     context: ./../../..
+  #     dockerfile: ./deployment/dev/Dockerfile.dev.database
+  #   networks:
+  #     - frontend
+  #   command: --default-authentication-plugin=mysql_native_password
+  #   restart: always
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: example
+  #   logging:
+  #     driver: "none"

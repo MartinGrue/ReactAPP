@@ -96,7 +96,7 @@ export const getFollowers = (
 
 export const dbSeed = () => {
   return axios
-    .get(`http://127.0.0.1:5000/api/seed/reseed/`)
+    .get(`${Cypress.env("apiUrl")}/seed/reseed/`)
     .then((response) => {
       response.status !== 200 &&
         console.log("Error from api reseed: ", response.status);

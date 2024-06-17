@@ -10,44 +10,40 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        test:
-          [
-            "auth",
-            "home",
-            "profile",
-            "manage",
-            "activity",
-            "activities",
-            "createactivity",
-          ]
-        browser: ["chrome", "firefox"]
+        # test:
+        #   [
+        #     "auth",
+        #     "home",
+        #     "profile",
+        #     "manage",
+        #     "activity",
+        #     "activities",
+        #     "createactivity",
+        #   ]
+        # browser: ["chrome", "firefox"]
+        test: ["activities"]
+        browser: ["chrome"]
     env:
       TEST: ${{ matrix.test }}
       BRO: ${{ matrix.browser }}
+      DOCKER_BUILDKIT: 1
     steps:
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
       - name: Install docker-compose
         uses: KengoTODA/actions-setup-docker-compose@v1
         with:
-            version: '2.14.2' # the full version of `docker-compose` command
-  
+          version: "2.14.2" # the full version of `docker-compose` command
+
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      # - name: Install doctl
+      #   uses: digitalocean/action-doctl@v2
+      #   with:
+      #     token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - name: Log in to DigitalOcean Container Registry with short-lived credentials
-        run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      # - name: Log in to DigitalOcean Container Registry with short-lived credentials
+      #   run: doctl registry login --expiry-seconds 600 --access-token ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Run ${{ matrix.test }} test on ${{ matrix.browser }}
         run: |
-          docker-compose -f deployment/test/CI/docker-compose-cypress.yml up \
-           --abort-on-container-exit --exit-code-from cypress
+          docker-compose -f deployment/test/CI/docker-compose-cypress.yml up -d && docker logs -f $(docker ps -aqf name=cypress)

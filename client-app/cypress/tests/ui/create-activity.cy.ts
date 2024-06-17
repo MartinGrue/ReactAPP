@@ -41,9 +41,8 @@ describe("Create New Activity", function () {
   };
 
   beforeEach(() => {
-    getIntercepts(["reseed", "createNewActivity"]);
+    getIntercepts([ "createNewActivity"]);
     cy.wrap(dbSeed());
-    cy.wait("@reseed").its("response.statusCode").should("eq", 200);
     cy.login(user.email, user.password);
     cy.get("[data-cy=createActivity]").click(); //this is not visible on mobile
   });

@@ -1,8 +1,10 @@
 # #!/bin/bash
 ## Start the first process
 (cd /e2e/client-app; nohup npm run dev >/dev/null 2>&1 &)
+echo "Waiting for React server up"
 while ! echo exit | nc localhost 3000; do sleep 10; done
 echo "React server up"
+echo "Waiting for Backend server up"
 while ! echo exit | nc localhost 5000; do sleep 10; done
 echo "Backend server up"
 

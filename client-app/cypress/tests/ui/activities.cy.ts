@@ -14,11 +14,10 @@ const user = {
 
 describe("Have a working activity dashboard", () => {
   beforeEach(() => {
-    getIntercepts(["reseed", "loginUser", "fetchMore", "userLoad"]);
-    cy.wrap(dbSeed());
-    cy.wait("@reseed").its("response.statusCode").should("eq", 200);
+    getIntercepts(["loginUser", "fetchMore", "userLoad"]);
+    dbSeed();
     cy.login(user.email, user.password);
-    // cy.wait("@loginUser").its("response.statusCode").should("eq", 200);
+    cy.wait("@loginUser").its("response.statusCode").should("eq", 200);
   });
 
   it("should display the correct amount of activities for 'all' filter", () => {

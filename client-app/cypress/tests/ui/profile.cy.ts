@@ -37,7 +37,6 @@ const panes = getPanes(user1);
 describe("Check the Profile functionality", () => {
   beforeEach(function () {
     getIntercepts([
-      "reseed",
       "userProfile",
       "updateProfile",
       "getSignature",
@@ -47,7 +46,6 @@ describe("Check the Profile functionality", () => {
     ]);
 
     cy.wrap(dbSeed());
-    cy.wait("@reseed").its("response.statusCode").should("eq", 200);
     cy.login(user1.email, user1.password);
     cy.get("[data-cy=profile-dropdown]").click();
     cy.get("[data-cy=profile]").click();

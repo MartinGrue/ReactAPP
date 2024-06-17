@@ -1,17 +1,28 @@
-FROM cypress/browsers:node16.5.0-chrome94-ff93
+FROM cypress/browsers:node-18.16.0-chrome-114.0.5735.133-1-ff-114.0.2-edge-114.0.1823.51-1
 USER root
 RUN apt update && apt install netcat -y
-RUN npm install -g check-engine
+RUN npm install -g check-engine pnpm
 
 WORKDIR /e2e/client-app
+RUN npm install -g cypress
+
 RUN chown -R node /e2e/client-app
-
 COPY --chown=node:node ./client-app/package.json ./client-app/package-lock.jso[n] ./
-COPY --chown=node:node ./client-app/ .
-#This will not copy node_modules, see dockerignore
 
-COPY --chown=node:node ./deployment/test/startup.sh /home/node/startup.sh
-COPY --chown=node:node ./data /e2e/data
+# Custom cache invalidation
+ARG CACHEBUST=1231112
+# RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
+# RUN npm install
 
-USER node
-RUN npm install
+# Install dependencies with pnpm and cache mount
+RUN --mount=type=cache,id=pnmcache,target=/pnpm_store \
+  pnpm config set store-dir /pnpm_store && \
+  pnpm config set package-import-method copy && \
+  pnpm install --prefer-offline --ignore-scripts
+# RUN pnpm i
+# COPY ./client-app/ .
+# #This will not copy node_modules, see dockerignore
+
+# COPY ./deployment/test/startup.sh /home/node/startup.sh
+# COPY  ./data /e2e/data
+# 

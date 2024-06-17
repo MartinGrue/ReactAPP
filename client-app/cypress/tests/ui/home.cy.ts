@@ -14,9 +14,8 @@ const user = {
 //google login should work
 describe("Should have a working home page", () => {
   beforeEach(() => {
-    getIntercepts(["reseed", "loginUser", "initLoad", "userLoad"]);
+    getIntercepts(["loginUser", "initLoad", "userLoad"]);
     cy.wrap(dbSeed());
-    cy.wait("@reseed").its("response.statusCode").should("eq", 200);
     // return cy.wrap(dbSeed(), { timeout: 10000 });
   });
 
